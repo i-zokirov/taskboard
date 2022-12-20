@@ -1,14 +1,10 @@
-import { Response, Request, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/variables";
-import User, { IUser } from "../models/User.model";
-
-interface IUserAuthRequest extends Request {
-    user?: IUser | null;
-}
+import User from "../models/User.model";
 
 const authenticate = async (
-    req: IUserAuthRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ) => {
@@ -24,7 +20,7 @@ const authenticate = async (
                 JWT_SECRET
             ) as JwtPayload;
 
-            req["user"] = await User.findById(payload.userId);
+            req.user = await User.findById(payload.userId);
             next();
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {

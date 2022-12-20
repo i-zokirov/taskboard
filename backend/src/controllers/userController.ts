@@ -25,7 +25,3 @@ export const loginUser: RequestHandler = async (req, res) => {
         throw new Error("Invalid email or password");
     }
 };
-
-export const test: RequestHandler = (req, res) => {
-    res.json("Hi");
-};
