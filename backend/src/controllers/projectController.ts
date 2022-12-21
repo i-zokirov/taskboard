@@ -21,8 +21,8 @@ export const createProject: RequestHandler = async (req, res) => {
     const { title } = req.body;
     const project = await Project.create({
         title,
-        owner: req.user,
-        members: [req.user],
+        owner: req.user?._id,
+        members: [req.user?._id],
     });
     res.json(project);
 };

@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 // ROUTE HANDLERS
 app.use("/api/users", userRouteHandler);
 app.use("/api/projects", projectRouteHandler);
-app.use("/api/tasks", taskRouteHandler);
+app.use("/api/projects", taskRouteHandler);
 
 // ERROR HANDLERS
 app.use(notFoundErrorHandler);

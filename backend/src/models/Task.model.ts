@@ -35,15 +35,17 @@ const taskSchema = new Schema<ITask>({
     completed: {
         type: Boolean,
         required: true,
+        default: false,
     },
     status: {
         type: String,
         enum: ["Open", "In Progress", "Pending", "Completed"],
-        required: true,
+        default: TaskStatus[TaskStatus.Open],
     },
     priority: {
         type: String,
         enum: ["High", "Medium", "Low"],
+        default: TaskPriority[TaskPriority.Low],
     },
     createdBy: {
         type: Schema.Types.ObjectId,
