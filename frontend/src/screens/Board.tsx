@@ -3,18 +3,12 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+
 import List from "@mui/material/List";
-import {
-    FormControl,
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-    Badge,
-} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -23,8 +17,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import BoardToolbar from "../components/BoardToolbar";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ViewAgendaIcon from "@mui/icons-material/ViewAgenda";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -95,87 +94,13 @@ const Board: React.FC = () => {
     return (
         <Box sx={{ display: "flex" }}>
             <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: "none" }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-
-                    <FormControl
-                        variant="standard"
-                        sx={{ m: 1, minWidth: 120, color: "inherit" }}
-                    >
-                        <Select
-                            labelId="demo-simple-select-standard-label"
-                            id="demo-simple-select-standard"
-                            value={project}
-                            onChange={handleChange}
-                            sx={{
-                                color: "inherit",
-                                ".MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "rgba(228, 219, 233, 0.25)",
-                                },
-                                "&.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                    {
-                                        borderColor:
-                                            "rgba(228, 219, 233, 0.25)",
-                                    },
-                                "&:hover .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "rgba(228, 219, 233, 0.25)",
-                                },
-                                ".MuiSvgIcon-root ": {
-                                    fill: "white !important",
-                                },
-                            }}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            {projects.map((project) => (
-                                <MenuItem key={project} value={project}>
-                                    {project}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { md: "flex" } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show 4 new mails"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={""}
-                            aria-haspopup="true"
-                            // onClick={""}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Box>
-                </Toolbar>
+                <BoardToolbar
+                    open={open}
+                    projects={projects}
+                    project={project}
+                    handleChange={handleChange}
+                    handleDrawerOpen={handleDrawerOpen}
+                />
             </AppBar>
             <Drawer
                 sx={{
@@ -201,7 +126,45 @@ const Board: React.FC = () => {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {["Inbox", "Starred", "Send email", "Drafts"].map(
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <DashboardIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={"Dashboard"} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <ViewAgendaIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={"View Agenda"} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <AssessmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={"Reports"} />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+                <Divider />
+                <List>
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <RocketLaunchIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={"Projects"} />
+                        </ListItemButton>
+                        <IconButton sx={{ marginRight: "5px" }}>
+                            <MoreHorizIcon />
+                        </IconButton>
+                    </ListItem>
+                    {["Project 1", "Project 2", "Project 3"].map(
                         (text, index) => (
                             <ListItem key={text} disablePadding>
                                 <ListItemButton>
@@ -219,22 +182,6 @@ const Board: React.FC = () => {
                     )}
                 </List>
                 <Divider />
-                <List>
-                    {["All mail", "Trash", "Spam"].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
