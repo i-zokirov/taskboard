@@ -19,3 +19,7 @@ export interface DrawerProps {
     open: boolean;
     handleDrawerClose: () => void;
 }
+
+export interface TaskCardProps {
+    title: string;
+}

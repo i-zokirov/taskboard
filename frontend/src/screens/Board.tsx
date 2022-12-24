@@ -7,6 +7,7 @@ import BoardToolbar from "../components/BoardToolbar";
 
 import MainBoardContainer from "../components/Main";
 import Drawer from "../components/Drawer";
+import Kanban from "../components/Kanban";
 
 const Board: React.FC = () => {
     const [open, setOpen] = React.useState(false);
@@ -35,7 +36,7 @@ const Board: React.FC = () => {
             />
             <Drawer open={open} handleDrawerClose={handleDrawerClose} />
             <MainBoardContainer open={open}>
-                <h1>Hello</h1>
+                <Kanban />
             </MainBoardContainer>
         </Box>
     );

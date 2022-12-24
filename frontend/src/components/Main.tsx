@@ -35,7 +35,7 @@ const MainBoardContainer: React.FC<{
     return (
         <Main open={open}>
             {/* <DrawerHeader /> */}
-            <div style={{ marginTop: "60px" }}></div>
+            <div style={{ marginTop: "64.px" }}></div>
             {children}
         </Main>
     );
