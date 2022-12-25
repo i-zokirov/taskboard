@@ -22,4 +22,8 @@ export interface DrawerProps {
 
 export interface TaskCardProps {
     title: string;
+    badge?: string;
+    completed?: boolean;
+    // ref: any;
+    [x: string]: any;
 }
