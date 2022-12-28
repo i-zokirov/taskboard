@@ -54,13 +54,13 @@ code {
 }
 
 .btn:active {
-    box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
-        0 8px 12px 6px rgb(60 64 67 / 15%);
+    /* box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
+        0 8px 12px 6px rgb(60 64 67 / 15%); */
     outline: none;
 }
 .btn:focus {
     outline: none;
-    border: 2px solid #4285f4;
+    border: none;
 }
 
 textarea {
@@ -82,4 +82,20 @@ textarea::focus {
 
 a {
     text-decoration: none;
+}
+
+input {
+    border: none;
+    font-size: 14px;
+    background-color: #fff;
+    width: 100%;
+    border-radius: 5px;
+    outline: 0px none transparent;
+    padding: 0.5em;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+input:focus {
+    outline: 0px none transparent;
+    border: none;
 }

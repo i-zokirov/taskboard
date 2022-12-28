@@ -39,3 +39,14 @@ export interface ModalProps {
 export interface TaskCardDetails extends ModalProps {
     task: ITask;
 }
+
+export interface ColumnProps {
+    columnId?: string;
+    index?: number;
+    [x: string]: any;
+}
+
+export interface ColumnHeaderProps {
+    columnId: string;
+    column: any;
+}

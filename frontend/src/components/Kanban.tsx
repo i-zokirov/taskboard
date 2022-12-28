@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
-import { Box, Stack, Typography, IconButton, Tooltip } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import EditIcon from "@mui/icons-material/Edit";
+import {
+    Box,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Stack,
+    Typography,
+} from "@mui/material";
 import TaskCard from "./Card";
 
 import { kanbancolumns } from "../config";
 import { StrictModeDroppable } from "./StrictModeDroppable";
+import Column from "./Column";
+import ColumnHeader from "./ColumnHeader";
+import LastColumn from "./LastColumn";
 
 const onDragEnd = (
     result: DropResult,
@@ -52,20 +60,9 @@ const onDragEnd = (
     }
 };
 
-const light = "#eef1f5";
-const dark = "#e7ebf0";
-
 const Kanban: React.FC = () => {
-    const [showEditIcon, setShowEditIcon] = useState(false);
     const [columns, setColumns] = useState(kanbancolumns);
-
-    const handleMouseOver = () => {
-        setShowEditIcon(true);
-    };
-
-    const handleMouseLeave = () => {
-        setShowEditIcon(false);
-    };
+    const columnWidth = `${100 / Object.entries(columns).length + 1}%`;
     return (
         <Stack
             direction="row"
@@ -77,59 +74,12 @@ const Kanban: React.FC = () => {
                 onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
             >
                 {Object.entries(columns).map(([columnId, column], index) => (
-                    <Box
-                        key={columnId}
-                        sx={{
-                            width: `${100 / Object.entries(columns).length}vw`,
-                            height: "100vh",
-                            overflow: "hidden",
-                            background: index % 2 === 0 ? light : dark,
-                        }}
+                    <Column
+                        columnId={columnId}
+                        width={columnWidth}
+                        index={index}
                     >
-                        <Box
-                            onMouseOver={handleMouseOver}
-                            onMouseLeave={handleMouseLeave}
-                            sx={{
-                                padding: "10px",
-                                height: "50px",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                backgroundColor: column.color,
-                            }}
-                        >
-                            <Box display="flex" alignItems={"center"}>
-                                <IconButton>{column.icon}</IconButton>
-                                <Typography color={"white"}>
-                                    {column.name}
-                                </Typography>
-                            </Box>
-
-                            <Box>
-                                {showEditIcon && (
-                                    <Tooltip title="Edit column name">
-                                        <IconButton>
-                                            <EditIcon
-                                                sx={{
-                                                    color: "white",
-                                                    height: "16px",
-                                                    width: "16px",
-                                                }}
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
-
-                                <Tooltip title="Selection Menu">
-                                    <IconButton>
-                                        <MoreHorizIcon
-                                            sx={{ color: "white" }}
-                                        />
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
-                        </Box>
-
+                        <ColumnHeader columnId={columnId} column={column} />
                         <Box sx={{ padding: "10px 5px" }}>
                             <StrictModeDroppable
                                 droppableId={columnId}
@@ -169,9 +119,15 @@ const Kanban: React.FC = () => {
                                 )}
                             </StrictModeDroppable>
                         </Box>
-                    </Box>
+                    </Column>
                 ))}
             </DragDropContext>
+            <Column
+                width={`${(100 / Object.entries(columns).length + 1) / 1.7}%`}
+                index={Object.entries(columns).length}
+            >
+                <LastColumn />
+            </Column>
         </Stack>
     );
 };
