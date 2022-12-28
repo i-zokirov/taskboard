@@ -50,7 +50,12 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     };
 
     return (
-        <TransitionModal open={open} onClose={onClose}>
+        <TransitionModal
+            open={open}
+            onClose={onClose}
+            height={{ md: 400, lg: 600 }}
+            width={{ md: 600, lg: 800 }}
+        >
             <Box height={"100%"}>
                 <Box
                     display={"flex"}
@@ -107,7 +112,6 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                             size="small"
                                             variant="standard"
                                             fullWidth
-                                            style={{ fontSize: "1px" }}
                                             value={descriptionInput}
                                             onChange={(e) =>
                                                 setDescriptionInput(
@@ -145,7 +149,6 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                 <TextField
                                     id={`conversation`}
                                     multiline
-                                    rows={5}
                                     maxRows={6}
                                     placeholder={"Click here to add a comment"}
                                     size="small"

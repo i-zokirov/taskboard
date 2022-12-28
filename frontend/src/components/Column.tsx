@@ -7,7 +7,6 @@ const dark = "#e7ebf0";
 const Column: React.FC<ColumnProps> = (props) => {
     return (
         <Box
-            key={props.columnId ? props.columnId : Math.random()}
             sx={{
                 width: props.width,
                 height: "100vh",

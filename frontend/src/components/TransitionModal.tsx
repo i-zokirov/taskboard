@@ -14,7 +14,13 @@ const style = {
     borderRadius: "10px",
 };
 
-const TransitionModal: React.FC<ModalProps> = ({ open, onClose, children }) => {
+const TransitionModal: React.FC<ModalProps> = ({
+    open,
+    onClose,
+    children,
+    height,
+    width,
+}) => {
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -31,8 +37,8 @@ const TransitionModal: React.FC<ModalProps> = ({ open, onClose, children }) => {
                 <Box
                     sx={{
                         ...style,
-                        height: { md: 400, lg: 600 },
-                        width: { md: 600, lg: 800 },
+                        height,
+                        width,
                     }}
                 >
                     {children}

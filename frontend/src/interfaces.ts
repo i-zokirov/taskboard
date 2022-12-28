@@ -50,3 +50,12 @@ export interface ColumnHeaderProps {
     columnId: string;
     column: any;
 }
+
+export interface MenuProps {
+    anchorEl: HTMLElement | null;
+    open: boolean;
+    handleClose: () => void;
+    [x: string]: any;
+}
+
+export interface AddTaskModalProps extends ModalProps {}

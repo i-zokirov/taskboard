@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
-import {
-    Box,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Stack,
-    Typography,
-} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import TaskCard from "./Card";
 
 import { kanbancolumns } from "../config";
@@ -78,6 +71,7 @@ const Kanban: React.FC = () => {
                         columnId={columnId}
                         width={columnWidth}
                         index={index}
+                        key={columnId}
                     >
                         <ColumnHeader columnId={columnId} column={column} />
                         <Box sx={{ padding: "10px 5px" }}>
