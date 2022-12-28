@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { Box, Stack, Typography, IconButton, Tooltip } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import EditIcon from "@mui/icons-material/Edit";
 import TaskCard from "./Card";
 
 import { kanbancolumns } from "../config";
@@ -53,22 +54,18 @@ const onDragEnd = (
 
 const light = "#eef1f5";
 const dark = "#e7ebf0";
+
 const Kanban: React.FC = () => {
+    const [showEditIcon, setShowEditIcon] = useState(false);
     const [columns, setColumns] = useState(kanbancolumns);
-    const [enabled, setEnabled] = useState(false);
-    useEffect(() => {
-        const animation = requestAnimationFrame(() => setEnabled(true));
 
-        return () => {
-            cancelAnimationFrame(animation);
-            setEnabled(false);
-        };
-    }, []);
+    const handleMouseOver = () => {
+        setShowEditIcon(true);
+    };
 
-    if (!enabled) {
-        return null;
-    }
-    // const theme = useTheme();
+    const handleMouseLeave = () => {
+        setShowEditIcon(false);
+    };
     return (
         <Stack
             direction="row"
@@ -90,6 +87,8 @@ const Kanban: React.FC = () => {
                         }}
                     >
                         <Box
+                            onMouseOver={handleMouseOver}
+                            onMouseLeave={handleMouseLeave}
                             sx={{
                                 padding: "10px",
                                 height: "50px",
@@ -106,11 +105,29 @@ const Kanban: React.FC = () => {
                                 </Typography>
                             </Box>
 
-                            <Tooltip title="Selection Menu">
-                                <IconButton>
-                                    <MoreHorizIcon sx={{ color: "white" }} />
-                                </IconButton>
-                            </Tooltip>
+                            <Box>
+                                {showEditIcon && (
+                                    <Tooltip title="Edit column name">
+                                        <IconButton>
+                                            <EditIcon
+                                                sx={{
+                                                    color: "white",
+                                                    height: "16px",
+                                                    width: "16px",
+                                                }}
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+
+                                <Tooltip title="Selection Menu">
+                                    <IconButton>
+                                        <MoreHorizIcon
+                                            sx={{ color: "white" }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
                         </Box>
 
                         <Box sx={{ padding: "10px 5px" }}>
@@ -132,23 +149,17 @@ const Kanban: React.FC = () => {
                                             >
                                                 {(provided, snapshot) => {
                                                     return (
-                                                        <div
-                                                            ref={
+                                                        <TaskCard
+                                                            task={item}
+                                                            completed={
+                                                                item.completed
+                                                            }
+                                                            innerRef={
                                                                 provided.innerRef
                                                             }
                                                             {...provided.draggableProps}
                                                             {...provided.dragHandleProps}
-                                                        >
-                                                            <TaskCard
-                                                                title={
-                                                                    item.title
-                                                                }
-                                                                // badge="error"
-                                                                completed={
-                                                                    item.completed
-                                                                }
-                                                            />
-                                                        </div>
+                                                        />
                                                     );
                                                 }}
                                             </Draggable>

@@ -1,5 +1,7 @@
 import { SelectChangeEvent } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import { ITask } from "./types";
+
 export interface BoardToolbarProps extends ProjectSelectorProps {
     open: boolean;
     handleDrawerOpen: () => void;
@@ -21,9 +23,19 @@ export interface DrawerProps {
 }
 
 export interface TaskCardProps {
-    title: string;
+    task: ITask;
     badge?: string;
     completed?: boolean;
-    // ref: any;
+    innerRef: any;
     [x: string]: any;
+}
+
+export interface ModalProps {
+    open: boolean;
+    onClose: () => void;
+    [x: string]: any;
+}
+
+export interface TaskCardDetails extends ModalProps {
+    task: ITask;
 }

@@ -12,11 +12,11 @@ code {
         monospace;
 }
 
-.btn-circular {
+.btn {
     align-items: center;
     appearance: none;
     background-color: #00aaff;
-    border-radius: 24px;
+    border-radius: 5px;
     border-style: none;
     box-sizing: border-box;
     color: #fff;
@@ -44,18 +44,42 @@ code {
     will-change: transform, opacity;
     z-index: 0;
 }
+.btn-circular {
+    border-radius: 24px;
+}
 
-.btn-circular:hover {
+.btn:hover {
     background: #3268c5;
     color: #f6f9fe;
 }
 
-.btn-circular:active {
+.btn:active {
     box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
         0 8px 12px 6px rgb(60 64 67 / 15%);
     outline: none;
 }
-.btn-circular:focus {
+.btn:focus {
     outline: none;
     border: 2px solid #4285f4;
+}
+
+textarea {
+    border: none;
+    font-size: 14px;
+    background-color: #e7ebf0;
+    width: 100%;
+    border-radius: 5px;
+    resize: vertical;
+    outline: 0px none transparent;
+    padding: 0.5em;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+textarea::focus {
+    border: none;
+    outline: 0px none transparent;
+}
+
+a {
+    text-decoration: none;
 }
