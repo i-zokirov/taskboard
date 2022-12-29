@@ -54,7 +54,7 @@ export interface ColumnHeaderProps {
 export interface MenuProps {
     anchorEl: HTMLElement | null;
     open: boolean;
-    handleClose: () => void;
+    handleClose?: () => void;
     [x: string]: any;
 }
 

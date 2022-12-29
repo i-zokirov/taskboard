@@ -62,8 +62,9 @@ const Kanban: React.FC = () => {
         show: boolean;
     }>({ colId: null, show: false });
 
-    const columnWidth = `${100 / Object.entries(columns).length + 1}%`;
-
+    const columnsLength = Object.entries(columns).length;
+    const columnWidth = columnsLength < 4 ? `${100 / columnsLength}vw` : `22vw`;
+    // const columnWidth = `20vw`;
     const hideInputForCol = () => {
         setShowInputForCol({ colId: null, show: false });
     };

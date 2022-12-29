@@ -74,7 +74,7 @@ const LastColumn = () => {
                 <br />
                 <Typography
                     variant="body2"
-                    alignItems={"center"}
+                    textAlign={"center"}
                     color="#9e9e9e"
                 >
                     Bring your productivity to the next level and collaborate

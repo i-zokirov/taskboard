@@ -33,7 +33,11 @@ import AndroidIcon from "@mui/icons-material/Android";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import SubjectIcon from "@mui/icons-material/Subject";
+import PrintIcon from "@mui/icons-material/Print";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
 
@@ -98,6 +102,10 @@ export const icons: IconDictionary = {
         <AddCircleOutlineIcon sx={{ ...sx }} />
     ),
     add: (sx: SxProps | undefined) => <AddIcon sx={{ ...sx }} />,
+    close: (sx: SxProps | undefined) => <CloseIcon sx={{ ...sx }} />,
+    archive: (sx: SxProps | undefined) => <ArchiveIcon sx={{ ...sx }} />,
+    subject: (sx: SxProps | undefined) => <SubjectIcon sx={{ ...sx }} />,
+    print: (sx: SxProps | undefined) => <PrintIcon sx={{ ...sx }} />,
 };
 
 export const productivityIcons = [

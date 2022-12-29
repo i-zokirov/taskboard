@@ -11,7 +11,7 @@ const MenuComponent: React.FC<MenuProps> = (props) => {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
+                // onClick={handleClose}
                 PaperProps={{
                     elevation: 0,
                     sx: {

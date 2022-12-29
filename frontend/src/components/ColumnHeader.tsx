@@ -4,6 +4,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import { ColumnHeaderProps } from "../interfaces";
 import ColumnIconSelectorMenu from "./ColumnIconSelectorMenu";
+import ColumnMenu from "./ColumnMenu";
 
 const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     const { columnId, column } = props;
@@ -22,14 +23,27 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
         state: boolean;
     }>({ id: null, state: false });
 
+    const [showcurrentColumnMenu, setShowCurrentColumnMenu] = useState<{
+        id: null | string;
+        state: boolean;
+    }>({ id: null, state: false });
+
+    const [columnMenuAnchorEl, setColumnMenuAnchorEl] =
+        React.useState<null | HTMLElement>(null);
     const [columnIconAnchorEl, setColumnIconAnchorEl] =
         React.useState<null | HTMLElement>(null);
 
     const openColumnIconMenu = Boolean(columnIconAnchorEl);
+    const openColumnMenu = Boolean(columnMenuAnchorEl);
 
-    const handleCloseColumnMenu = () => {
+    const handleCloseColumnIconMenu = () => {
         setColumnIconAnchorEl(null);
         setShowCurrentColumnIconMenu({ id: null, state: false });
+    };
+
+    const handleCloseColumnMenu = () => {
+        setColumnMenuAnchorEl(null);
+        setShowCurrentColumnMenu({ id: null, state: false });
     };
 
     const handleColumnIconClick = (
@@ -64,6 +78,14 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
         e.preventDefault();
         setNewInput(e.target.value);
     };
+
+    const handleColumnMenuClick = (
+        id: string,
+        e: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        setShowCurrentColumnMenu({ id, state: true });
+        setColumnMenuAnchorEl(e.currentTarget);
+    };
     return (
         <React.Fragment>
             {showcurrentColumnIconMenu.state &&
@@ -71,6 +93,15 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                     <ColumnIconSelectorMenu
                         open={openColumnIconMenu}
                         anchorEl={columnIconAnchorEl}
+                        handleClose={handleCloseColumnIconMenu}
+                    />
+                )}
+
+            {showcurrentColumnMenu.state &&
+                showcurrentColumnMenu.id === columnId && (
+                    <ColumnMenu
+                        open={openColumnMenu}
+                        anchorEl={columnMenuAnchorEl}
                         handleClose={handleCloseColumnMenu}
                     />
                 )}
@@ -127,8 +158,12 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                         </Tooltip>
                     )}
 
-                    <Tooltip title="Selection Menu">
-                        <IconButton>
+                    <Tooltip title="Section Menu">
+                        <IconButton
+                            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                                handleColumnMenuClick(columnId, e)
+                            }
+                        >
                             <MoreHorizIcon sx={{ color: "white" }} />
                         </IconButton>
                     </Tooltip>
