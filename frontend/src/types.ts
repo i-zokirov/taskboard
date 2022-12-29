@@ -5,3 +5,7 @@ export type ITask = {
     completed: boolean;
     dueDate?: Date;
 };
+
+export type IconDictionary = {
+    [x: string]: any;
+};

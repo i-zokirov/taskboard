@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Drawer as MUIDrawer } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -24,8 +24,11 @@ import { appBarMenuOptions } from "../config";
 import { Link } from "react-router-dom";
 import { drawerWidth } from "../config";
 import { DrawerProps } from "../interfaces";
+import SearchBar from "./SearchBar";
 
 const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
+    const [searchText, setSearchText] = useState("");
+    const handleSearch = () => {};
     const theme = useTheme();
     return (
         <MUIDrawer
@@ -74,6 +77,16 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                         <MoreHorizIcon />
                     </IconButton>
                 </ListItem>
+
+                <ListItem>
+                    <SearchBar
+                        label="Search a project"
+                        value={searchText}
+                        setValue={setSearchText}
+                        handleSearch={handleSearch}
+                    />
+                </ListItem>
+
                 {["Project 1", "Project 2", "Project 3"].map((text, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton>

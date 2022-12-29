@@ -59,3 +59,10 @@ export interface MenuProps {
 }
 
 export interface AddTaskModalProps extends ModalProps {}
+
+export interface SearchBarProps {
+    label: string;
+    value: string;
+    setValue: (prop: string) => void;
+    handleSearch: () => void;
+}
