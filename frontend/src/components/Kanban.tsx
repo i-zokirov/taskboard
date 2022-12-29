@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
-import { Box, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Tooltip } from "@mui/material";
 import TaskCard from "./Card";
 
 import { kanbancolumns } from "../config";
@@ -8,7 +8,9 @@ import { StrictModeDroppable } from "./StrictModeDroppable";
 import Column from "./Column";
 import ColumnHeader from "./ColumnHeader";
 import LastColumn from "./LastColumn";
-
+import { icons } from "../assets/icons";
+import ColumnNoTasksPlaceHolder from "./ColumnNoTasksPlaceHolder";
+import TaskInputCard from "./TaskInputCard";
 const onDragEnd = (
     result: DropResult,
     columns: any,
@@ -55,7 +57,16 @@ const onDragEnd = (
 
 const Kanban: React.FC = () => {
     const [columns, setColumns] = useState(kanbancolumns);
+    const [showInputForCol, setShowInputForCol] = useState<{
+        colId: null | string;
+        show: boolean;
+    }>({ colId: null, show: false });
+
     const columnWidth = `${100 / Object.entries(columns).length + 1}%`;
+
+    const hideInputForCol = () => {
+        setShowInputForCol({ colId: null, show: false });
+    };
     return (
         <Stack
             direction="row"
@@ -108,6 +119,41 @@ const Kanban: React.FC = () => {
                                                 }}
                                             </Draggable>
                                         ))}
+                                        {showInputForCol.show &&
+                                        showInputForCol.colId === columnId ? (
+                                            <TaskInputCard
+                                                hideInput={hideInputForCol}
+                                            />
+                                        ) : (
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    justifyContent: " center",
+                                                }}
+                                            >
+                                                <Tooltip title="Add task">
+                                                    <IconButton
+                                                        sx={{
+                                                            background: "#fff",
+                                                        }}
+                                                        onClick={() =>
+                                                            setShowInputForCol({
+                                                                colId: columnId,
+                                                                show: true,
+                                                            })
+                                                        }
+                                                    >
+                                                        {icons["add"]({
+                                                            width: "20px",
+                                                            height: "20px",
+                                                        })}
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Box>
+                                        )}
+                                        {column.taskItems.length === 0 && (
+                                            <ColumnNoTasksPlaceHolder />
+                                        )}
                                         {provided.placeholder}
                                     </div>
                                 )}

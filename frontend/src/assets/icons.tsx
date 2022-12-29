@@ -32,6 +32,8 @@ import CloudQueueIcon from "@mui/icons-material/CloudQueue";
 import AndroidIcon from "@mui/icons-material/Android";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PestControlIcon from "@mui/icons-material/PestControl";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddIcon from "@mui/icons-material/Add";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
 
@@ -90,6 +92,12 @@ export const icons: IconDictionary = {
     at: (sx: SxProps | undefined) => <AlternateEmailIcon sx={{ ...sx }} />,
     android: (sx: SxProps | undefined) => <AndroidIcon sx={{ ...sx }} />,
     whatsapp: (sx: SxProps | undefined) => <WhatsAppIcon sx={{ ...sx }} />,
+
+    // rest
+    addcircle: (sx: SxProps | undefined) => (
+        <AddCircleOutlineIcon sx={{ ...sx }} />
+    ),
+    add: (sx: SxProps | undefined) => <AddIcon sx={{ ...sx }} />,
 };
 
 export const productivityIcons = [

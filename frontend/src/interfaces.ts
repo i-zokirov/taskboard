@@ -66,3 +66,7 @@ export interface SearchBarProps {
     setValue: (prop: string) => void;
     handleSearch: () => void;
 }
+
+export interface TaskInputCardProps {
+    hideInput: () => void;
+}
