@@ -38,6 +38,10 @@ import AddIcon from "@mui/icons-material/Add";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import SubjectIcon from "@mui/icons-material/Subject";
 import PrintIcon from "@mui/icons-material/Print";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CheckIcon from "@mui/icons-material/Check";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
 
@@ -106,10 +110,15 @@ export const icons: IconDictionary = {
     archive: (sx: SxProps | undefined) => <ArchiveIcon sx={{ ...sx }} />,
     subject: (sx: SxProps | undefined) => <SubjectIcon sx={{ ...sx }} />,
     print: (sx: SxProps | undefined) => <PrintIcon sx={{ ...sx }} />,
+    rocket: (sx: SxProps | undefined) => <RocketLaunchIcon sx={{ ...sx }} />,
+    delete: (sx: SxProps | undefined) => <DeleteOutlineIcon sx={{ ...sx }} />,
+    check: (sx: SxProps | undefined) => <CheckIcon sx={{ ...sx }} />,
+    uploadfile: (sx: SxProps | undefined) => <UploadFileIcon sx={{ ...sx }} />,
 };
 
 export const productivityIcons = [
     "celebration",
+    "rocket",
     "checkcircle",
     "barchart",
     "movetoinbox",
@@ -128,6 +137,8 @@ export const productivityIcons = [
     "pausecircle",
     "globe",
     "bug",
+    "delete",
+    "uploadfile",
 ];
 
 export const technologyIcons = [
