@@ -9,3 +9,17 @@ export type ITask = {
 export type IconDictionary = {
     [x: string]: any;
 };
+
+export type User = {
+    id: string;
+    name: string;
+    email: string;
+    token: string;
+};
+
+export enum Status {
+    Pending = "Pending",
+    FulFilled = "FulFilled",
+    Rejected = "Rejected",
+    UnInitialized = "UnInitialized",
+}

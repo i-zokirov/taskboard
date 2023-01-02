@@ -1,6 +1,6 @@
 import { SelectChangeEvent } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { ITask } from "./types";
+import { ITask, User } from "./types";
 
 export interface BoardToolbarProps extends ProjectSelectorProps {
     open: boolean;

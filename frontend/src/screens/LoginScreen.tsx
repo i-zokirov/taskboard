@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,15 +13,37 @@ import Container from "@mui/material/Container";
 import Copyright from "../components/Copyright";
 import { Link as RouterLink } from "react-router-dom";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import { icons } from "../assets/icons";
+import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import { authenticateUser } from "../reduxApp/features/auth/auth-slice";
+import { Status } from "../types";
 const LoginScreen: React.FC = () => {
+    const dispatch = useAppDispatch();
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+        const formData = new FormData(event.currentTarget);
+        const body = {
+            email: formData.get("email")!.toString(),
+            password: formData.get("password")!.toString(),
+        };
+        if (body.email && body.password) {
+            dispatch(authenticateUser(body));
+        }
     };
+
+    const { loading, userData, status, error } = useAppSelector(
+        (state) => state.auth
+    );
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (status === Status.FulFilled && userData) navigate("/app");
+
+        if (error) {
+            // handle error
+        }
+    }, [status, navigate]);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -69,14 +91,17 @@ const LoginScreen: React.FC = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
-                    <Button
+
+                    <LoadingButton
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
+                        startIcon={icons.login()}
+                        loading={false}
                     >
                         Sign In
-                    </Button>
+                    </LoadingButton>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">

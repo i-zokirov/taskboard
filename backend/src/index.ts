@@ -12,7 +12,14 @@ const app = express();
 // MIDDLEWARE
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
 // ROUTE HANDLERS
 app.use("/api/users", userRouteHandler);
 app.use("/api/projects", projectRouteHandler);
@@ -22,5 +29,5 @@ app.use("/api/projects", taskRouteHandler);
 app.use(notFoundErrorHandler);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`App is running on port: ${PORT}`));

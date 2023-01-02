@@ -45,6 +45,8 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
 
+import LoginIcon from "@mui/icons-material/Login";
+
 export const icons: IconDictionary = {
     // productivity workflow
 
@@ -114,6 +116,7 @@ export const icons: IconDictionary = {
     delete: (sx: SxProps | undefined) => <DeleteOutlineIcon sx={{ ...sx }} />,
     check: (sx: SxProps | undefined) => <CheckIcon sx={{ ...sx }} />,
     uploadfile: (sx: SxProps | undefined) => <UploadFileIcon sx={{ ...sx }} />,
+    login: (sx: SxProps | undefined) => <LoginIcon sx={{ ...sx }} />,
 };
 
 export const productivityIcons = [
