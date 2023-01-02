@@ -3,6 +3,7 @@ import baseUrl from "../../baseUrl";
 import { User } from "../../../types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Status } from "../../../types";
+
 interface AuthState {
     authenticated: boolean;
     tokenVerified: boolean;
@@ -12,10 +13,12 @@ interface AuthState {
     status: Status;
 }
 
+const userData = localStorage.getItem("userData");
+
 const initialState: AuthState = {
     authenticated: false,
     tokenVerified: false,
-    userData: null,
+    userData: userData ? JSON.parse(userData) : null,
     loading: false,
     status: Status.UnInitialized,
 };
@@ -45,6 +48,10 @@ export const authSlice = createSlice({
                 state.userData = action.payload;
                 state.tokenVerified = true;
                 state.status = Status.FulFilled;
+                localStorage.setItem(
+                    "userData",
+                    JSON.stringify(action.payload)
+                );
             }
         );
         builder.addCase(authenticateUser.rejected, (state, action) => {

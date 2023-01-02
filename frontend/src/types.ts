@@ -11,10 +11,11 @@ export type IconDictionary = {
 };
 
 export type User = {
-    id: string;
-    name: string;
+    id?: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    token: string;
+    token?: string;
 };
 
 export enum Status {

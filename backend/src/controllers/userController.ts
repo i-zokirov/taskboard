@@ -4,8 +4,14 @@ import User from "../models/User.model";
 import generateToken from "../utils/generateToken";
 
 export const registerUser: RequestHandler = async (req, res) => {
-    const { email, name, password } = req.body;
-    const user = await User.create({ email, name, password });
+    const { email, firstName, lastName, marketingConsent, password } = req.body;
+    const user = await User.create({
+        email,
+        firstName,
+        lastName,
+        marketingConsent,
+        password,
+    });
     if (user) res.status(201).json(user);
 };
 
@@ -16,7 +22,8 @@ export const loginUser: RequestHandler = async (req, res) => {
         const token = generateToken(user._id);
         res.json({
             id: user._id,
-            name: user.name,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             token,
         });

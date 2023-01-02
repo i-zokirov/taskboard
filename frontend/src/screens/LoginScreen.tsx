@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
@@ -16,7 +16,7 @@ import { Link as RouterLink } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { icons } from "../assets/icons";
 import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import { authenticateUser } from "../reduxApp/features/auth/auth-slice";
+import { authenticateUser } from "../reduxApp/features/auth/authSlice";
 import { Status } from "../types";
 const LoginScreen: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -43,7 +43,7 @@ const LoginScreen: React.FC = () => {
         if (error) {
             // handle error
         }
-    }, [status, navigate]);
+    }, [status, navigate, error, userData]);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -98,7 +98,7 @@ const LoginScreen: React.FC = () => {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                         startIcon={icons.login()}
-                        loading={false}
+                        loading={loading}
                     >
                         Sign In
                     </LoadingButton>

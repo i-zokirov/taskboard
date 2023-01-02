@@ -7,18 +7,18 @@ import MainBoardContainer from "../components/Main";
 import Drawer from "../components/Drawer";
 import Kanban from "../components/Kanban";
 import { useAppSelector } from "../reduxApp/hooks";
-// import { useAuthenticateUserQuery } from "../reduxApp/features/auth/auth-slice";
 
 const Board: React.FC = () => {
     const [open, setOpen] = React.useState(false);
     const [project, setProject] = useState("Project 1");
     const projects = ["Project 1", "Project 2"];
 
+    const auth = useAppSelector((state) => state.auth);
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (!data) navigate("/login");
-    // }, [data, navigate]);
+    useEffect(() => {
+        if (!auth.userData || !auth.tokenVerified) navigate("/login");
+    }, [auth, navigate]);
 
     const handleChange = (event: SelectChangeEvent) => {
         setProject(event.target.value);

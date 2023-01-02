@@ -2,9 +2,11 @@ import { Schema, model, Model, Types } from "mongoose";
 import * as bcrypt from "bcryptjs";
 export interface IUser {
     _id?: Types.ObjectId;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
+    marketingConsent?: boolean;
 }
 
 interface IUserMethods {
@@ -14,7 +16,11 @@ interface IUserMethods {
 type IUserModel = Model<IUser, {}, IUserMethods>;
 
 const userSchema = new Schema<IUser, IUserModel, IUserMethods>({
-    name: {
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
         type: String,
         required: true,
     },
@@ -27,6 +33,10 @@ const userSchema = new Schema<IUser, IUserModel, IUserMethods>({
         type: String,
         required: true,
     },
+    marketingConsent: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 userSchema.method("matchPassword", async function (enteredPassword: string) {
@@ -37,7 +47,6 @@ userSchema.pre("save", async function name(next) {
     if (!this.isModified("password")) {
         next();
     }
-
     const salt = await bcrypt.genSalt(6);
     this.password = await bcrypt.hash(this.password, salt);
 });

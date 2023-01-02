@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -11,16 +11,45 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "../components/Copyright";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import { registerUser } from "../reduxApp/features/register/register-slice";
+import { Status } from "../types";
 
 const SignUpScreen = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const { status, userData, error } = useAppSelector(
+        (state) => state.register
+    );
+
+    useEffect(() => {
+        if (userData && status === Status.FulFilled) navigate("/login");
+        if (error) {
+            // handle error
+        }
+    }, [userData, status, navigate, error]);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+        const formData = new FormData(event.currentTarget);
+        const reqBody = {
+            firstName: formData.get("firstName")!.toString(),
+            lastName: formData.get("lastName")!.toString(),
+            email: formData.get("email")!.toString(),
+            password: formData.get("password")!.toString(),
+            marketingConsent:
+                formData.get("marketingConsent")!.toString() ===
+                "allowMarketing",
+        };
+
+        if (
+            reqBody.email &&
+            reqBody.password &&
+            reqBody.firstName &&
+            reqBody.lastName
+        )
+            dispatch(registerUser(reqBody));
     };
     return (
         <Container component="main" maxWidth="xs">
@@ -91,8 +120,9 @@ const SignUpScreen = () => {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        value="allowExtraEmails"
+                                        value={"allowMarketing"}
                                         color="primary"
+                                        name="marketingConsent"
                                     />
                                 }
                                 label="I want to receive inspiration, marketing promotions and updates via email."
