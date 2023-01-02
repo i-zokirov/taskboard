@@ -4,6 +4,7 @@ export interface IProject {
     title: string;
     owner: Types.ObjectId;
     members?: Types.ObjectId[];
+    sections?: Types.ObjectId[];
 }
 
 interface IProjectMethods {
@@ -29,6 +30,12 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
             {
                 type: Schema.Types.ObjectId,
                 ref: "User",
+            },
+        ],
+        sections: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Section",
             },
         ],
     },

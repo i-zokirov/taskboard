@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     createProject,
+    defaultSetupController,
     deleteProject,
     getProjectById,
     getProjects,
@@ -9,6 +10,8 @@ import {
 import authenticate from "../middleware/authenticate";
 
 const router = Router();
+
+router.route("/default").post(authenticate, defaultSetupController);
 
 router
     .route("/")

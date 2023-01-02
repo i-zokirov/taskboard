@@ -1,6 +1,8 @@
 import { RequestHandler } from "express";
 
 import Project from "../models/Project.model";
+import Section from "../models/Section.model";
+import Task from "../models/Task.model";
 import User from "../models/User.model";
 
 export const getProjects: RequestHandler = async (req, res) => {
@@ -86,5 +88,62 @@ export const deleteProject: RequestHandler = async (req, res) => {
     } else {
         res.status(404);
         throw new Error("Project not found!");
+    }
+};
+
+export const defaultSetupController: RequestHandler = async (req, res) => {
+    const project = await Project.create({
+        title: "Sample project",
+        owner: req.user?._id,
+    });
+    if (project) {
+        const openSection = await Section.create({
+            title: "Open",
+            project: project._id,
+            description: "sample section description",
+            icon: "tipsandupdates",
+            color: "#d93651",
+        });
+        const progressSection = await Section.create({
+            title: "In Progress",
+            project: project._id,
+            description: "",
+            icon: "refresh",
+            color: "#00aaff",
+        });
+        const pendingSection = await Section.create({
+            title: "Pending",
+            project: project._id,
+            description: "",
+            icon: "lockreset",
+            color: "#ff9f1a",
+        });
+        const completedSection = await Section.create({
+            title: "Completed",
+            project: project._id,
+            description: "",
+            icon: "checkcircle",
+            color: "#47cc8a",
+        });
+
+        const task = await Task.create({
+            title: "Set up project",
+            description: "Sample description",
+            completed: false,
+            priority: "Low",
+            createdBy: req.user?._id,
+            assignedTo: req.user?._id,
+            project: project._id,
+            section: openSection._id,
+        });
+
+        project.sections = [
+            openSection._id,
+            progressSection._id,
+            pendingSection._id,
+            completedSection._id,
+        ];
+        const updated = await (await project.save()).populate("sections");
+        res.json(updated);
     }
 };

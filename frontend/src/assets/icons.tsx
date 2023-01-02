@@ -42,6 +42,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
 
@@ -117,6 +118,7 @@ export const icons: IconDictionary = {
     check: (sx: SxProps | undefined) => <CheckIcon sx={{ ...sx }} />,
     uploadfile: (sx: SxProps | undefined) => <UploadFileIcon sx={{ ...sx }} />,
     login: (sx: SxProps | undefined) => <LoginIcon sx={{ ...sx }} />,
+    lockreset: (sx: SxProps | undefined) => <LockResetIcon sx={{ ...sx }} />,
 };
 
 export const productivityIcons = [

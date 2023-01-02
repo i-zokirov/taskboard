@@ -1,12 +1,5 @@
 import { Schema, model, Types } from "mongoose";
 
-export enum TaskStatus {
-    Open = "Open",
-    InProgress = "In Progress",
-    Pending = "Pending",
-    Completed = "Completed",
-}
-
 export enum TaskPriority {
     High = "High",
     Medium = "Medium",
@@ -17,7 +10,7 @@ export interface ITask {
     title: string;
     description?: string;
     completed: boolean;
-    status: TaskStatus;
+    section: Types.ObjectId;
     priority: TaskPriority;
     createdBy: Types.ObjectId;
     assignedTo?: Types.ObjectId;
@@ -37,11 +30,7 @@ const taskSchema = new Schema<ITask>({
         required: true,
         default: false,
     },
-    status: {
-        type: String,
-        enum: ["Open", "In Progress", "Pending", "Completed"],
-        default: TaskStatus[TaskStatus.Open],
-    },
+
     priority: {
         type: String,
         enum: ["High", "Medium", "Low"],
@@ -59,6 +48,11 @@ const taskSchema = new Schema<ITask>({
     project: {
         type: Schema.Types.ObjectId,
         ref: "Project",
+        required: true,
+    },
+    section: {
+        type: Schema.Types.ObjectId,
+        ref: "Section",
         required: true,
     },
 });
