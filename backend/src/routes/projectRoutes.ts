@@ -1,11 +1,11 @@
 import { Router } from "express";
 import {
-    createProject,
+    createProjectHandler,
     defaultSetupController,
     deleteProject,
     getProjectById,
-    getProjects,
-    updateProject,
+    getProjectsHandler,
+    updateProjectHandler,
 } from "../controllers/projectController";
 import authenticate from "../middleware/authenticate";
 
@@ -15,12 +15,12 @@ router.route("/default").post(authenticate, defaultSetupController);
 
 router
     .route("/")
-    .get(authenticate, getProjects)
-    .post(authenticate, createProject);
+    .get(authenticate, getProjectsHandler)
+    .post(authenticate, createProjectHandler);
 router
     .route("/:projectId")
     .get(authenticate, getProjectById)
     .delete(authenticate, deleteProject)
-    .patch(authenticate, updateProject);
+    .patch(authenticate, updateProjectHandler);
 
 export default router;

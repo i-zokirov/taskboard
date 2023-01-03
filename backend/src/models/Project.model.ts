@@ -9,7 +9,7 @@ export interface IProject {
 
 interface IProjectMethods {
     isOwner(user: Types.ObjectId): boolean;
-    isMember(user: Types.ObjectId): boolean;
+    isMember(user: Types.ObjectId | undefined): boolean;
 }
 
 type IProjectModel = Model<IProject, {}, IProjectMethods>;

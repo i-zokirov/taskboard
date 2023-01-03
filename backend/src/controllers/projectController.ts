@@ -1,37 +1,25 @@
 import { RequestHandler } from "express";
-
+import { createProject, getProjects } from "../core/coreFunctions";
 import Project from "../models/Project.model";
 import Section from "../models/Section.model";
 import Task from "../models/Task.model";
 import User from "../models/User.model";
 
-export const getProjects: RequestHandler = async (req, res) => {
-    const projects = await Project.find()
-        .populate("owner", "name")
-        .populate("members", "name");
-
-    let userProjects;
-    if (projects.length) {
-        userProjects = projects.filter((project) =>
-            project.isMember(req.user!)
-        );
-    }
+export const getProjectsHandler: RequestHandler = async (req, res) => {
+    let userProjects = await getProjects(req.user!);
     res.json(userProjects);
 };
 
-export const createProject: RequestHandler = async (req, res) => {
+export const createProjectHandler: RequestHandler = async (req, res) => {
     const { title } = req.body;
-    const project = await Project.create({
-        title,
-        owner: req.user?._id,
-        members: [req.user?._id],
-    });
+    const project = await createProject({ title, user: req.user! });
     res.json(project);
 };
 
-export const updateProject: RequestHandler = async (req, res) => {
+export const updateProjectHandler: RequestHandler = async (req, res) => {
     const { title, owner: newOwnerId } = req.body;
     const { projectId } = req.params;
+
     const project = await Project.findById(projectId);
     if (project) {
         if (project.isOwner(req.user!)) {

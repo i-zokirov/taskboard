@@ -97,7 +97,7 @@ export const updateTask: RequestHandler = async (req, res) => {
                 task.title = title ? title : task?.title;
                 task.description = description ? description : task.description;
                 task.completed = completed ? completed : task.completed;
-                task.status = status ? status : task.status;
+                // task.status = status ? status : task.status;
                 task.priority = priority ? priority : task.priority;
                 task.assignedTo = assignee ? assignee : task.assignedTo;
                 const updated = await (
