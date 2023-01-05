@@ -35,8 +35,21 @@ export const tasksSlice = createSlice({
             state.loading = false;
             state.data[action.payload.project] = [];
         },
+        updateSingleTaskInStore: (
+            state,
+            action: PayloadAction<{ projectId: string; task: ITask }>
+        ) => {
+            const index = state.data[action.payload.projectId].findIndex(
+                (el) => el._id === action.payload.task._id
+            );
+            state.data[action.payload.projectId][index] = action.payload.task;
+        },
     },
 });
 
-export const { tasksRequest, tasksRequestFailure, tasksRequestSuccess } =
-    tasksSlice.actions;
+export const {
+    tasksRequest,
+    tasksRequestFailure,
+    tasksRequestSuccess,
+    updateSingleTaskInStore,
+} = tasksSlice.actions;

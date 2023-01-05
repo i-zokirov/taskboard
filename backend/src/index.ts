@@ -13,7 +13,11 @@ import {
     ServerToClientEvents,
     SocketData,
 } from "./interfaces";
-import { readProjectsHandler, readTasksHandler } from "./socket";
+import {
+    readProjectsHandler,
+    readTasksHandler,
+    updateTasksHandler,
+} from "./socket";
 
 connectDB();
 const app = express();
@@ -61,7 +65,7 @@ io.on("connection", function (socket: Socket) {
 
     socket.on("projects:read", readProjectsHandler);
     socket.on("tasks:read", readTasksHandler);
-
+    socket.on("tasks:update", updateTasksHandler);
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
     });

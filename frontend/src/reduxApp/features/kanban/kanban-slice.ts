@@ -60,6 +60,7 @@ export const kanbanSlice = createSlice({
                     action.payload.source.index,
                     1
                 );
+                removed.section = action.payload.destination.droppableId;
                 destinationTaskItems.splice(
                     action.payload.destination.index,
                     0,

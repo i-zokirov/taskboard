@@ -94,4 +94,15 @@ export interface ClientToServerEvents {
             error?: string | undefined;
         }) => void
     ) => void;
+    ["tasks:update"]: (
+        payload: {
+            token: string | undefined;
+            taskId: string;
+            updates: { [x: string]: any };
+        },
+        callback: (response: {
+            task?: ITask;
+            error?: string | undefined;
+        }) => void
+    ) => void;
 }

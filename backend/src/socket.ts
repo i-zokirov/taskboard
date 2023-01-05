@@ -75,3 +75,32 @@ export const readTasksHandler = async function (
         console.log(error);
     }
 };
+
+export const updateTasksHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        taskId: string;
+        updates: { [x: string]: any };
+    },
+    callback: (response: { task?: ITask; error?: string | undefined }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            await Task.findByIdAndUpdate(payload.taskId, {
+                ...payload.updates,
+            }).populate({
+                path: "createdBy assignedTo project",
+                select: "name name title",
+            });
+            console.info(`Task updated: ${payload.taskId}`);
+            const task = await Task.findById(payload.taskId);
+            if (task) callback({ task });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};

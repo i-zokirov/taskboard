@@ -12,6 +12,17 @@ export interface ClientToServerEvents {
             error?: string | undefined;
         }) => void
     ) => void;
+    ["tasks:update"]: (
+        payload: {
+            token: string;
+            taskId: string;
+            updates: { [x: string]: any };
+        },
+        callback: (response: {
+            task?: ITask;
+            error?: string | undefined;
+        }) => void
+    ) => void;
 }
 
 export interface InterServerEvents {

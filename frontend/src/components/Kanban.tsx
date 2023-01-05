@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { Box, IconButton, LinearProgress, Stack, Tooltip } from "@mui/material";
 import TaskCard from "./Card";
-
-import { kanbancolumns } from "../config";
 import { StrictModeDroppable } from "./StrictModeDroppable";
 import Column from "./Column";
 import ColumnHeader from "./ColumnHeader";
@@ -16,6 +14,7 @@ import socket from "../socket";
 import {
     tasksRequest,
     tasksRequestSuccess,
+    updateSingleTaskInStore,
 } from "../reduxApp/features/tasks/tasks-slice";
 
 import {
@@ -42,6 +41,22 @@ const Kanban: React.FC = () => {
         if (!result.destination) return;
         const { source, destination } = result;
         dispatch(moveTask({ source, destination }));
+        const payload = {
+            token,
+            taskId: result.draggableId,
+            updates: { section: result.destination.droppableId },
+        };
+        socket.emit("tasks:update", payload, (response) => {
+            if (response.task) {
+                // update task in redux
+                dispatch(
+                    updateSingleTaskInStore({
+                        projectId: projectData!._id,
+                        task: response.task,
+                    })
+                );
+            }
+        });
     };
     useEffect(() => {
         return () => {
