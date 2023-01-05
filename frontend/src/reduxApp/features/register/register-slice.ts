@@ -9,8 +9,8 @@ interface ReqBody extends User {
 }
 
 interface RegisterState {
-    status: Status;
     userData: User | null;
+    status: Status;
     loading: boolean;
     error?: string;
 }

@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ColumnHeaderProps } from "../interfaces";
 import ColumnIconSelectorMenu from "./ColumnIconSelectorMenu";
 import ColumnMenu from "./ColumnMenu";
+import { icons } from "../assets/icons";
 
 const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     const { columnId, column } = props;
@@ -124,7 +125,7 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                             handleColumnIconClick(columnId, event)
                         }
                     >
-                        {column.icon}
+                        {icons[column.icon]({ color: "white" })}
                     </IconButton>
                     {columnInput.id === columnId && columnInput.show ? (
                         <input
@@ -135,7 +136,7 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                             autoFocus
                         />
                     ) : (
-                        <Typography color={"white"}>{column.name}</Typography>
+                        <Typography color={"white"}>{column.title}</Typography>
                     )}
                 </Box>
 

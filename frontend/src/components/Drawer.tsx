@@ -29,6 +29,9 @@ import { icons } from "../assets/icons";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProjectTypeSelectionMenu from "./ProjectTypeSelectionMenu";
 import ProjectAddMenu from "./ProjectAddMenu";
+import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import { setCurrentProject } from "../reduxApp/features/projects/currentProjectSlice";
+import { IProject } from "../types";
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
@@ -48,6 +51,9 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
         useState<HTMLElement | null>(null);
     const [searchText, setSearchText] = useState("");
 
+    const { projectData } = useAppSelector((state) => state.currentProject);
+    const { data: projects } = useAppSelector((state) => state.projects);
+    const dispatch = useAppDispatch();
     const openProjectTypeSelectorMenu = Boolean(projectTypeMenuAnchorEl);
     const openProjectAddMenu = Boolean(projectAddMenuAnchorEl);
     const handleSearch = () => {};
@@ -67,6 +73,13 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
     const handleCloseProjectAddMenu = () => {
         setProjectAddMenuAnchorEl(null);
     };
+
+    const handleProjectChange = (project: IProject) => {
+        if (project._id !== projectData?._id) {
+            dispatch(setCurrentProject(project));
+        }
+    };
+
     const theme = useTheme();
     return (
         <ThemeProvider theme={darkTheme}>
@@ -153,22 +166,22 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                         />
                     </ListItem>
 
-                    {["Project 1", "Project 2", "Project 3"].map(
-                        (text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? (
-                                            <InboxIcon />
-                                        ) : (
-                                            <MailIcon />
-                                        )}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        )
-                    )}
+                    {projects.map((project, index) => (
+                        <ListItem key={project._id} disablePadding>
+                            <ListItemButton
+                                onClick={() => handleProjectChange(project)}
+                            >
+                                <ListItemIcon>
+                                    {index % 2 === 0 ? (
+                                        <InboxIcon />
+                                    ) : (
+                                        <MailIcon />
+                                    )}
+                                </ListItemIcon>
+                                <ListItemText primary={project.title} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
                 </List>
                 <Divider />
             </MUIDrawer>

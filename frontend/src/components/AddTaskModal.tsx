@@ -52,11 +52,7 @@ const AddTaskModal: FunctionComponent<AddTaskModalProps> = (props) => {
                 />
                 <br />
                 <Box display={"flex"} marginTop={"10px"}>
-                    <ProjectSelector
-                        project={project}
-                        projects={projects}
-                        handleChange={handleChangeProject}
-                    />
+                    <ProjectSelector />
                 </Box>
                 <Box display={"flex"} justifyContent="flex-end">
                     <button

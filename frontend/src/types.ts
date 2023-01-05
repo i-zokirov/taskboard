@@ -1,11 +1,24 @@
 export type ITask = {
-    id: string;
+    _id: string;
+    id?: string;
     title: string;
     description?: string;
     completed: boolean;
     dueDate?: Date;
+    createdBy?: User;
+    assignedTo?: User;
+    section?: string;
+    priority?: string;
+    project?: IProject;
 };
-
+export type ISection = {
+    _id: string;
+    title: string;
+    description?: string;
+    icon: string;
+    color: string;
+    project: IProject;
+};
 export type IconDictionary = {
     [x: string]: any;
 };
@@ -23,4 +36,16 @@ export enum Status {
     FulFilled = "FulFilled",
     Rejected = "Rejected",
     UnInitialized = "UnInitialized",
+}
+
+export type IProject = {
+    _id: string;
+    title: string;
+    owner: User;
+    members?: User[];
+    sections?: ISection[];
+};
+
+export interface KanbanColumn extends ISection {
+    taskItems: ITask[];
 }

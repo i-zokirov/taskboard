@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
-import { Box, IconButton, Stack, Tooltip } from "@mui/material";
+import { Box, IconButton, LinearProgress, Stack, Tooltip } from "@mui/material";
 import TaskCard from "./Card";
 
 import { kanbancolumns } from "../config";
@@ -11,166 +11,221 @@ import LastColumn from "./LastColumn";
 import { icons } from "../assets/icons";
 import ColumnNoTasksPlaceHolder from "./ColumnNoTasksPlaceHolder";
 import TaskInputCard from "./TaskInputCard";
-const onDragEnd = (
-    result: DropResult,
-    columns: any,
-    setColumns: (_: any) => void
-) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
+import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import socket from "../socket";
+import {
+    tasksRequest,
+    tasksRequestSuccess,
+} from "../reduxApp/features/tasks/tasks-slice";
 
-    if (source.droppableId !== destination.droppableId) {
-        const sourceColumn = columns[source.droppableId];
-        const destinationColumn = columns[destination.droppableId];
-        const sourceItems = [...sourceColumn.taskItems];
-        const destinationItems = [...destinationColumn.taskItems];
-        const [removed] = sourceItems.splice(source.index, 1);
-        destinationItems.splice(destination.index, 0, removed);
-
-        setColumns((prev: any) => {
-            return {
-                ...prev,
-                [source.droppableId]: {
-                    ...sourceColumn,
-                    taskItems: sourceItems,
-                },
-                [destination.droppableId]: {
-                    ...destinationColumn,
-                    taskItems: destinationItems,
-                },
-            };
-        });
-    } else {
-        const column = columns[source.droppableId];
-        const copiedItems = [...column.taskItems];
-        const [removed] = copiedItems.splice(source.index, 1);
-        copiedItems.splice(destination.index, 0, removed);
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...column,
-                items: copiedItems,
-            },
-        });
-    }
-};
+import {
+    moveTask,
+    setUpKanban,
+} from "../reduxApp/features/kanban/kanban-slice";
 
 const Kanban: React.FC = () => {
-    const [columns, setColumns] = useState(kanbancolumns);
     const [showInputForCol, setShowInputForCol] = useState<{
         colId: null | string;
         show: boolean;
     }>({ colId: null, show: false });
 
-    const columnsLength = Object.entries(columns).length;
+    const kanban = useAppSelector((state) => state.kanban);
+    const columnsLength = Object.entries(kanban.columns).length;
     const columnWidth = columnsLength < 4 ? `${100 / columnsLength}vw` : `22vw`;
-    // const columnWidth = `20vw`;
+
+    const { projectData } = useAppSelector((state) => state.currentProject);
+    const tasks = useAppSelector((state) => state.tasks);
+    const token = useAppSelector((state) => state.auth.userData?.token);
+
+    const dispatch = useAppDispatch();
+    const onDragEnd = (result: DropResult) => {
+        if (!result.destination) return;
+        const { source, destination } = result;
+        dispatch(moveTask({ source, destination }));
+    };
+    useEffect(() => {
+        return () => {
+            if (projectData) {
+                if (tasks.data[projectData._id]) {
+                    // build kanban
+                    const sections = projectData.sections!.map((section) => {
+                        const project = projectData;
+
+                        return { ...section, project };
+                    });
+
+                    dispatch(
+                        setUpKanban({
+                            sections,
+                            tasks: tasks.data[projectData._id],
+                        })
+                    );
+                } else {
+                    dispatch(tasksRequest());
+                    socket.emit(
+                        "tasks:read",
+                        { token, projectId: projectData._id },
+                        (response) => {
+                            if (response.tasks) {
+                                dispatch(
+                                    tasksRequestSuccess({
+                                        project: projectData._id,
+                                        tasks: response.tasks,
+                                    })
+                                );
+                                const sections = projectData.sections!.map(
+                                    (section) => {
+                                        const project = projectData;
+
+                                        return { ...section, project };
+                                    }
+                                );
+                                dispatch(
+                                    setUpKanban({
+                                        sections,
+                                        tasks: response.tasks,
+                                    })
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        };
+    }, [projectData]);
     const hideInputForCol = () => {
         setShowInputForCol({ colId: null, show: false });
     };
-    return (
-        <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems={"flex-start"}
-            spacing={0}
-        >
-            <DragDropContext
-                onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+
+    if (tasks.loading) {
+        return <LinearProgress color="secondary" />;
+    } else {
+        return (
+            <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems={"flex-start"}
+                spacing={0}
             >
-                {Object.entries(columns).map(([columnId, column], index) => (
-                    <Column
-                        columnId={columnId}
-                        width={columnWidth}
-                        index={index}
-                        key={columnId}
-                    >
-                        <ColumnHeader columnId={columnId} column={column} />
-                        <Box sx={{ padding: "10px 5px" }}>
-                            <StrictModeDroppable
-                                droppableId={columnId}
+                <DragDropContext onDragEnd={onDragEnd}>
+                    {Object.entries(kanban.columns).map(
+                        ([columnId, column], index) => (
+                            <Column
+                                columnId={columnId}
+                                width={columnWidth}
+                                index={index}
                                 key={columnId}
                             >
-                                {(provided, snapshot) => (
-                                    <div
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                        style={{ minHeight: "90vh" }}
+                                <ColumnHeader
+                                    columnId={columnId}
+                                    column={column}
+                                />
+                                <Box sx={{ padding: "10px 5px" }}>
+                                    <StrictModeDroppable
+                                        droppableId={columnId}
+                                        key={columnId}
                                     >
-                                        {column.taskItems.map((item, indx) => (
-                                            <Draggable
-                                                key={item.id}
-                                                draggableId={item.id}
-                                                index={indx}
+                                        {(provided, snapshot) => (
+                                            <div
+                                                {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                                style={{ minHeight: "90vh" }}
                                             >
-                                                {(provided, snapshot) => {
-                                                    return (
-                                                        <TaskCard
-                                                            task={item}
-                                                            completed={
-                                                                item.completed
+                                                {column.taskItems.map(
+                                                    (item, indx) => (
+                                                        <Draggable
+                                                            key={item._id}
+                                                            draggableId={
+                                                                item._id
                                                             }
-                                                            innerRef={
-                                                                provided.innerRef
-                                                            }
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                        />
-                                                    );
-                                                }}
-                                            </Draggable>
-                                        ))}
-                                        {showInputForCol.show &&
-                                        showInputForCol.colId === columnId ? (
-                                            <TaskInputCard
-                                                hideInput={hideInputForCol}
-                                            />
-                                        ) : (
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    justifyContent: " center",
-                                                }}
-                                            >
-                                                <Tooltip title="Add task">
-                                                    <IconButton
-                                                        sx={{
-                                                            background: "#fff",
-                                                        }}
-                                                        onClick={() =>
-                                                            setShowInputForCol({
-                                                                colId: columnId,
-                                                                show: true,
-                                                            })
+                                                            index={indx}
+                                                        >
+                                                            {(
+                                                                provided,
+                                                                snapshot
+                                                            ) => {
+                                                                return (
+                                                                    <TaskCard
+                                                                        task={
+                                                                            item
+                                                                        }
+                                                                        completed={
+                                                                            item.completed
+                                                                        }
+                                                                        innerRef={
+                                                                            provided.innerRef
+                                                                        }
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                    />
+                                                                );
+                                                            }}
+                                                        </Draggable>
+                                                    )
+                                                )}
+                                                {showInputForCol.show &&
+                                                showInputForCol.colId ===
+                                                    columnId ? (
+                                                    <TaskInputCard
+                                                        hideInput={
+                                                            hideInputForCol
                                                         }
+                                                    />
+                                                ) : (
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                " center",
+                                                        }}
                                                     >
-                                                        {icons["add"]({
-                                                            width: "20px",
-                                                            height: "20px",
-                                                        })}
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Box>
+                                                        <Tooltip title="Add task">
+                                                            <IconButton
+                                                                sx={{
+                                                                    background:
+                                                                        "#fff",
+                                                                }}
+                                                                onClick={() =>
+                                                                    setShowInputForCol(
+                                                                        {
+                                                                            colId: columnId,
+                                                                            show: true,
+                                                                        }
+                                                                    )
+                                                                }
+                                                            >
+                                                                {icons["add"]({
+                                                                    width: "20px",
+                                                                    height: "20px",
+                                                                })}
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </Box>
+                                                )}
+                                                {column.taskItems.length ===
+                                                    0 && (
+                                                    <ColumnNoTasksPlaceHolder />
+                                                )}
+                                                {provided.placeholder}
+                                            </div>
                                         )}
-                                        {column.taskItems.length === 0 && (
-                                            <ColumnNoTasksPlaceHolder />
-                                        )}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </StrictModeDroppable>
-                        </Box>
-                    </Column>
-                ))}
-            </DragDropContext>
-            <Column
-                width={`${(100 / Object.entries(columns).length + 1) / 1.7}%`}
-                index={Object.entries(columns).length}
-            >
-                <LastColumn />
-            </Column>
-        </Stack>
-    );
+                                    </StrictModeDroppable>
+                                </Box>
+                            </Column>
+                        )
+                    )}
+                </DragDropContext>
+                <Column
+                    width={`${
+                        (100 / Object.entries(kanban.columns).length + 1) / 1.7
+                    }%`}
+                    index={Object.entries(kanban.columns).length}
+                >
+                    <LastColumn />
+                </Column>
+            </Stack>
+        );
+    }
 };
 
 export default Kanban;

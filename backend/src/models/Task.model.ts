@@ -15,6 +15,7 @@ export interface ITask {
     createdBy: Types.ObjectId;
     assignedTo?: Types.ObjectId;
     project: Types.ObjectId;
+    dueDate?: Date;
 }
 
 const taskSchema = new Schema<ITask>({
@@ -55,6 +56,7 @@ const taskSchema = new Schema<ITask>({
         ref: "Section",
         required: true,
     },
+    dueDate: Date,
 });
 
 const Task = model<ITask>("Task", taskSchema);

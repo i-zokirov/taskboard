@@ -1,8 +1,8 @@
 import { SelectChangeEvent } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { ITask, User } from "./types";
+import { IProject, ITask } from "./types";
 
-export interface BoardToolbarProps extends ProjectSelectorProps {
+export interface BoardToolbarProps {
     open: boolean;
     handleDrawerOpen: () => void;
 }
@@ -69,4 +69,29 @@ export interface SearchBarProps {
 
 export interface TaskInputCardProps {
     hideInput: () => void;
+}
+
+// SOCKET
+
+export interface ServerToClientEvents {}
+
+interface ProjectsReadProps {
+    projects: IProject[];
+    error?: string;
+}
+
+export interface ClientToServerEvents {
+    hello: () => void;
+    ["projects:read"]: (
+        payload: { token: string | undefined },
+        callback: (response: ProjectsReadProps) => void
+    ) => void;
+
+    ["tasks:read"]: (
+        payload: { token: string | undefined; projectId: string },
+        callback: (response: {
+            tasks?: ITask[];
+            error?: string | undefined;
+        }) => void
+    ) => void;
 }

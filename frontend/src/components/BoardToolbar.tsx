@@ -103,11 +103,7 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <ProjectSelector
-                        project={props.project}
-                        projects={props.projects}
-                        handleChange={props.handleChange}
-                    />
+                    <ProjectSelector />
                     <Box sx={{ flexGrow: 1 }} />
                     <Box
                         sx={{
