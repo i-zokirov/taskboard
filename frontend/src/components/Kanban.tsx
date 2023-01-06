@@ -182,6 +182,7 @@ const Kanban: React.FC = () => {
                                                 showInputForCol.colId ===
                                                     columnId ? (
                                                     <TaskInputCard
+                                                        sectionId={columnId}
                                                         hideInput={
                                                             hideInputForCol
                                                         }

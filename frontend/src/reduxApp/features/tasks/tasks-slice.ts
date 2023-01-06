@@ -44,6 +44,12 @@ export const tasksSlice = createSlice({
             );
             state.data[action.payload.projectId][index] = action.payload.task;
         },
+        addTaskToStore: (
+            state,
+            action: PayloadAction<{ projectId: string; task: ITask }>
+        ) => {
+            state.data[action.payload.projectId].push(action.payload.task);
+        },
     },
 });
 
@@ -52,4 +58,5 @@ export const {
     tasksRequestFailure,
     tasksRequestSuccess,
     updateSingleTaskInStore,
+    addTaskToStore,
 } = tasksSlice.actions;

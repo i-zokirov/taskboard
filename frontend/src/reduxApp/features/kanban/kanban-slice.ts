@@ -30,12 +30,30 @@ export const kanbanSlice = createSlice({
                     taskItems: action.payload.tasks.filter(
                         (task) =>
                             task.project?._id === section.project._id &&
-                            task.section === section._id
+                            task.section._id === section._id
                     ),
                 };
                 columns[section._id] = column;
             }
             state.columns = columns;
+        },
+        updateTaskInKanbanBoard: (
+            state,
+            action: PayloadAction<{ task: ITask }>
+        ) => {
+            const index = state.columns[
+                action.payload.task.section._id
+            ].taskItems.findIndex((el) => el._id === action.payload.task._id);
+            state.columns[action.payload.task.section._id].taskItems[index] =
+                action.payload.task;
+        },
+        addTaskToKanbanBoard: (
+            state,
+            action: PayloadAction<{ task: ITask; sectionId: string }>
+        ) => {
+            state.columns[action.payload.sectionId].taskItems.push(
+                action.payload.task
+            );
         },
         moveTask: (
             state,
@@ -60,7 +78,7 @@ export const kanbanSlice = createSlice({
                     action.payload.source.index,
                     1
                 );
-                removed.section = action.payload.destination.droppableId;
+                removed.section._id = action.payload.destination.droppableId;
                 destinationTaskItems.splice(
                     action.payload.destination.index,
                     0,
@@ -97,4 +115,9 @@ export const kanbanSlice = createSlice({
     },
 });
 
-export const { setUpKanban, moveTask } = kanbanSlice.actions;
+export const {
+    setUpKanban,
+    moveTask,
+    updateTaskInKanbanBoard,
+    addTaskToKanbanBoard,
+} = kanbanSlice.actions;

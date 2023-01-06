@@ -1,6 +1,6 @@
 import { SelectChangeEvent } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { IProject, ITask } from "./types";
+import { IProject, ITask, ITaskOptions } from "./types";
 
 export interface BoardToolbarProps {
     open: boolean;
@@ -69,6 +69,7 @@ export interface SearchBarProps {
 
 export interface TaskInputCardProps {
     hideInput: () => void;
+    sectionId: string;
 }
 
 // SOCKET
@@ -99,6 +100,16 @@ export interface ClientToServerEvents {
             token: string | undefined;
             taskId: string;
             updates: { [x: string]: any };
+        },
+        callback: (response: {
+            task?: ITask;
+            error?: string | undefined;
+        }) => void
+    ) => void;
+    ["tasks:create"]: (
+        payload: {
+            token: string | undefined;
+            task: ITaskOptions;
         },
         callback: (response: {
             task?: ITask;

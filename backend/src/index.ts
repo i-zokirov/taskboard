@@ -14,6 +14,7 @@ import {
     SocketData,
 } from "./interfaces";
 import {
+    createTasksHandler,
     readProjectsHandler,
     readTasksHandler,
     updateTasksHandler,
@@ -62,10 +63,10 @@ io.on("connection", function (socket: Socket) {
         console.log("New client joined");
         console.log(socket.id);
     });
-
     socket.on("projects:read", readProjectsHandler);
     socket.on("tasks:read", readTasksHandler);
     socket.on("tasks:update", updateTasksHandler);
+    socket.on("tasks:create", createTasksHandler);
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
     });

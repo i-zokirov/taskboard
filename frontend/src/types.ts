@@ -7,9 +7,21 @@ export type ITask = {
     dueDate?: Date;
     createdBy?: User;
     assignedTo?: User;
+    section: ISection;
+    priority: string;
+    project: IProject;
+};
+
+export type ITaskOptions = {
+    title?: string;
+    description?: string;
+    completed?: boolean;
+    dueDate?: Date;
+    createdBy?: User;
+    assignedTo?: User;
     section?: string;
     priority?: string;
-    project?: IProject;
+    project?: string;
 };
 export type ISection = {
     _id: string;

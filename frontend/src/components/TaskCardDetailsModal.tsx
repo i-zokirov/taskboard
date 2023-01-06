@@ -24,6 +24,11 @@ import Divider from "@mui/material/Divider";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AddReactionIcon from "@mui/icons-material/AddReaction";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
+
+import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import socket from "../socket";
+import { updateSingleTaskInStore } from "../reduxApp/features/tasks/tasks-slice";
+import { updateTaskInKanbanBoard } from "../reduxApp/features/kanban/kanban-slice";
 const dark = "#e7ebf0";
 
 const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
@@ -32,15 +37,54 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
         task.description ? task.description : ""
     );
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate : null);
-
     const [showDescriptionInput, setShowDescriptionInput] = useState(false);
-
     const toggleDescriptionInput = () => {
         setShowDescriptionInput((prev) => !prev);
     };
 
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
     const saveHandler = () => {
         hideDescriptionInput();
+        const updates = {
+            ...task,
+            description: descriptionInput ? descriptionInput : task.description,
+            dueDate: dueDate ? dueDate : task.dueDate,
+        };
+
+        socket.emit(
+            "tasks:update",
+            { token, taskId: task._id, updates },
+            (response) => {
+                if (response.task) {
+                    dispatch(
+                        updateSingleTaskInStore({
+                            projectId: task.project!._id,
+                            task: response.task,
+                        })
+                    );
+                    dispatch(updateTaskInKanbanBoard({ task: response.task }));
+                }
+            }
+        );
+    };
+    const markTaskCompleted = () => {
+        const payload = {
+            token,
+            taskId: task._id,
+            updates: { completed: true },
+        };
+        socket.emit("tasks:update", payload, (response) => {
+            if (response.task) {
+                dispatch(
+                    updateSingleTaskInStore({
+                        projectId: task.project!._id,
+                        task: response.task,
+                    })
+                );
+                dispatch(updateTaskInKanbanBoard({ task: response.task }));
+            }
+        });
     };
     const hideDescriptionInput = () => {
         setShowDescriptionInput(false);
@@ -61,10 +105,12 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                     display={"flex"}
                     justifyContent="space-between"
                     alignItems={"center"}
-                    sx={{ height: "12%", padding: "20px" }}
+                    sx={{ padding: "20px" }}
                 >
                     <Box>
-                        <button className="btn">Complete</button>
+                        <button className="btn" onClick={markTaskCompleted}>
+                            Complete
+                        </button>
                     </Box>
                     <Box>
                         <Tooltip title="More..." placement="top">
@@ -73,7 +119,10 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Close" placement="top">
-                            <IconButton sx={{ marginLeft: "10px" }}>
+                            <IconButton
+                                sx={{ marginLeft: "10px" }}
+                                onClick={onClose}
+                            >
                                 <CloseIcon />
                             </IconButton>
                         </Tooltip>
@@ -99,7 +148,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                         }}
                     >
                         <Box>
-                            <Typography variant="h5">{task.title}</Typography>
+                            <Typography variant="h6">{task.title}</Typography>
                             <Box marginTop={2}>
                                 {showDescriptionInput ? (
                                     <React.Fragment>
@@ -108,9 +157,8 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                             label="Description"
                                             multiline
                                             maxRows={4}
-                                            defaultValue={task.description}
                                             size="small"
-                                            variant="standard"
+                                            variant="outlined"
                                             fullWidth
                                             value={descriptionInput}
                                             onChange={(e) =>
@@ -118,6 +166,10 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                                     e.target.value
                                                 )
                                             }
+                                            autoFocus
+                                            InputProps={{
+                                                style: { fontSize: 14 },
+                                            }}
                                         />
 
                                         <Button

@@ -4,7 +4,7 @@ import Project, { IProject } from "./models/Project.model";
 import User from "./models/User.model";
 import { JWT_SECRET } from "./config/variables";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import Task, { ITask } from "./models/Task.model";
+import Task, { ITask, ITaskOptions } from "./models/Task.model";
 
 const authenticate = async (token: string) => {
     if (!token) {
@@ -63,8 +63,8 @@ export const readTasksHandler = async function (
                 const tasks = await Task.find({
                     project: project._id,
                 }).populate({
-                    path: "createdBy assignedTo project",
-                    select: "name name title",
+                    path: "createdBy assignedTo project section",
+                    select: "name name title title",
                 });
                 callback({ tasks });
             }
@@ -90,12 +90,38 @@ export const updateTasksHandler = async function (
         if (user) {
             await Task.findByIdAndUpdate(payload.taskId, {
                 ...payload.updates,
-            }).populate({
-                path: "createdBy assignedTo project",
-                select: "name name title",
             });
             console.info(`Task updated: ${payload.taskId}`);
-            const task = await Task.findById(payload.taskId);
+            const task = await Task.findById(payload.taskId).populate({
+                path: "createdBy assignedTo project section",
+                select: "name name title title",
+            });
+            if (task) callback({ task });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createTasksHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        task: ITaskOptions;
+    },
+    callback: (response: { task?: ITask; error?: string | undefined }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const task = await (
+                await Task.create({ ...payload.task, createdBy: user._id })
+            ).populate({
+                path: "createdBy assignedTo project section",
+                select: "name name title title",
+            });
             if (task) callback({ task });
         } else {
             callback({ error: "NO user" });

@@ -1,4 +1,7 @@
 import { Schema, model, Types } from "mongoose";
+import { IProject } from "./Project.model";
+import { ISection } from "./Section.model";
+import { IUser } from "./User.model";
 
 export enum TaskPriority {
     High = "High",
@@ -17,6 +20,18 @@ export interface ITask {
     project: Types.ObjectId;
     dueDate?: Date;
 }
+
+export type ITaskOptions = {
+    title?: string;
+    description?: string;
+    completed?: boolean;
+    dueDate?: Date;
+    createdBy?: Types.ObjectId;
+    assignedTo?: Types.ObjectId;
+    section?: Types.ObjectId;
+    priority?: string;
+    project?: Types.ObjectId;
+};
 
 const taskSchema = new Schema<ITask>({
     title: {
