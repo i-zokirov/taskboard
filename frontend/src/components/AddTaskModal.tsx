@@ -1,35 +1,61 @@
-import { Typography, Box, TextField, SelectChangeEvent } from "@mui/material";
-
-import React, {
-    ChangeEvent,
-    FunctionComponent,
-    useState,
-    FormEvent,
-} from "react";
+import { Typography, Box, TextField } from "@mui/material";
+import React, { ChangeEvent, useState, FormEvent } from "react";
 import { AddTaskModalProps } from "../interfaces";
 import ProjectSelector from "./ProjectSelector";
 import TransitionModal from "./TransitionModal";
-
-const AddTaskModal: FunctionComponent<AddTaskModalProps> = (props) => {
+import { useAppSelector, useAppDispatch } from "../reduxApp/hooks";
+import socket from "../socket";
+import { ITaskOptions } from "../types";
+import { addTaskToKanbanBoard } from "../reduxApp/features/kanban/kanban-slice";
+import { addTaskToStore } from "../reduxApp/features/tasks/tasks-slice";
+const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
     const [newTask, setNewTask] = useState("");
-    const [project, setProject] = useState("Project 1");
-    const projects = ["Project 1", "Project 2"];
 
     const { open, onClose } = props;
-
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    const projectData = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    const dispatch = useAppDispatch();
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         setNewTask(e.currentTarget.value);
     };
 
-    const handleChangeProject = (event: SelectChangeEvent) => {
-        setProject(event.target.value);
-    };
-
     const handleCreateTask = (event: FormEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        console.log(event);
         // save new task
+        if (newTask) {
+            const payload: {
+                token: string | undefined;
+                task: ITaskOptions;
+            } = {
+                token,
+                task: {
+                    title: newTask,
+                    project: projectData?._id,
+                },
+            };
+            if (projectData?.sections?.length) {
+                payload.task["section"] = projectData.sections[0]._id;
+            }
+            socket.emit("tasks:create", payload, (response) => {
+                if (response.task) {
+                    dispatch(
+                        addTaskToKanbanBoard({
+                            task: response.task,
+                            sectionId: response.task.section._id,
+                        })
+                    );
+                    dispatch(
+                        addTaskToStore({
+                            task: response.task,
+                            projectId: projectData!._id,
+                        })
+                    );
+                }
+            });
+        }
 
         // close modal
         onClose();
