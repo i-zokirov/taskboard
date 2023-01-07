@@ -1,46 +1,29 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef } from "react";
 import { Paper, Box } from "@mui/material";
 import { TaskInputCardProps } from "../interfaces";
-import socket from "../socket";
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import { addTaskToKanbanBoard } from "../reduxApp/features/kanban/kanban-slice";
-import { addTaskToStore } from "../reduxApp/features/tasks/tasks-slice";
+
+import { useAppSelector, useCreateTask } from "../reduxApp/hooks";
 
 const TaskInputCard: FunctionComponent<TaskInputCardProps> = ({
     hideInput,
     sectionId,
 }) => {
-    const [value, setValue] = useState("");
-    const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value);
-    };
+    const inputRef = useRef<HTMLInputElement>(null);
     const token = useAppSelector((state) => state.auth.userData?.token);
     const { projectData } = useAppSelector((state) => state.currentProject);
-    const dispatch = useAppDispatch();
+    const createTask = useCreateTask();
     const handleBlur = (e: React.FormEvent<HTMLInputElement>) => {
-        if (value) {
+        if (inputRef.current && inputRef.current.value) {
             // create task
             const payload = {
                 token,
                 task: {
-                    title: value,
+                    title: inputRef.current.value,
                     section: sectionId,
                     project: projectData?._id,
                 },
             };
-            socket.emit("tasks:create", payload, (request) => {
-                if (request.task) {
-                    dispatch(
-                        addTaskToKanbanBoard({ sectionId, task: request.task })
-                    );
-                    dispatch(
-                        addTaskToStore({
-                            projectId: projectData!._id,
-                            task: request.task,
-                        })
-                    );
-                }
-            });
+            createTask(payload);
         }
         hideInput();
     };
@@ -65,9 +48,9 @@ const TaskInputCard: FunctionComponent<TaskInputCardProps> = ({
                     style={{ width: "100%", fontSize: "14px" }}
                     placeholder="Task title"
                     autoFocus
-                    value={value}
+                    ref={inputRef}
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    id={"New task input"}
                 />
             </Box>
         </Paper>

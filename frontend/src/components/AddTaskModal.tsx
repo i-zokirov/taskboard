@@ -1,62 +1,31 @@
-import { Typography, Box, TextField } from "@mui/material";
-import React, { ChangeEvent, useState, FormEvent } from "react";
+import { Typography, Box } from "@mui/material";
+import React, { FormEvent, useRef } from "react";
 import { AddTaskModalProps } from "../interfaces";
 import ProjectSelector from "./ProjectSelector";
 import TransitionModal from "./TransitionModal";
-import { useAppSelector, useAppDispatch } from "../reduxApp/hooks";
-import socket from "../socket";
+import { useAppSelector, useCreateTask } from "../reduxApp/hooks";
 import { ITaskOptions } from "../types";
-import { addTaskToKanbanBoard } from "../reduxApp/features/kanban/kanban-slice";
-import { addTaskToStore } from "../reduxApp/features/tasks/tasks-slice";
-const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
-    const [newTask, setNewTask] = useState("");
 
+const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
+    const inputRef = useRef<HTMLInputElement>(null);
     const { open, onClose } = props;
     const token = useAppSelector((state) => state.auth.userData?.token);
-    const projectData = useAppSelector(
-        (state) => state.currentProject.projectData
-    );
-    const dispatch = useAppDispatch();
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        setNewTask(e.currentTarget.value);
-    };
-
+    const createTask = useCreateTask();
     const handleCreateTask = (event: FormEvent<HTMLButtonElement>) => {
         event.preventDefault();
         // save new task
-        if (newTask) {
+        if (inputRef.current?.value) {
             const payload: {
                 token: string | undefined;
                 task: ITaskOptions;
             } = {
                 token,
                 task: {
-                    title: newTask,
-                    project: projectData?._id,
+                    title: inputRef.current.value,
                 },
             };
-            if (projectData?.sections?.length) {
-                payload.task["section"] = projectData.sections[0]._id;
-            }
-            socket.emit("tasks:create", payload, (response) => {
-                if (response.task) {
-                    dispatch(
-                        addTaskToKanbanBoard({
-                            task: response.task,
-                            sectionId: response.task.section._id,
-                        })
-                    );
-                    dispatch(
-                        addTaskToStore({
-                            task: response.task,
-                            projectId: projectData!._id,
-                        })
-                    );
-                }
-            });
+            createTask(payload);
         }
-
         // close modal
         onClose();
     };
@@ -67,14 +36,18 @@ const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
                     Add task
                 </Typography>
                 <br />
-                <TextField
-                    label="Task Title"
-                    size="small"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    value={newTask}
-                    onChange={handleChange}
+
+                <input
+                    type="text"
+                    style={{
+                        width: "100%",
+                        fontSize: "14px",
+                        border: "1px solid blue",
+                    }}
+                    placeholder="Start typing..."
+                    autoFocus
+                    ref={inputRef}
+                    id={"New task input"}
                 />
                 <br />
                 <Box display={"flex"} marginTop={"10px"}>

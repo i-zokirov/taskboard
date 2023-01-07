@@ -25,10 +25,8 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AddReactionIcon from "@mui/icons-material/AddReaction";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import socket from "../socket";
-import { updateSingleTaskInStore } from "../reduxApp/features/tasks/tasks-slice";
-import { updateTaskInKanbanBoard } from "../reduxApp/features/kanban/kanban-slice";
+import { useAppSelector, useUpdateTaskDetails } from "../reduxApp/hooks";
+import { ITaskOptions } from "../types";
 const dark = "#e7ebf0";
 
 const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
@@ -42,49 +40,26 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
         setShowDescriptionInput((prev) => !prev);
     };
 
-    const dispatch = useAppDispatch();
+    const updateTaskDetails = useUpdateTaskDetails();
     const token = useAppSelector((state) => state.auth.userData?.token);
     const saveHandler = () => {
         hideDescriptionInput();
-        const updates = {
-            ...task,
-            description: descriptionInput ? descriptionInput : task.description,
-            dueDate: dueDate ? dueDate : task.dueDate,
-        };
-
-        socket.emit(
-            "tasks:update",
-            { token, taskId: task._id, updates },
-            (response) => {
-                if (response.task) {
-                    dispatch(
-                        updateSingleTaskInStore({
-                            projectId: task.project!._id,
-                            task: response.task,
-                        })
-                    );
-                    dispatch(updateTaskInKanbanBoard({ task: response.task }));
-                }
-            }
-        );
+        const taskObject: ITaskOptions = {};
+        taskObject.description = descriptionInput
+            ? descriptionInput
+            : task.description;
+        taskObject.dueDate = dueDate ? dueDate : task.dueDate;
+        const payload = { token, taskId: task._id, updates: taskObject };
+        updateTaskDetails(payload, task);
     };
+
     const markTaskCompleted = () => {
         const payload = {
             token,
             taskId: task._id,
             updates: { completed: true },
         };
-        socket.emit("tasks:update", payload, (response) => {
-            if (response.task) {
-                dispatch(
-                    updateSingleTaskInStore({
-                        projectId: task.project!._id,
-                        task: response.task,
-                    })
-                );
-                dispatch(updateTaskInKanbanBoard({ task: response.task }));
-            }
-        });
+        updateTaskDetails(payload, task);
     };
     const hideDescriptionInput = () => {
         setShowDescriptionInput(false);

@@ -23,22 +23,19 @@ const Board: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     useEffect(() => {
-        console.log(userData, tokenVerified);
-        return () => {
-            if (!userData || !tokenVerified) {
-                navigate("/login");
-                return;
-            } else {
-                const payload = { token: userData!.token };
-                dispatch(projectsRequest());
-                socket.emit("projects:read", payload, (response) => {
-                    dispatch(projectsRequestSuccess(response.projects));
-                    if (response.projects.length) {
-                        dispatch(setCurrentProject(response.projects[0]));
-                    }
-                });
-            }
-        };
+        if (!userData || !tokenVerified) {
+            navigate("/login");
+            return;
+        } else {
+            const payload = { token: userData!.token };
+            dispatch(projectsRequest());
+            socket.emit("projects:read", payload, (response) => {
+                dispatch(projectsRequestSuccess(response.projects));
+                if (response.projects.length) {
+                    dispatch(setCurrentProject(response.projects[0]));
+                }
+            });
+        }
     }, [tokenVerified, userData]);
 
     const handleDrawerOpen = () => {
