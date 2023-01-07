@@ -8,6 +8,14 @@ export interface ISection {
     project: Types.ObjectId;
 }
 
+export type ISectionOptions = {
+    title?: string;
+    description?: string;
+    icon?: string;
+    color?: string;
+    project?: string;
+};
+
 interface ISectionMethods {}
 
 type ISectionModel = Model<ISection, {}, ISectionMethods>;

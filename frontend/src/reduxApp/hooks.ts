@@ -7,10 +7,20 @@ import {
     updateSingleTaskInStore,
 } from "./features/tasks/tasks-slice";
 import {
+    addColumnToKanban,
     addTaskToKanbanBoard,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
-import { ITask, ITaskOptions } from "../types";
+import { ISectionOptions, ITask, ITaskOptions } from "../types";
+import {
+    addNewSectionToProject,
+    projectsRequest,
+    projectsRequestSuccess,
+} from "./features/projects/projects-slice";
+import { colors } from "../assets/theme";
+import { getRandomInt } from "../utils";
+import { productivityIcons } from "../assets/icons";
+import { setCurrentProject } from "./features/projects/currentProjectSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -25,15 +35,15 @@ export const useUpdateTaskDetails = () => {
         },
         task: ITask
     ) => {
-        socket.emit("tasks:update", payload, (response) => {
-            if (response.task) {
+        socket.emit("tasks:update", payload, (result) => {
+            if (result.task) {
                 dispatch(
                     updateSingleTaskInStore({
                         projectId: task.project!._id,
-                        task: response.task,
+                        task: result.task,
                     })
                 );
-                dispatch(updateTaskInKanbanBoard({ task: response.task }));
+                dispatch(updateTaskInKanbanBoard({ task: result.task }));
             }
         });
     };
@@ -54,20 +64,60 @@ export const useCreateTask = () => {
         if (!payload.task.priority) {
             payload.task.priority = "Low";
         }
-        socket.emit("tasks:create", payload, (request) => {
-            if (request.task) {
+        socket.emit("tasks:create", payload, (result) => {
+            if (result.task) {
                 dispatch(
                     addTaskToKanbanBoard({
-                        sectionId: request.task.section._id,
-                        task: request.task,
+                        sectionId: result.task.section._id,
+                        task: result.task,
                     })
                 );
                 dispatch(
                     addTaskToStore({
-                        projectId: request.task.project._id,
-                        task: request.task,
+                        projectId: result.task.project._id,
+                        task: result.task,
                     })
                 );
+            }
+        });
+    };
+};
+
+export const useCreateSection = () => {
+    const dispatch = useAppDispatch();
+    const projectData = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return (payload: {
+        section: ISectionOptions;
+        token: string | undefined;
+    }) => {
+        payload.section.project = projectData?._id;
+        payload.token = token;
+        payload.section.color = colors[getRandomInt(colors.length)].colorCode;
+        payload.section.icon =
+            productivityIcons[getRandomInt(productivityIcons.length)];
+        socket.emit("sections:create", payload, (result) => {
+            console.log(result.section);
+            if (result.section) {
+                dispatch(addNewSectionToProject({ section: result.section }));
+                dispatch(addColumnToKanban({ section: result.section }));
+            }
+        });
+    };
+};
+
+export const useFetchProjects = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return () => {
+        dispatch(projectsRequest());
+        const payload = { token };
+        socket.emit("projects:read", payload, (response) => {
+            dispatch(projectsRequestSuccess(response.projects));
+            if (response.projects.length) {
+                dispatch(setCurrentProject(response.projects[0]));
             }
         });
     };

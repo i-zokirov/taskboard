@@ -1,3 +1,4 @@
+import { ISection, ISectionOptions } from "./models/Section.model";
 import { ITask, ITaskOptions } from "./models/Task.model";
 
 export interface ServerToClientEvents {}
@@ -30,6 +31,16 @@ export interface ClientToServerEvents {
         },
         callback: (response: {
             task?: ITask;
+            error?: string | undefined;
+        }) => void
+    ) => void;
+    ["sections:create"]: (
+        payload: {
+            token: string | undefined;
+            section: ISectionOptions;
+        },
+        callback: (response: {
+            section?: ISection;
             error?: string | undefined;
         }) => void
     ) => void;

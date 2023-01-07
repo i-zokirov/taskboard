@@ -5,6 +5,7 @@ import User from "./models/User.model";
 import { JWT_SECRET } from "./config/variables";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Task, { ITask, ITaskOptions } from "./models/Task.model";
+import Section, { ISection, ISectionOptions } from "./models/Section.model";
 
 const authenticate = async (token: string) => {
     if (!token) {
@@ -76,7 +77,7 @@ export const readTasksHandler = async function (
     }
 };
 
-export const updateTasksHandler = async function (
+export const updateTaskHandler = async function (
     this: Socket,
     payload: {
         token: string;
@@ -105,7 +106,7 @@ export const updateTasksHandler = async function (
     }
 };
 
-export const createTasksHandler = async function (
+export const createTaskHandler = async function (
     this: Socket,
     payload: {
         token: string;
@@ -123,6 +124,37 @@ export const createTasksHandler = async function (
                 select: "name name title title",
             });
             if (task) callback({ task });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createSectionHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        section: ISectionOptions;
+    },
+    callback: (response: {
+        section?: ISection;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const section = await (
+                await Section.create({ ...payload.section })
+            ).populate("project");
+
+            await Project.findByIdAndUpdate(section.project._id, {
+                $push: { sections: section },
+            });
+
+            callback({ section });
         } else {
             callback({ error: "NO user" });
         }

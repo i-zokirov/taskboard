@@ -14,10 +14,11 @@ import {
     SocketData,
 } from "./interfaces";
 import {
-    createTasksHandler,
+    createSectionHandler,
+    createTaskHandler,
     readProjectsHandler,
     readTasksHandler,
-    updateTasksHandler,
+    updateTaskHandler,
 } from "./socket";
 
 connectDB();
@@ -65,8 +66,9 @@ io.on("connection", function (socket: Socket) {
     });
     socket.on("projects:read", readProjectsHandler);
     socket.on("tasks:read", readTasksHandler);
-    socket.on("tasks:update", updateTasksHandler);
-    socket.on("tasks:create", createTasksHandler);
+    socket.on("tasks:update", updateTaskHandler);
+    socket.on("tasks:create", createTaskHandler);
+    socket.on("sections:create", createSectionHandler);
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
     });

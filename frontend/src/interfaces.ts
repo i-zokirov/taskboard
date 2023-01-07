@@ -1,6 +1,12 @@
 import { SelectChangeEvent } from "@mui/material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { IProject, ITask, ITaskOptions } from "./types";
+import {
+    IProject,
+    ISection,
+    ISectionOptions,
+    ITask,
+    ITaskOptions,
+} from "./types";
 
 export interface BoardToolbarProps {
     open: boolean;
@@ -113,6 +119,16 @@ export interface ClientToServerEvents {
         },
         callback: (response: {
             task?: ITask;
+            error?: string | undefined;
+        }) => void
+    ) => void;
+    ["sections:create"]: (
+        payload: {
+            token: string | undefined;
+            section: ISectionOptions;
+        },
+        callback: (response: {
+            section?: ISection;
             error?: string | undefined;
         }) => void
     ) => void;

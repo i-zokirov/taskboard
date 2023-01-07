@@ -31,6 +31,13 @@ export type ISection = {
     color: string;
     project: IProject;
 };
+export type ISectionOptions = {
+    title?: string;
+    description?: string;
+    icon?: string;
+    color?: string;
+    project?: string;
+};
 export type IconDictionary = {
     [x: string]: any;
 };

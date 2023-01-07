@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
     Box,
     ListItemButton,
@@ -10,7 +10,24 @@ import AddIcon from "@mui/icons-material/Add";
 import FaceIcon from "@mui/icons-material/Face";
 import Face2Icon from "@mui/icons-material/Face2";
 import Face4Icon from "@mui/icons-material/Face4";
+import { useCreateSection } from "../reduxApp/hooks";
 const LastColumn = () => {
+    const [showInput, setShowInput] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const handleAddSectionBtnClick = () => {
+        setShowInput((prev) => !prev);
+    };
+
+    const createSection = useCreateSection();
+    const handleInputBlur = () => {
+        if (inputRef.current && inputRef.current.value) {
+            createSection({
+                section: { title: inputRef.current.value },
+                token: "",
+            });
+        }
+        setShowInput((prev) => !prev);
+    };
     return (
         <React.Fragment>
             <Box
@@ -23,16 +40,32 @@ const LastColumn = () => {
                 }}
             >
                 <Box display="flex" alignItems={"center"}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <AddIcon sx={{ color: "#3268c5" }} />
-                        </ListItemIcon>
-                        <ListItemText>
-                            <Typography sx={{ color: "#3268c5" }}>
-                                Add section
-                            </Typography>
-                        </ListItemText>
-                    </ListItemButton>
+                    {showInput ? (
+                        <input
+                            type="text"
+                            style={{
+                                width: "100%",
+                                fontSize: "16px",
+                                padding: "12px",
+                            }}
+                            placeholder="Start typing..."
+                            autoFocus
+                            ref={inputRef}
+                            id={"New Section input"}
+                            onBlur={handleInputBlur}
+                        />
+                    ) : (
+                        <ListItemButton onClick={handleAddSectionBtnClick}>
+                            <ListItemIcon>
+                                <AddIcon sx={{ color: "#3268c5" }} />
+                            </ListItemIcon>
+                            <ListItemText>
+                                <Typography sx={{ color: "#3268c5" }}>
+                                    Add section
+                                </Typography>
+                            </ListItemText>
+                        </ListItemButton>
+                    )}
                 </Box>
             </Box>
             <Box

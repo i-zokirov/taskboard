@@ -20,7 +20,6 @@ export const kanbanSlice = createSlice({
             state,
             action: PayloadAction<{ sections: ISection[]; tasks: ITask[] }>
         ) => {
-            console.log(action);
             const columns: {
                 [x: string]: KanbanColumn;
             } = {};
@@ -36,6 +35,15 @@ export const kanbanSlice = createSlice({
                 columns[section._id] = column;
             }
             state.columns = columns;
+        },
+        addColumnToKanban: (
+            state,
+            action: PayloadAction<{ section: ISection }>
+        ) => {
+            state.columns[action.payload.section._id] = {
+                ...action.payload.section,
+                taskItems: [],
+            };
         },
         updateTaskInKanbanBoard: (
             state,
@@ -120,4 +128,5 @@ export const {
     moveTask,
     updateTaskInKanbanBoard,
     addTaskToKanbanBoard,
+    addColumnToKanban,
 } = kanbanSlice.actions;

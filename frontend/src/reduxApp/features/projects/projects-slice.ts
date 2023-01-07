@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IProject, Status } from "../../../types";
+import { IProject, ISection, Status } from "../../../types";
 
 interface ProjectState {
     data: IProject[] | [];
@@ -34,6 +34,17 @@ export const projectsSlice = createSlice({
             state.error = action.payload;
             state.status = Status.Rejected;
         },
+        addNewSectionToProject: (
+            state,
+            action: PayloadAction<{ section: ISection }>
+        ) => {
+            const projectIndex = state.data.findIndex(
+                (project) => project._id === action.payload.section.project._id
+            );
+            console.log(projectIndex);
+            if (projectIndex >= 0)
+                state.data[projectIndex].sections?.push(action.payload.section);
+        },
     },
 });
 
@@ -41,4 +52,5 @@ export const {
     projectsRequest,
     projectRequestFailure,
     projectsRequestSuccess,
+    addNewSectionToProject,
 } = projectsSlice.actions;
