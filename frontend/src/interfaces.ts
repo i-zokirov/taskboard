@@ -132,4 +132,15 @@ export interface ClientToServerEvents {
             error?: string | undefined;
         }) => void
     ) => void;
+    ["sections:update"]: (
+        payload: {
+            token: string | undefined;
+            updates: ISectionOptions;
+            sectionId: string;
+        },
+        callback: (response: {
+            section?: ISection;
+            error?: string | undefined;
+        }) => void
+    ) => void;
 }

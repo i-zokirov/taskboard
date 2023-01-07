@@ -9,6 +9,7 @@ import {
 import {
     addColumnToKanban,
     addTaskToKanbanBoard,
+    updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
 import { ISectionOptions, ITask, ITaskOptions } from "../types";
@@ -16,11 +17,15 @@ import {
     addNewSectionToProject,
     projectsRequest,
     projectsRequestSuccess,
+    updateSectionInProjects,
 } from "./features/projects/projects-slice";
 import { colors } from "../assets/theme";
 import { getRandomInt } from "../utils";
 import { productivityIcons } from "../assets/icons";
-import { setCurrentProject } from "./features/projects/currentProjectSlice";
+import {
+    setCurrentProject,
+    updateSectionInCurrentProject,
+} from "./features/projects/currentProjectSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -118,6 +123,27 @@ export const useFetchProjects = () => {
             dispatch(projectsRequestSuccess(response.projects));
             if (response.projects.length) {
                 dispatch(setCurrentProject(response.projects[0]));
+            }
+        });
+    };
+};
+
+export const useUpdateSection = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return (payload: {
+        token: string | undefined;
+        updates: ISectionOptions;
+        sectionId: string;
+    }) => {
+        payload.token = token;
+        socket.emit("sections:update", payload, (response) => {
+            if (response.section) {
+                dispatch(updateSectionInCurrentProject(response.section));
+                dispatch(updateSectionInProjects(response.section));
+                dispatch(
+                    updateColumnSectionInKanban({ section: response.section })
+                );
             }
         });
     };

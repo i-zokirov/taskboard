@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent, useState } from "react";
+import React, { FormEvent, FunctionComponent, useState } from "react";
 import { Box, IconButton, Typography, Tooltip } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
@@ -6,10 +6,12 @@ import { ColumnHeaderProps } from "../interfaces";
 import ColumnIconSelectorMenu from "./ColumnIconSelectorMenu";
 import ColumnMenu from "./ColumnMenu";
 import { icons } from "../assets/icons";
+import { useUpdateSection } from "../reduxApp/hooks";
 
 const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     const { columnId, column } = props;
-    const [newInput, setNewInput] = useState("");
+
+    const [newInput, setNewInput] = useState(column.title);
     const [columnInput, setColumnInput] = useState<{
         id: null | string;
         show: boolean;
@@ -37,6 +39,7 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     const openColumnIconMenu = Boolean(columnIconAnchorEl);
     const openColumnMenu = Boolean(columnMenuAnchorEl);
 
+    const updateSection = useUpdateSection();
     const handleCloseColumnIconMenu = () => {
         setColumnIconAnchorEl(null);
         setShowCurrentColumnIconMenu({ id: null, state: false });
@@ -67,17 +70,29 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     };
     const showColumnInput = (id: string, inputValue: string) => {
         setColumnInput({ id, show: true });
-        setNewInput(inputValue);
     };
-    const handleNewInput = (event: any) => {
+
+    const onInputChange = (e: FormEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        setNewInput(e.currentTarget.value);
+    };
+    const handleInputTitleUpdate = (event: any) => {
         setColumnInput({ id: null, show: false });
         // handle new column name with newInput
-
-        setNewInput("");
+        if (newInput !== column.title)
+            updateSection({
+                token: "",
+                updates: { title: newInput },
+                sectionId: columnId,
+            });
     };
-    const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        setNewInput(e.target.value);
+    const handleIconUpdate = (icon: string) => {
+        updateSection({
+            token: "",
+            updates: { icon },
+            sectionId: columnId,
+        });
+        handleCloseColumnIconMenu();
     };
 
     const handleColumnMenuClick = (
@@ -95,6 +110,7 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                         open={openColumnIconMenu}
                         anchorEl={columnIconAnchorEl}
                         handleClose={handleCloseColumnIconMenu}
+                        handleClick={handleIconUpdate}
                     />
                 )}
 
@@ -130,10 +146,10 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                     {columnInput.id === columnId && columnInput.show ? (
                         <input
                             type="text"
-                            onBlur={handleNewInput}
-                            onChange={onInputChange}
-                            value={newInput}
+                            onBlur={handleInputTitleUpdate}
                             autoFocus
+                            value={newInput}
+                            onChange={onInputChange}
                         />
                     ) : (
                         <Typography color={"white"}>{column.title}</Typography>

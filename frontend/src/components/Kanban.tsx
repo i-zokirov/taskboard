@@ -59,54 +59,52 @@ const Kanban: React.FC = () => {
         });
     };
     useEffect(() => {
-        return () => {
-            if (projectData) {
-                if (tasks.data[projectData._id]) {
-                    // build kanban
-                    const sections = projectData.sections!.map((section) => {
-                        const project = projectData;
+        if (projectData) {
+            if (tasks.data[projectData._id]) {
+                // build kanban
+                const sections = projectData.sections!.map((section) => {
+                    const project = projectData;
 
-                        return { ...section, project };
-                    });
+                    return { ...section, project };
+                });
 
-                    dispatch(
-                        setUpKanban({
-                            sections,
-                            tasks: tasks.data[projectData._id],
-                        })
-                    );
-                } else {
-                    dispatch(tasksRequest());
-                    socket.emit(
-                        "tasks:read",
-                        { token, projectId: projectData._id },
-                        (response) => {
-                            if (response.tasks) {
-                                dispatch(
-                                    tasksRequestSuccess({
-                                        project: projectData._id,
-                                        tasks: response.tasks,
-                                    })
-                                );
-                                const sections = projectData.sections!.map(
-                                    (section) => {
-                                        const project = projectData;
+                dispatch(
+                    setUpKanban({
+                        sections,
+                        tasks: tasks.data[projectData._id],
+                    })
+                );
+            } else {
+                dispatch(tasksRequest());
+                socket.emit(
+                    "tasks:read",
+                    { token, projectId: projectData._id },
+                    (response) => {
+                        if (response.tasks) {
+                            dispatch(
+                                tasksRequestSuccess({
+                                    project: projectData._id,
+                                    tasks: response.tasks,
+                                })
+                            );
+                            const sections = projectData.sections!.map(
+                                (section) => {
+                                    const project = projectData;
 
-                                        return { ...section, project };
-                                    }
-                                );
-                                dispatch(
-                                    setUpKanban({
-                                        sections,
-                                        tasks: response.tasks,
-                                    })
-                                );
-                            }
+                                    return { ...section, project };
+                                }
+                            );
+                            dispatch(
+                                setUpKanban({
+                                    sections,
+                                    tasks: response.tasks,
+                                })
+                            );
                         }
-                    );
-                }
+                    }
+                );
             }
-        };
+        }
     }, [projectData]);
     const hideInputForCol = () => {
         setShowInputForCol({ colId: null, show: false });

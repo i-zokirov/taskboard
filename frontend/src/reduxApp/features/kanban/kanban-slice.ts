@@ -45,6 +45,16 @@ export const kanbanSlice = createSlice({
                 taskItems: [],
             };
         },
+        updateColumnSectionInKanban: (
+            state,
+            action: PayloadAction<{ section: ISection }>
+        ) => {
+            console.log("Kanban", action.payload.section);
+            state.columns[action.payload.section._id] = {
+                ...action.payload.section,
+                taskItems: state.columns[action.payload.section._id].taskItems,
+            };
+        },
         updateTaskInKanbanBoard: (
             state,
             action: PayloadAction<{ task: ITask }>
@@ -55,6 +65,7 @@ export const kanbanSlice = createSlice({
             state.columns[action.payload.task.section._id].taskItems[index] =
                 action.payload.task;
         },
+
         addTaskToKanbanBoard: (
             state,
             action: PayloadAction<{ task: ITask; sectionId: string }>
@@ -129,4 +140,5 @@ export const {
     updateTaskInKanbanBoard,
     addTaskToKanbanBoard,
     addColumnToKanban,
+    updateColumnSectionInKanban,
 } = kanbanSlice.actions;

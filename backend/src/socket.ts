@@ -39,7 +39,7 @@ export const readProjectsHandler = async function (
             console.log(
                 `Reading projects: ${this.id} \nProjects length: ${projects?.length}`
             );
-            console.log();
+
             callback({ projects });
         }
     } catch (error) {
@@ -68,6 +68,7 @@ export const readTasksHandler = async function (
                     select: "name name title title",
                 });
                 callback({ tasks });
+                console.log("Rendering tasks");
             }
         } else {
             callback({ error: "NO user" });
@@ -155,6 +156,38 @@ export const createSectionHandler = async function (
             });
 
             callback({ section });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const updateSectionHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        updates: ISectionOptions;
+        sectionId: string;
+    },
+    callback: (response: {
+        section?: ISection;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const section = await Section.findOneAndUpdate(
+                { _id: payload.sectionId },
+                {
+                    ...payload.updates,
+                },
+                { returnDocument: "after" }
+            ).populate("project");
+
+            if (section) callback({ section });
         } else {
             callback({ error: "NO user" });
         }

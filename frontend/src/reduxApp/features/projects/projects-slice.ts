@@ -41,9 +41,24 @@ export const projectsSlice = createSlice({
             const projectIndex = state.data.findIndex(
                 (project) => project._id === action.payload.section.project._id
             );
-            console.log(projectIndex);
             if (projectIndex >= 0)
                 state.data[projectIndex].sections?.push(action.payload.section);
+        },
+        updateSectionInProjects: (state, action: PayloadAction<ISection>) => {
+            const projectIndex = state.data.findIndex(
+                (project) => project._id === action.payload.project._id
+            );
+            if (projectIndex >= 0) {
+                const sectionIndx = state.data[
+                    projectIndex
+                ].sections?.findIndex(
+                    (section) => section._id === action.payload._id
+                );
+                if (sectionIndx && sectionIndx >= 0)
+                    if (state.data[projectIndex].sections!.length)
+                        state.data[projectIndex].sections![sectionIndx]! =
+                            action.payload;
+            }
         },
     },
 });
@@ -53,4 +68,5 @@ export const {
     projectRequestFailure,
     projectsRequestSuccess,
     addNewSectionToProject,
+    updateSectionInProjects,
 } = projectsSlice.actions;

@@ -18,6 +18,7 @@ import {
     createTaskHandler,
     readProjectsHandler,
     readTasksHandler,
+    updateSectionHandler,
     updateTaskHandler,
 } from "./socket";
 
@@ -69,6 +70,8 @@ io.on("connection", function (socket: Socket) {
     socket.on("tasks:update", updateTaskHandler);
     socket.on("tasks:create", createTaskHandler);
     socket.on("sections:create", createSectionHandler);
+    socket.on("sections:update", updateSectionHandler);
+
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
     });

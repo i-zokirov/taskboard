@@ -4,7 +4,7 @@ import { icons, productivityIcons, technologyIcons } from "../assets/icons";
 import { Box, IconButton, Typography } from "@mui/material";
 import { MenuProps } from "../interfaces";
 const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
-    const { open, handleClose, anchorEl } = props;
+    const { open, handleClose, anchorEl, handleClick } = props;
     return (
         <MenuComponent
             open={open}
@@ -29,7 +29,13 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
 
                 <Box width="200px">
                     {productivityIcons.map((icon, index) => (
-                        <IconButton key={index} sx={{ margin: "3px" }}>
+                        <IconButton
+                            key={index}
+                            sx={{ margin: "3px" }}
+                            onClick={() => {
+                                handleClick(icon);
+                            }}
+                        >
                             {icons[icon]({
                                 width: "28px",
                                 height: "28px",
@@ -48,7 +54,13 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
                 </Box>
                 <Box width="200px">
                     {technologyIcons.map((icon, index) => (
-                        <IconButton key={index} sx={{ margin: "3px" }}>
+                        <IconButton
+                            key={index}
+                            sx={{ margin: "3px" }}
+                            onClick={() => {
+                                handleClick(icon);
+                            }}
+                        >
                             {icons[icon]({
                                 width: "28px",
                                 height: "28px",
