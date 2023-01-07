@@ -34,7 +34,13 @@ export const authenticateUser = createAsyncThunk(
 export const authSlice = createSlice({
     name: "authenticateUser",
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state, action: PayloadAction) => {
+            state.userData = null;
+            state.authenticated = false;
+            state.tokenVerified = false;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(authenticateUser.pending, (state) => {
             state.status = Status.Pending;
@@ -65,5 +71,7 @@ export const authSlice = createSlice({
         });
     },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

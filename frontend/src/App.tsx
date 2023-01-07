@@ -16,10 +16,9 @@ const App: React.FC = () => {
                 <CssBaseline />
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/app" element={<Board />} />
                     <Route path="/login" element={<LoginScreen />} />
                     <Route path="/sign-up" element={<SignUpScreen />} />
-
-                    <Route path="/app" element={<Board />} />
                 </Routes>
             </LocalizationProvider>
         </ThemeProvider>

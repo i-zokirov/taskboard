@@ -38,12 +38,14 @@ const LoginScreen: React.FC = () => {
 
     const navigate = useNavigate();
     useEffect(() => {
-        if (status === Status.FulFilled && userData) navigate("/app");
+        if (status === Status.FulFilled && userData) {
+            navigate("/app");
+        }
 
         if (error) {
             // handle error
         }
-    }, [status, navigate, error, userData]);
+    }, [status, error, userData]);
 
     return (
         <Container component="main" maxWidth="xs">

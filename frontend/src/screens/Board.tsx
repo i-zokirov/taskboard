@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 
@@ -18,16 +18,18 @@ import { setCurrentProject } from "../reduxApp/features/projects/currentProjectS
 
 const Board: React.FC = () => {
     const [open, setOpen] = React.useState(false);
-    const auth = useAppSelector((state) => state.auth);
+    const { tokenVerified, userData } = useAppSelector((state) => state.auth);
     const { status, loading } = useAppSelector((state) => state.projects);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     useEffect(() => {
+        console.log(userData, tokenVerified);
         return () => {
-            if (!auth.userData || !auth.tokenVerified) {
+            if (!userData || !tokenVerified) {
                 navigate("/login");
+                return;
             } else {
-                const payload = { token: auth.userData.token };
+                const payload = { token: userData!.token };
                 dispatch(projectsRequest());
                 socket.emit("projects:read", payload, (response) => {
                     dispatch(projectsRequestSuccess(response.projects));
@@ -37,7 +39,7 @@ const Board: React.FC = () => {
                 });
             }
         };
-    }, [auth, navigate]);
+    }, [tokenVerified, userData]);
 
     const handleDrawerOpen = () => {
         setOpen(true);

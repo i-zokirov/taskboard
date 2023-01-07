@@ -11,8 +11,19 @@ import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { MenuProps } from "../interfaces";
+import { useAppDispatch } from "../reduxApp/hooks";
+import { logout } from "../reduxApp/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
     const { open, anchorEl, handleClose } = props;
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(logout());
+        localStorage.removeItem("userData");
+        navigate("/login");
+    };
     return (
         <MenuComponent
             open={open}
@@ -39,7 +50,7 @@ const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
                 </ListItemIcon>
                 <ListItemText>Preferences</ListItemText>
             </ListItemButton>
-            <ListItemButton>
+            <ListItemButton LinkComponent={"a"} href="/login">
                 <ListItemIcon>
                     <LogoutIcon />
                 </ListItemIcon>

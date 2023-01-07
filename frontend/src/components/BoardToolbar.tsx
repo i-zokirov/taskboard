@@ -63,7 +63,7 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
             .getAttribute("data-buttonclicked")
             ?.split(" ")
             ?.join("");
-        console.log(btnclicked);
+
         switch (btnclicked) {
             case "account":
                 handleOpenProfileMenu(e);
