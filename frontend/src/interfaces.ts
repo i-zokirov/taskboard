@@ -143,4 +143,25 @@ export interface ClientToServerEvents {
             error?: string | undefined;
         }) => void
     ) => void;
+    ["sections:delete"]: (
+        payload: {
+            token: string | undefined;
+            sectionId: string;
+        },
+        callback: (response: {
+            project?: IProject;
+            error?: string | undefined;
+        }) => void
+    ) => void;
+    ["sections:completeTasks"]: (
+        payload: {
+            token: string | undefined;
+            sectionId: string;
+        },
+        callback: (response: {
+            success?: boolean;
+            error?: string | undefined;
+            updated?: number;
+        }) => void
+    ) => void;
 }

@@ -4,11 +4,13 @@ import { RootState, AppDispatch } from "./store";
 import socket from "../socket";
 import {
     addTaskToStore,
+    markSectionTasksCompleted,
     updateSingleTaskInStore,
 } from "./features/tasks/tasks-slice";
 import {
     addColumnToKanban,
     addTaskToKanbanBoard,
+    markColumnTasksCompleted,
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
@@ -17,6 +19,7 @@ import {
     addNewSectionToProject,
     projectsRequest,
     projectsRequestSuccess,
+    updateProjectFromProjectsList,
     updateSectionInProjects,
 } from "./features/projects/projects-slice";
 import { colors } from "../assets/theme";
@@ -144,6 +147,41 @@ export const useUpdateSection = () => {
                 dispatch(
                     updateColumnSectionInKanban({ section: response.section })
                 );
+            }
+        });
+    };
+};
+
+export const useDeleteSection = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return (payload: { token: string | undefined; sectionId: string }) => {
+        payload.token = token;
+        socket.emit("sections:delete", payload, (response) => {
+            if (response.project) {
+                dispatch(setCurrentProject(response.project));
+                dispatch(updateProjectFromProjectsList(response.project));
+            }
+        });
+    };
+};
+
+export const useCompleteSectionTasks = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    const { projectData } = useAppSelector((state) => state.currentProject);
+    return (payload: { token: string | undefined; sectionId: string }) => {
+        payload.token = token;
+        socket.emit("sections:completeTasks", payload, (response) => {
+            if (response.success) {
+                dispatch(
+                    markSectionTasksCompleted({
+                        projectId: projectData!._id,
+                        sectionId: payload.sectionId,
+                    })
+                );
+                dispatch(markColumnTasksCompleted(payload.sectionId));
+                console.log(response.updated);
             }
         });
     };

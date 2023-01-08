@@ -14,8 +14,10 @@ import {
     SocketData,
 } from "./interfaces";
 import {
+    completeSectionTasksHandler,
     createSectionHandler,
     createTaskHandler,
+    deleteSectionHandler,
     readProjectsHandler,
     readTasksHandler,
     updateSectionHandler,
@@ -71,7 +73,8 @@ io.on("connection", function (socket: Socket) {
     socket.on("tasks:create", createTaskHandler);
     socket.on("sections:create", createSectionHandler);
     socket.on("sections:update", updateSectionHandler);
-
+    socket.on("sections:delete", deleteSectionHandler);
+    socket.on("sections:completeTasks", completeSectionTasksHandler);
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
     });

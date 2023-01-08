@@ -195,3 +195,69 @@ export const updateSectionHandler = async function (
         console.log(error);
     }
 };
+
+export const deleteSectionHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        sectionId: string;
+    },
+    callback: (response: {
+        project?: IProject;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const section = await Section.findOneAndDelete(
+                { _id: payload.sectionId },
+                { returnDocument: "after" }
+            ).populate("project");
+
+            const project = await Project.findOneAndUpdate(
+                { _id: section?.project._id },
+                { $pull: { sections: section?._id } }
+            )
+                .populate("owner", "name")
+                .populate("members", "name")
+                .populate("sections");
+            console.log(project);
+            const result = await Task.deleteMany({ section: section?._id });
+            console.log(result);
+            if (project) callback({ project });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const completeSectionTasksHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        sectionId: string;
+    },
+    callback: (response: {
+        success?: boolean;
+        error?: string | undefined;
+        updated?: number;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const { modifiedCount } = await Task.updateMany(
+                { section: payload.sectionId },
+                { completed: true }
+            );
+            callback({ success: true, updated: modifiedCount });
+        } else {
+            callback({ error: "NO user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};

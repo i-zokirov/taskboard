@@ -60,6 +60,15 @@ export const projectsSlice = createSlice({
                             action.payload;
             }
         },
+        updateProjectFromProjectsList: (
+            state,
+            action: PayloadAction<IProject>
+        ) => {
+            const projectIndex = state.data.findIndex(
+                (project) => project._id === action.payload._id
+            );
+            state.data[projectIndex] = action.payload;
+        },
     },
 });
 
@@ -69,4 +78,5 @@ export const {
     projectsRequestSuccess,
     addNewSectionToProject,
     updateSectionInProjects,
+    updateProjectFromProjectsList,
 } = projectsSlice.actions;

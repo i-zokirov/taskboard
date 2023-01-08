@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ITask } from "../../../types";
+import { ISection, ITask } from "../../../types";
 
 interface TasksState {
     data: {
@@ -50,6 +50,19 @@ export const tasksSlice = createSlice({
         ) => {
             state.data[action.payload.projectId].push(action.payload.task);
         },
+        markSectionTasksCompleted: (
+            state,
+            action: PayloadAction<{ projectId: string; sectionId: string }>
+        ) => {
+            state.data[action.payload.projectId] = state.data[
+                action.payload.projectId
+            ].map((task) => {
+                return {
+                    ...task,
+                    completed: action.payload.sectionId === task.section._id,
+                };
+            });
+        },
     },
 });
 
@@ -59,4 +72,5 @@ export const {
     tasksRequestSuccess,
     updateSingleTaskInStore,
     addTaskToStore,
+    markSectionTasksCompleted,
 } = tasksSlice.actions;

@@ -1,3 +1,4 @@
+import { IProject } from "./models/Project.model";
 import { ISection, ISectionOptions } from "./models/Section.model";
 import { ITask, ITaskOptions } from "./models/Task.model";
 
@@ -53,6 +54,27 @@ export interface ClientToServerEvents {
         callback: (response: {
             section?: ISection;
             error?: string | undefined;
+        }) => void
+    ) => void;
+    ["sections:delete"]: (
+        payload: {
+            token: string | undefined;
+            sectionId: string;
+        },
+        callback: (response: {
+            project?: IProject;
+            error?: string | undefined;
+        }) => void
+    ) => void;
+    ["sections:completeTasks"]: (
+        payload: {
+            token: string;
+            sectionId: string;
+        },
+        callback: (response: {
+            success?: boolean;
+            error?: string | undefined;
+            updated?: number;
         }) => void
     ) => void;
 }

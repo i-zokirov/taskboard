@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { ISection, ITask, KanbanColumn } from "../../../types";
+import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 
 interface KanbanState {
     columns: {
@@ -64,6 +65,13 @@ export const kanbanSlice = createSlice({
             ].taskItems.findIndex((el) => el._id === action.payload.task._id);
             state.columns[action.payload.task.section._id].taskItems[index] =
                 action.payload.task;
+        },
+        markColumnTasksCompleted: (state, action: PayloadAction<string>) => {
+            state.columns[action.payload].taskItems = state.columns[
+                action.payload
+            ].taskItems.map((task) => {
+                return { ...task, completed: true };
+            });
         },
 
         addTaskToKanbanBoard: (
@@ -141,4 +149,5 @@ export const {
     addTaskToKanbanBoard,
     addColumnToKanban,
     updateColumnSectionInKanban,
+    markColumnTasksCompleted,
 } = kanbanSlice.actions;

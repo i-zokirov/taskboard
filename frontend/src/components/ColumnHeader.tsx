@@ -120,6 +120,8 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                         open={openColumnMenu}
                         anchorEl={columnMenuAnchorEl}
                         handleClose={handleCloseColumnMenu}
+                        column={column}
+                        columnId={columnId}
                     />
                 )}
             <Box
