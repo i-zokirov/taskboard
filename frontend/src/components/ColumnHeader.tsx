@@ -94,6 +94,14 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
         });
         handleCloseColumnIconMenu();
     };
+    const handleColorUpdate = (color: string) => {
+        updateSection({
+            token: "",
+            updates: { color },
+            sectionId: columnId,
+        });
+        handleCloseColumnIconMenu();
+    };
 
     const handleColumnMenuClick = (
         id: string,
@@ -111,6 +119,7 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                         anchorEl={columnIconAnchorEl}
                         handleClose={handleCloseColumnIconMenu}
                         handleClick={handleIconUpdate}
+                        handleColorUpdate={handleColorUpdate}
                     />
                 )}
 

@@ -9,6 +9,10 @@ import {
     ListItemButton,
     ListItemText,
     ListItemIcon,
+    FormControl,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TaskCardDetails } from "../interfaces";
@@ -23,6 +27,8 @@ import { useAppSelector, useUpdateTaskDetails } from "../reduxApp/hooks";
 import { ITaskOptions } from "../types";
 
 const dark = "#e7ebf0";
+
+const priorities = ["Low", "Medium", "High"];
 
 const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     const { open, onClose, task } = props;
@@ -59,6 +65,15 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
             taskObject.title = titleInput;
         }
         const payload = { token, taskId: task._id, updates: taskObject };
+        updateTaskDetails(payload, task);
+    };
+
+    const handlePriorityChange = (e: SelectChangeEvent) => {
+        const payload = {
+            token,
+            taskId: task._id,
+            updates: { priority: e.target.value },
+        };
         updateTaskDetails(payload, task);
     };
 
@@ -247,7 +262,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                         sx={{
                             background: dark,
                             width: "30%",
-                            height: 310,
+                            height: 318,
                             borderBottomRightRadius: "10px",
                         }}
                     >
@@ -279,6 +294,26 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                         </Box>
 
                         <Divider />
+                        <br />
+                        <FormControl
+                            variant="standard"
+                            sx={{ padding: "10px", color: "inherit" }}
+                            fullWidth
+                        >
+                            <Select
+                                labelId="task-priority-selector-label"
+                                id="task-priority-selector"
+                                value={task.priority}
+                                onChange={handlePriorityChange}
+                                fullWidth
+                            >
+                                {priorities.map((priority) => (
+                                    <MenuItem key={priority} value={priority}>
+                                        {priority}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                         <Box padding={"10px"} sx={{ textAlign: "center" }}>
                             <Typography variant="subtitle1">
                                 {task.project.title}

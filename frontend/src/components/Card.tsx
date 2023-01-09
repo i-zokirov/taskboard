@@ -8,7 +8,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import TaskCardDetailsModal from "./TaskCardDetailsModal";
 
 const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
-    const { task, badge, completed, innerRef, ...rest } = props;
+    const { task, completed, innerRef, ...rest } = props;
     const [elevation, setElevation] = useState(0);
     const [opacity, setOpacity] = useState(completed ? 0.5 : 1);
     const [openCardModel, setOpenCardModel] = useState(false);
@@ -27,6 +27,17 @@ const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
         e.preventDefault();
         setElevation(0);
         setOpacity(completed ? 0.5 : 1);
+    };
+
+    const getPriorityColor = (priority: string) => {
+        switch (priority) {
+            case "Low":
+                return "info";
+            case "Medium":
+                return "warning";
+            case "High":
+                return "error";
+        }
     };
 
     return (
@@ -81,8 +92,8 @@ const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
                             spacing={1}
                         >
                             <Box
-                                display={"flex"}
-                                justifyContent="space-between"
+                                // display={"flex"}
+                                // justifyContent="space-between"
                                 alignItems={"center"}
                                 width="100%"
                             >
@@ -95,16 +106,33 @@ const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
                                 >
                                     {task.title}
                                 </Typography>
-                                <IconButton>
-                                    <AccountCircleIcon />
-                                </IconButton>
+                                {task.description && (
+                                    <Typography
+                                        sx={{
+                                            textDecoration: completed
+                                                ? "line-through"
+                                                : "none",
+
+                                            display: "block",
+                                            textOverflow: "ellipsis",
+                                            wordWrap: "break-word",
+                                            overflow: "hidden",
+                                            maxHeight: "3.6em",
+                                            lineHeight: "1.8em",
+                                        }}
+                                        variant="body2"
+                                    >
+                                        {task.description}
+                                    </Typography>
+                                )}
                             </Box>
-                            {badge && (
+                            {task.priority && (
                                 <Box>
                                     <Chip
-                                        label="high"
+                                        label={task.priority}
                                         size="small"
-                                        color={"error"}
+                                        color={getPriorityColor(task.priority)}
+                                        sx={{ fontSize: "11px" }}
                                     />
                                 </Box>
                             )}
