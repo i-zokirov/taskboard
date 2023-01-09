@@ -10,6 +10,8 @@ export type ITask = {
     section: ISection;
     priority: string;
     project: IProject;
+    completedOn?: Date;
+    completedBy?: User;
 };
 
 export type ITaskOptions = {
@@ -22,6 +24,8 @@ export type ITaskOptions = {
     section?: string;
     priority?: string;
     project?: string;
+    completedOn?: Date;
+    completedBy?: User;
 };
 export type ISection = {
     _id: string;

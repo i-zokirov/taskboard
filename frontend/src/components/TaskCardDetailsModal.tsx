@@ -3,14 +3,12 @@ import {
     Box,
     IconButton,
     Tooltip,
-    Stack,
     Typography,
     TextField,
     Button,
     ListItemButton,
     ListItemText,
     ListItemIcon,
-    Link,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TaskCardDetails } from "../interfaces";
@@ -18,15 +16,12 @@ import TransitionModal from "./TransitionModal";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Divider from "@mui/material/Divider";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import AddReactionIcon from "@mui/icons-material/AddReaction";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useAppSelector, useUpdateTaskDetails } from "../reduxApp/hooks";
 import { ITaskOptions } from "../types";
+
 const dark = "#e7ebf0";
 
 const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
@@ -34,21 +29,35 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     const [descriptionInput, setDescriptionInput] = useState(
         task.description ? task.description : ""
     );
+    const [titleInput, setTitleInput] = useState(task.title ? task.title : "");
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate : null);
     const [showDescriptionInput, setShowDescriptionInput] = useState(false);
+    const [showTitleInput, setShowTitleInput] = useState(false);
+
     const toggleDescriptionInput = () => {
         setShowDescriptionInput((prev) => !prev);
     };
 
+    const toggleTitleInput = () => {
+        setShowTitleInput((prev) => !prev);
+    };
+
     const updateTaskDetails = useUpdateTaskDetails();
     const token = useAppSelector((state) => state.auth.userData?.token);
+
     const saveHandler = () => {
+        setShowTitleInput(false);
         hideDescriptionInput();
         const taskObject: ITaskOptions = {};
-        taskObject.description = descriptionInput
-            ? descriptionInput
-            : task.description;
-        taskObject.dueDate = dueDate ? dueDate : task.dueDate;
+        if (descriptionInput !== task.description) {
+            taskObject.description = descriptionInput;
+        }
+        if (dueDate !== task.dueDate && dueDate) {
+            taskObject.dueDate = dueDate;
+        }
+        if (titleInput !== task.title) {
+            taskObject.title = titleInput;
+        }
         const payload = { token, taskId: task._id, updates: taskObject };
         updateTaskDetails(payload, task);
     };
@@ -66,26 +75,74 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     };
     const handleDateChange = (newValue: any) => {
         setDueDate(newValue);
+        if (newValue) {
+            const payload = {
+                token,
+                taskId: task._id,
+                updates: { dueDate: newValue },
+            };
+            updateTaskDetails(payload, task);
+        }
     };
 
     return (
         <TransitionModal
             open={open}
             onClose={onClose}
-            height={{ md: 400, lg: 600 }}
-            width={{ md: 600, lg: 800 }}
+            height={{ md: 400, lg: 400 }}
+            width={{ md: 600, lg: 600 }}
         >
-            <Box height={"100%"}>
+            <Box>
                 <Box
                     display={"flex"}
                     justifyContent="space-between"
                     alignItems={"center"}
                     sx={{ padding: "20px" }}
                 >
-                    <Box>
-                        <button className="btn" onClick={markTaskCompleted}>
-                            Complete
-                        </button>
+                    <Box
+                        display={"flex"}
+                        justifyContent="space-between"
+                        alignItems={"center"}
+                        width="60%"
+                    >
+                        {task.completed ? (
+                            <Button variant="outlined" disabled={true}>
+                                Completed
+                            </Button>
+                        ) : (
+                            <button
+                                className="btn"
+                                onClick={markTaskCompleted}
+                                disabled={task.completed}
+                            >
+                                Complete
+                            </button>
+                        )}
+
+                        <Box
+                            display={"flex"}
+                            width="50%"
+                            justifyContent={"space-around"}
+                            alignItems={"center"}
+                        >
+                            <Box>
+                                <CheckCircleIcon
+                                    sx={{ color: "#47cc8a", fontSize: "26px" }}
+                                />
+                            </Box>
+                            <Box>
+                                <Typography variant="body1">
+                                    Completed by {task.completedBy?.firstName}{" "}
+                                    {task.completedBy?.lastName}
+                                </Typography>
+                                <Typography variant={"caption"}>
+                                    {task.completedOn &&
+                                        new Date(
+                                            task.completedOn
+                                        )?.toLocaleDateString()}
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
                     <Box>
                         <Tooltip title="More..." placement="top">
@@ -105,12 +162,13 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                 </Box>
                 <Divider />
 
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={0}
-                    sx={{ height: "88%" }}
+                <Box
+                    height="80%"
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                    }}
                 >
                     <Box
                         display={"flex"}
@@ -118,12 +176,36 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                         justifyContent={"space-between"}
                         sx={{
                             width: "70%",
-                            minHeight: "100%",
                             padding: "25px",
                         }}
                     >
                         <Box>
-                            <Typography variant="h6">{task.title}</Typography>
+                            {showTitleInput ? (
+                                <TextField
+                                    id={`${task.id} task title`}
+                                    label="Title"
+                                    size="small"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={titleInput}
+                                    onChange={(e) =>
+                                        setTitleInput(e.target.value)
+                                    }
+                                    autoFocus
+                                    InputProps={{
+                                        style: { fontSize: 16 },
+                                    }}
+                                    onBlur={saveHandler}
+                                />
+                            ) : (
+                                <Typography
+                                    variant="h6"
+                                    onClick={toggleTitleInput}
+                                >
+                                    {task.title}
+                                </Typography>
+                            )}
+
                             <Box marginTop={2}>
                                 {showDescriptionInput ? (
                                     <React.Fragment>
@@ -145,17 +227,8 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                             InputProps={{
                                                 style: { fontSize: 14 },
                                             }}
+                                            onBlur={saveHandler}
                                         />
-
-                                        <Button
-                                            onClick={saveHandler}
-                                            variant="outlined"
-                                            color={"secondary"}
-                                            size="small"
-                                            sx={{ marginTop: 1 }}
-                                        >
-                                            Save
-                                        </Button>
                                     </React.Fragment>
                                 ) : (
                                     <Typography
@@ -169,63 +242,18 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                 )}
                             </Box>
                         </Box>
-
-                        <Box sx={{ minHeight: "300px" }}>
-                            <Typography variant="h6">Conversations</Typography>
-                            <Box>
-                                <TextField
-                                    id={`conversation`}
-                                    multiline
-                                    maxRows={6}
-                                    placeholder={"Click here to add a comment"}
-                                    size="small"
-                                    variant="outlined"
-                                    fullWidth
-                                />
-
-                                <Box
-                                    marginTop={1}
-                                    display="flex"
-                                    justifyContent={"space-between"}
-                                >
-                                    <Tooltip title={"Insert emoji"}>
-                                        <IconButton>
-                                            <AddReactionIcon
-                                                sx={{
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    opacity: "0.7",
-                                                }}
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title={"Add comment"}>
-                                        <IconButton>
-                                            <ArrowCircleRightIcon
-                                                sx={{
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    opacity: "0.7",
-                                                }}
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-                            </Box>
-                        </Box>
                     </Box>
                     <Box
                         sx={{
                             background: dark,
-                            borderBottomRightRadius: "10px",
                             width: "30%",
-                            minHeight: "100%",
-                            paddingTop: "20px",
+                            height: 310,
+                            borderBottomRightRadius: "10px",
                         }}
                     >
                         <Box padding={"20px"}>
                             <DateTimePicker
-                                label="Set Due date"
+                                label="Set due date"
                                 value={dueDate}
                                 onChange={handleDateChange}
                                 InputProps={{
@@ -235,7 +263,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                     <TextField
                                         {...params}
                                         variant="standard"
-                                        size="large"
+                                        size="small"
                                     />
                                 )}
                             />
@@ -249,28 +277,15 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                                 <ListItemText>Tags</ListItemText>
                             </ListItemButton>
                         </Box>
+
                         <Divider />
-                        <Box padding={"10px"}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <VisibilityIcon />
-                                </ListItemIcon>
-                                <ListItemText>Watching</ListItemText>
-                            </ListItemButton>
-                            <Box paddingLeft={"20px"}>
-                                <AccountCircleIcon sx={{ opacity: 0.6 }} />
-                            </Box>
-                        </Box>
-                        <Divider />
-                        <Box padding={"10px"}>
-                            <Link href="/" sx={{ textDecoration: "none" }}>
-                                <Typography variant="body2">
-                                    Project 1
-                                </Typography>
-                            </Link>
+                        <Box padding={"10px"} sx={{ textAlign: "center" }}>
+                            <Typography variant="subtitle1">
+                                {task.project.title}
+                            </Typography>
                         </Box>
                     </Box>
-                </Stack>
+                </Box>
             </Box>
         </TransitionModal>
     );

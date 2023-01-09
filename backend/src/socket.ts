@@ -64,8 +64,8 @@ export const readTasksHandler = async function (
                 const tasks = await Task.find({
                     project: project._id,
                 }).populate({
-                    path: "createdBy assignedTo project section",
-                    select: "name name title title",
+                    path: "createdBy assignedTo project section completedBy",
+                    select: "firstName firstName title title firstName",
                 });
                 callback({ tasks });
                 console.log("Rendering tasks");
@@ -83,20 +83,24 @@ export const updateTaskHandler = async function (
     payload: {
         token: string;
         taskId: string;
-        updates: { [x: string]: any };
+        updates: ITaskOptions;
     },
     callback: (response: { task?: ITask; error?: string | undefined }) => void
 ) {
     try {
         const user = await authenticate(payload.token);
         if (user) {
+            if (payload.updates.completed) {
+                payload.updates.completedOn = new Date();
+                payload.updates.completedBy = user._id;
+            }
             await Task.findByIdAndUpdate(payload.taskId, {
                 ...payload.updates,
             });
             console.info(`Task updated: ${payload.taskId}`);
             const task = await Task.findById(payload.taskId).populate({
-                path: "createdBy assignedTo project section",
-                select: "name name title title",
+                path: "createdBy assignedTo project section completedBy",
+                select: "firstName firstName title title firstName",
             });
             if (task) callback({ task });
         } else {
@@ -121,8 +125,8 @@ export const createTaskHandler = async function (
             const task = await (
                 await Task.create({ ...payload.task, createdBy: user._id })
             ).populate({
-                path: "createdBy assignedTo project section",
-                select: "name name title title",
+                path: "createdBy assignedTo project section completedBy",
+                select: "firstName firstName title title firstName",
             });
             if (task) callback({ task });
         } else {
@@ -251,7 +255,11 @@ export const completeSectionTasksHandler = async function (
         if (user) {
             const { modifiedCount } = await Task.updateMany(
                 { section: payload.sectionId },
-                { completed: true }
+                {
+                    completed: true,
+                    completedOn: new Date(),
+                    completedBy: user._id,
+                }
             );
             callback({ success: true, updated: modifiedCount });
         } else {

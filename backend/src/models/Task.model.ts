@@ -19,6 +19,8 @@ export interface ITask {
     assignedTo?: Types.ObjectId;
     project: Types.ObjectId;
     dueDate?: Date;
+    completedOn?: Date;
+    completedBy?: Types.ObjectId;
 }
 
 export type ITaskOptions = {
@@ -31,6 +33,8 @@ export type ITaskOptions = {
     section?: Types.ObjectId;
     priority?: string;
     project?: Types.ObjectId;
+    completedOn?: Date;
+    completedBy?: Types.ObjectId;
 };
 
 const taskSchema = new Schema<ITask>({
@@ -72,6 +76,11 @@ const taskSchema = new Schema<ITask>({
         required: true,
     },
     dueDate: Date,
+    completedOn: Date,
+    completedBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
 });
 
 const Task = model<ITask>("Task", taskSchema);

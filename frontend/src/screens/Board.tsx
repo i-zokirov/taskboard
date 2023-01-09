@@ -10,7 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Status } from "../types";
 
 const Board: React.FC = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const { tokenVerified, userData } = useAppSelector((state) => state.auth);
     const { status, loading } = useAppSelector((state) => state.projects);
     const navigate = useNavigate();
