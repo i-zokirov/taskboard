@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { IProject, ISection, Status } from "../../../types";
 
 interface ProjectState {
-    data: IProject[] | [];
+    data: IProject[];
     loading: boolean;
     status: Status;
     error?: string;
@@ -33,6 +33,9 @@ export const projectsSlice = createSlice({
             state.data = [];
             state.error = action.payload;
             state.status = Status.Rejected;
+        },
+        addProject: (state, action: PayloadAction<IProject>) => {
+            state.data.push(action.payload);
         },
         addNewSectionToProject: (
             state,
@@ -73,6 +76,7 @@ export const projectsSlice = createSlice({
 });
 
 export const {
+    addProject,
     projectsRequest,
     projectRequestFailure,
     projectsRequestSuccess,

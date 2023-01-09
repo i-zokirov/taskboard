@@ -50,6 +50,7 @@ export type User = {
     id?: string;
     firstName: string;
     lastName: string;
+    name?: string;
     email: string;
     token?: string;
 };
@@ -64,9 +65,11 @@ export enum Status {
 export type IProject = {
     _id: string;
     title: string;
+    description?: string;
     owner: User;
     members?: User[];
     sections?: ISection[];
+    createdBy?: User;
 };
 
 export interface KanbanColumn extends ISection {

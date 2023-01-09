@@ -17,6 +17,7 @@ import {
 import { ISectionOptions, ITask, ITaskOptions } from "../types";
 import {
     addNewSectionToProject,
+    addProject,
     projectsRequest,
     projectsRequestSuccess,
     updateProjectFromProjectsList,
@@ -52,6 +53,23 @@ export const useUpdateTaskDetails = () => {
                     })
                 );
                 dispatch(updateTaskInKanbanBoard({ task: result.task }));
+            }
+        });
+    };
+};
+
+export const useCreateProject = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return (payload: {
+        token: string | undefined;
+        project: { title: string; description: string };
+    }) => {
+        payload.token = token;
+        socket.emit("projects:create", payload, (response) => {
+            if (response.project) {
+                dispatch(addProject(response.project));
+                dispatch(setCurrentProject(response.project));
             }
         });
     };

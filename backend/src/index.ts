@@ -15,6 +15,7 @@ import {
 } from "./interfaces";
 import {
     completeSectionTasksHandler,
+    createProjectHandler,
     createSectionHandler,
     createTaskHandler,
     deleteSectionHandler,
@@ -63,11 +64,11 @@ const io = new Server<
 // SOCKET CONNECTION
 io.on("connection", function (socket: Socket) {
     socket.on("hello", () => {
-        // ...
         console.log("New client joined");
         console.log(socket.id);
     });
     socket.on("projects:read", readProjectsHandler);
+    socket.on("projects:create", createProjectHandler);
     socket.on("tasks:read", readTasksHandler);
     socket.on("tasks:update", updateTaskHandler);
     socket.on("tasks:create", createTaskHandler);

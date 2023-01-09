@@ -166,7 +166,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                         />
                     </ListItem>
 
-                    {projects.map((project, index) => (
+                    {projects.map((project: IProject, index: number) => (
                         <ListItem key={project._id} disablePadding>
                             <ListItemButton
                                 onClick={() => handleProjectChange(project)}
@@ -180,6 +180,11 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                                 </ListItemIcon>
                                 <ListItemText primary={project.title} />
                             </ListItemButton>
+                            <Tooltip title="More...">
+                                <IconButton sx={{ marginRight: "5px" }}>
+                                    <MoreHorizIcon />
+                                </IconButton>
+                            </Tooltip>
                         </ListItem>
                     ))}
                 </List>

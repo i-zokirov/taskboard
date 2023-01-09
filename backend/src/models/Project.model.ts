@@ -2,9 +2,11 @@ import { Schema, model, Types, Model } from "mongoose";
 
 export interface IProject {
     title: string;
+    description?: string;
     owner: Types.ObjectId;
     members?: Types.ObjectId[];
     sections?: Types.ObjectId[];
+    createdBy?: Types.ObjectId;
 }
 
 interface IProjectMethods {
@@ -19,7 +21,9 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
         title: {
             type: String,
             required: true,
-            unique: true,
+        },
+        description: {
+            type: String,
         },
         owner: {
             type: Schema.Types.ObjectId,
@@ -38,6 +42,10 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
                 ref: "Section",
             },
         ],
+        createdBy: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
     },
     { timestamps: true }
 );

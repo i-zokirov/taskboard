@@ -7,6 +7,10 @@ export interface ServerToClientEvents {}
 export interface ClientToServerEvents {
     hello: () => void;
     ["projects:read"]: (payload: { token: string }) => void;
+    ["projects:create"]: (payload: {
+        token: string;
+        project: IProject;
+    }) => void;
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },
         callback: (response: {

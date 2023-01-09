@@ -3,6 +3,7 @@ import * as bcrypt from "bcryptjs";
 export interface IUser {
     _id?: Types.ObjectId;
     firstName: string;
+    name: string;
     lastName: string;
     email: string;
     password: string;
@@ -17,6 +18,10 @@ type IUserModel = Model<IUser, {}, IUserMethods>;
 
 const userSchema = new Schema<IUser, IUserModel, IUserMethods>({
     firstName: {
+        type: String,
+        required: true,
+    },
+    name: {
         type: String,
         required: true,
     },

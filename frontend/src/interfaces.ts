@@ -93,6 +93,13 @@ export interface ClientToServerEvents {
         payload: { token: string | undefined },
         callback: (response: ProjectsReadProps) => void
     ) => void;
+    ["projects:create"]: (
+        payload: {
+            token: string | undefined;
+            project: { title: string; description: string };
+        },
+        callback: (response: { project?: IProject; error?: string }) => void
+    ) => void;
 
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },

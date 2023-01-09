@@ -48,6 +48,31 @@ export const readProjectsHandler = async function (
     }
 };
 
+export const createProjectHandler = async function (
+    this: Socket,
+    payload: { token: string; project: IProject },
+    callback: (payload: {
+        project?: IProject;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const project = await Project.create({
+                ...payload.project,
+                owner: user._id,
+                members: [user._id],
+            });
+
+            callback({ project });
+        }
+    } catch (error) {
+        console.log(error);
+        // callback({ error });
+    }
+};
+
 export const readTasksHandler = async function (
     this: Socket,
     payload: { token: string; projectId: string },

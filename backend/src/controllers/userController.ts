@@ -11,6 +11,7 @@ export const registerUser: RequestHandler = async (req, res) => {
         email,
         firstName,
         lastName,
+        name: firstName + " " + lastName,
         marketingConsent,
         password,
     });

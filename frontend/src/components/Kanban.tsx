@@ -231,7 +231,11 @@ const Kanban: React.FC = () => {
                 </DragDropContext>
                 <Column
                     width={`${
-                        (100 / Object.entries(kanban.columns).length + 1) / 1.7
+                        projectData?.sections?.length
+                            ? (100 / Object.entries(kanban.columns).length +
+                                  1) /
+                              1.7
+                            : 100
                     }%`}
                     index={Object.entries(kanban.columns).length}
                 >

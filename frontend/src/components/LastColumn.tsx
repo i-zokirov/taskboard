@@ -5,21 +5,33 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
+    Fade,
+    Paper,
+    Popper,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FaceIcon from "@mui/icons-material/Face";
 import Face2Icon from "@mui/icons-material/Face2";
 import Face4Icon from "@mui/icons-material/Face4";
-import { useCreateSection } from "../reduxApp/hooks";
+import { useAppSelector, useCreateSection } from "../reduxApp/hooks";
 const LastColumn = () => {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [showInput, setShowInput] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const addSectionRef = useRef<any>(null);
+    const createSection = useCreateSection();
+
+    const openPopper = Boolean(anchorEl);
+
     const handleAddSectionBtnClick = () => {
         setShowInput((prev) => !prev);
     };
 
-    const createSection = useCreateSection();
+    const closePopper = () => {
+        setAnchorEl(null);
+    };
     const handleInputBlur = () => {
+        closePopper();
         if (inputRef.current && inputRef.current.value) {
             createSection({
                 section: { title: inputRef.current.value },
@@ -30,6 +42,23 @@ const LastColumn = () => {
     };
     return (
         <React.Fragment>
+            {/* <Popper
+                open={openPopper}
+                anchorEl={anchorEl}
+                placement={"top-end"}
+                transition
+            >
+                {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                            <Typography sx={{ p: 2 }}>
+                                Click here to add sections to your project board
+                                to get started.
+                            </Typography>
+                        </Paper>
+                    </Fade>
+                )}
+            </Popper> */}
             <Box
                 sx={{
                     padding: "10px",
@@ -55,7 +84,10 @@ const LastColumn = () => {
                             onBlur={handleInputBlur}
                         />
                     ) : (
-                        <ListItemButton onClick={handleAddSectionBtnClick}>
+                        <ListItemButton
+                            onClick={handleAddSectionBtnClick}
+                            ref={addSectionRef}
+                        >
                             <ListItemIcon>
                                 <AddIcon sx={{ color: "#3268c5" }} />
                             </ListItemIcon>
