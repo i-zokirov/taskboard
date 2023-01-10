@@ -6,10 +6,10 @@ import {
     Typography,
     MenuItem,
 } from "@mui/material";
-import { MenuProps } from "../interfaces";
-import { icons } from "../assets/icons";
+import { MenuProps } from "../../interfaces";
+import { icons } from "../../assets/icons";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { themeOptions } from "../assets/theme";
+import { themeOptions } from "../../assets/theme";
 const theme = createTheme(themeOptions);
 const projectTypeSelectionOptions = [
     {

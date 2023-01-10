@@ -37,7 +37,7 @@ const TransitionModal: React.FC<ModalProps> = ({
                 <Box
                     sx={{
                         ...style,
-                        height,
+                        minHeight: height,
                         width,
                     }}
                 >

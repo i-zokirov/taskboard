@@ -70,6 +70,8 @@ export type IProject = {
     members?: User[];
     sections?: ISection[];
     createdBy?: User;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export interface KanbanColumn extends ISection {

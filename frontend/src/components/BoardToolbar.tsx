@@ -3,7 +3,7 @@ import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Toolbar, Box, IconButton, Tooltip, Divider } from "@mui/material";
 import { BoardToolbarProps } from "../interfaces";
-import ProjectSelector from "./ProjectSelector";
+import ProjectSelector from "./project/ProjectSelector";
 import MuiAppBar from "@mui/material/AppBar";
 import { AppBarProps } from "../interfaces";
 import { styled } from "@mui/material/styles";

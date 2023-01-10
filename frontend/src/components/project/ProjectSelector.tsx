@@ -5,8 +5,8 @@ import {
     MenuItem,
     SelectChangeEvent,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import { setCurrentProject } from "../reduxApp/features/projects/currentProjectSlice";
+import { useAppDispatch, useAppSelector } from "../../reduxApp/hooks";
+import { setCurrentProject } from "../../reduxApp/features/projects/currentProjectSlice";
 
 const ProjectSelector: React.FC = () => {
     const dispatch = useAppDispatch();

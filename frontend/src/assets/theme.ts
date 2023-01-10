@@ -59,3 +59,6 @@ export const colors = [
         colorCode: "#8A9499",
     },
 ];
+
+export const lightWhite = "#eef1f5";
+export const lightdark = "#e7ebf0";

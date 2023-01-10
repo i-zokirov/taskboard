@@ -1,7 +1,7 @@
 import { Typography, Box } from "@mui/material";
 import React, { FormEvent, useRef } from "react";
 import { AddTaskModalProps } from "../interfaces";
-import ProjectSelector from "./ProjectSelector";
+import ProjectSelector from "./project/ProjectSelector";
 import TransitionModal from "./TransitionModal";
 import { useAppSelector, useCreateTask } from "../reduxApp/hooks";
 import { ITaskOptions } from "../types";

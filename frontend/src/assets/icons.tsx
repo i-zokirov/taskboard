@@ -45,14 +45,18 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { IconDictionary } from "../types";
 import { SxProps } from "@mui/material";
-
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LoginIcon from "@mui/icons-material/Login";
-
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 export const icons: IconDictionary = {
     // productivity workflow
 
     celebration: (sx: SxProps | undefined) => (
         <CelebrationIcon sx={{ ...sx }} />
+    ),
+    morehorizon: (sx: SxProps | undefined) => <MoreHorizIcon sx={{ ...sx }} />,
+    notificationsactive: (sx: SxProps | undefined) => (
+        <NotificationsActiveIcon sx={{ ...sx }} />
     ),
     checkcircle: (sx: SxProps | undefined) => (
         <CheckCircleOutlineIcon sx={{ ...sx }} />
@@ -144,6 +148,8 @@ export const productivityIcons = [
     "bug",
     "delete",
     "uploadfile",
+    "notificationsactive",
+    "morehorizon",
 ];
 
 export const technologyIcons = [

@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
 import { Menu, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { MenuProps } from "../interfaces";
-import { icons } from "../assets/icons";
+import { MenuProps } from "../../interfaces";
+import { icons } from "../../assets/icons";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { themeOptions } from "../assets/theme";
+import { themeOptions } from "../../assets/theme";
 import AddProjectModal from "./AddProjectModal";
 const theme = createTheme(themeOptions);
 const ProjectAddMenu: FunctionComponent<MenuProps> = (props) => {

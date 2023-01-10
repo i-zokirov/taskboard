@@ -14,7 +14,7 @@ import {
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
-import { ISectionOptions, ITask, ITaskOptions } from "../types";
+import { IProject, ISectionOptions, ITask, ITaskOptions } from "../types";
 import {
     addNewSectionToProject,
     addProject,
@@ -30,6 +30,10 @@ import {
     setCurrentProject,
     updateSectionInCurrentProject,
 } from "./features/projects/currentProjectSlice";
+import {
+    closeProjectSettings,
+    openProjectSettings,
+} from "./features/projects/projectSettingsSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -202,5 +206,18 @@ export const useCompleteSectionTasks = () => {
                 console.log(response.updated);
             }
         });
+    };
+};
+
+export const useOpenProjectSettings = () => {
+    const dispatch = useAppDispatch();
+    return (project: IProject) => {
+        dispatch(openProjectSettings(project));
+    };
+};
+export const useCloseProjectSettings = () => {
+    const dispatch = useAppDispatch();
+    return () => {
+        dispatch(closeProjectSettings());
     };
 };

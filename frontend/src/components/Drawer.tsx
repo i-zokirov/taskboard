@@ -27,11 +27,16 @@ import { DrawerProps } from "../interfaces";
 import SearchBar from "./SearchBar";
 import { icons } from "../assets/icons";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ProjectTypeSelectionMenu from "./ProjectTypeSelectionMenu";
-import ProjectAddMenu from "./ProjectAddMenu";
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
+import ProjectTypeSelectionMenu from "./project/ProjectTypeSelectionMenu";
+import ProjectAddMenu from "./project/ProjectAddMenu";
+import {
+    useAppDispatch,
+    useAppSelector,
+    useOpenProjectSettings,
+} from "../reduxApp/hooks";
 import { setCurrentProject } from "../reduxApp/features/projects/currentProjectSlice";
 import { IProject } from "../types";
+import ProjectDetailsModal from "./project/ProjectDetailsModal";
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
@@ -54,6 +59,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
     const { projectData } = useAppSelector((state) => state.currentProject);
     const { data: projects } = useAppSelector((state) => state.projects);
     const dispatch = useAppDispatch();
+    const openProjectSettings = useOpenProjectSettings();
     const openProjectTypeSelectorMenu = Boolean(projectTypeMenuAnchorEl);
     const openProjectAddMenu = Boolean(projectAddMenuAnchorEl);
     const handleSearch = () => {};
@@ -93,6 +99,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                 open={openProjectAddMenu}
                 handleClose={handleCloseProjectAddMenu}
             />
+            <ProjectDetailsModal />
             <MUIDrawer
                 sx={{
                     width: drawerWidth,
@@ -181,7 +188,12 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                                 <ListItemText primary={project.title} />
                             </ListItemButton>
                             <Tooltip title="More...">
-                                <IconButton sx={{ marginRight: "5px" }}>
+                                <IconButton
+                                    sx={{ marginRight: "5px" }}
+                                    onClick={() => {
+                                        openProjectSettings(project);
+                                    }}
+                                >
                                     <MoreHorizIcon />
                                 </IconButton>
                             </Tooltip>

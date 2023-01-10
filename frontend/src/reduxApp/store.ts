@@ -3,6 +3,7 @@ import { authSlice } from "./features/auth/authSlice";
 import { kanbanSlice } from "./features/kanban/kanban-slice";
 import { currentProject } from "./features/projects/currentProjectSlice";
 import { projectsSlice } from "./features/projects/projects-slice";
+import { projectSettingsSlice } from "./features/projects/projectSettingsSlice";
 import { registerSlice } from "./features/register/register-slice";
 import { tasksSlice } from "./features/tasks/tasks-slice";
 
@@ -11,6 +12,7 @@ export const store = configureStore({
         auth: authSlice.reducer,
         register: registerSlice.reducer,
         projects: projectsSlice.reducer,
+        projectSettings: projectSettingsSlice.reducer,
         currentProject: currentProject.reducer,
         tasks: tasksSlice.reducer,
         kanban: kanbanSlice.reducer,
