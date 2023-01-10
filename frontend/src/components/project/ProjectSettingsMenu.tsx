@@ -8,6 +8,7 @@ import {
     Divider,
     Box,
     Tooltip,
+    Button,
 } from "@mui/material";
 import { icons } from "../../assets/icons";
 const settingsMenuOptions = [
@@ -54,10 +55,20 @@ const ProjectSettingsMenu: React.FC<MenuProps> = (props) => {
                             <ListItemText>{option.title}</ListItemText>
                         </ListItemButton>
                     </Tooltip>
-                    {index % 2 !== 0 &&
-                        settingsMenuOptions.length !== index + 1 && <Divider />}
+                    {index % 2 !== 0 && <Divider />}
                 </Box>
             ))}
+            <Box textAlign={"center"} paddingBottom="10px" paddingTop="10px">
+                <Box paddingBottom="5px">
+                    <Button fullWidth>Share</Button>
+                </Box>
+
+                <Box>
+                    <Button fullWidth color="error">
+                        Delete Project
+                    </Button>
+                </Box>
+            </Box>
         </MenuComponent>
     );
 };

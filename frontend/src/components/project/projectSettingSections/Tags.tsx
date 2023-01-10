@@ -1,7 +1,8 @@
+import { Container } from "@mui/material";
 import React from "react";
 
 const Tags = () => {
-    return <div>Tags</div>;
+    return <Container>Tags</Container>;
 };
 
 export default Tags;

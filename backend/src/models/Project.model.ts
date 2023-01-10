@@ -7,6 +7,7 @@ export interface IProject {
     members?: Types.ObjectId[];
     sections?: Types.ObjectId[];
     createdBy?: Types.ObjectId;
+    icon?: string;
 }
 
 interface IProjectMethods {
@@ -23,6 +24,9 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
             required: true,
         },
         description: {
+            type: String,
+        },
+        icon: {
             type: String,
         },
         owner: {

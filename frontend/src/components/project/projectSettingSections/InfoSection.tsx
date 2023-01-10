@@ -1,9 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
-import { Typography, Box, TextField } from "@mui/material";
+import { Typography, Box, TextField, Avatar, Tooltip } from "@mui/material";
 import moment from "moment";
-import { useAppSelector } from "../../../reduxApp/hooks";
-import { lightdark } from "../../../assets/theme";
-const ProjectDetailsModalInfoSection = () => {
+import { useAppSelector, useUpdateProject } from "../../../reduxApp/hooks";
+import { colors } from "../../../assets/theme";
+import { icons } from "../../../assets/icons";
+import { getRandomInt } from "../../../utils";
+import InfoSectionIconMenu from "./InfoSectionIconMenu";
+
+const color = colors[getRandomInt(colors.length)].colorCode;
+const InfoSection = () => {
     const projectSettings = useAppSelector((state) => state.projectSettings);
     const [titleValue, setTitleValue] = useState(
         projectSettings.projectData?.title || ""
@@ -11,6 +16,12 @@ const ProjectDetailsModalInfoSection = () => {
     const [descriptionValue, setDescriptionValue] = useState(
         projectSettings.projectData?.description || ""
     );
+
+    const [iconsAnchorEl, setIconsAnchorEl] =
+        React.useState<null | HTMLElement>(null);
+    const openIconsMenu = Boolean(iconsAnchorEl);
+
+    const updateProject = useUpdateProject();
     if (projectSettings.open) {
         const handleSubmit = () => {};
         const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,8 +31,32 @@ const ProjectDetailsModalInfoSection = () => {
             setDescriptionValue(e.currentTarget.value);
         };
 
+        const handleCloseIconsMenu = () => {
+            setIconsAnchorEl(null);
+        };
+        const handleOpenIconsMenu = (e: React.MouseEvent<HTMLElement>) => {
+            setIconsAnchorEl(e.currentTarget);
+        };
+        const handleUpdate = () => {
+            if (
+                titleValue !== projectSettings.projectData?.title ||
+                descriptionValue !== projectSettings.projectData.description
+            ) {
+                updateProject({
+                    updates: {
+                        title: titleValue,
+                        description: descriptionValue,
+                    },
+                });
+            }
+        };
         return (
             <Box sx={{ padding: "10px 20px 20px 20px" }}>
+                <InfoSectionIconMenu
+                    open={openIconsMenu}
+                    anchorEl={iconsAnchorEl}
+                    handleClose={handleCloseIconsMenu}
+                />
                 <Box
                     sx={{
                         background: "#eff2f5",
@@ -36,16 +71,51 @@ const ProjectDetailsModalInfoSection = () => {
                         noValidate
                         sx={{ mt: 1 }}
                     >
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            id="project-title"
-                            label="Project Title"
-                            name="title"
-                            value={titleValue}
-                            autoFocus
-                            onChange={handleInputChange}
-                        />
+                        <Box
+                            display={"flex"}
+                            alignItems="center"
+                            justifyContent="space-between"
+                        >
+                            <Box sx={{ width: "20%" }}>
+                                <Tooltip
+                                    title="Change project icon"
+                                    onClick={handleOpenIconsMenu}
+                                >
+                                    <Avatar
+                                        sx={{
+                                            bgcolor: color,
+                                            width: 56,
+                                            height: 56,
+                                        }}
+                                    >
+                                        {projectSettings.projectData?.icon
+                                            ? icons[
+                                                  projectSettings.projectData
+                                                      ?.icon
+                                              ]({ width: 44, height: 44 })
+                                            : icons.folder({
+                                                  width: 44,
+                                                  height: 44,
+                                              })}
+                                    </Avatar>
+                                </Tooltip>
+                            </Box>
+                            <Box sx={{ width: "80%" }}>
+                                <TextField
+                                    margin="normal"
+                                    id="project-title"
+                                    label="Project Title"
+                                    name="title"
+                                    fullWidth
+                                    value={titleValue}
+                                    autoFocus
+                                    onChange={handleInputChange}
+                                    onBlur={handleUpdate}
+                                />
+                            </Box>
+                        </Box>
+                        <br />
+
                         <TextField
                             margin="normal"
                             fullWidth
@@ -57,6 +127,7 @@ const ProjectDetailsModalInfoSection = () => {
                             maxRows={5}
                             value={descriptionValue}
                             onChange={handleTextAreaChange}
+                            onBlur={handleUpdate}
                         />
                     </Box>
                     <Box
@@ -113,4 +184,4 @@ const ProjectDetailsModalInfoSection = () => {
     }
 };
 
-export default ProjectDetailsModalInfoSection;
+export default InfoSection;

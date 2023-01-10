@@ -37,6 +37,12 @@ export const projectsSlice = createSlice({
         addProject: (state, action: PayloadAction<IProject>) => {
             state.data.push(action.payload);
         },
+        updateProject: (state, action: PayloadAction<IProject>) => {
+            const projectIndx = state.data.findIndex(
+                (project) => project._id === action.payload._id
+            );
+            state.data[projectIndx] = action.payload;
+        },
         addNewSectionToProject: (
             state,
             action: PayloadAction<{ section: ISection }>
@@ -77,6 +83,7 @@ export const projectsSlice = createSlice({
 
 export const {
     addProject,
+    updateProject,
     projectsRequest,
     projectRequestFailure,
     projectsRequestSuccess,

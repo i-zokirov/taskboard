@@ -65,7 +65,48 @@ export const createProjectHandler = async function (
                 members: [user._id],
             });
 
+            await project.populate({
+                path: "owner members ",
+                select: "name name ",
+            });
+
             callback({ project });
+        }
+    } catch (error) {
+        console.log(error);
+        // callback({ error });
+    }
+};
+
+export const updateProjectHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        projectId: string;
+        updates: { title: string; description: string; icon: string };
+    },
+    callback: (payload: {
+        project?: IProject;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const project = await Project.findByIdAndUpdate(
+                payload.projectId,
+                {
+                    ...payload.updates,
+                },
+                { returnDocument: "after" }
+            )
+                .populate({
+                    path: "owner members",
+                    select: "name name",
+                })
+                .populate("sections");
+
+            if (project) callback({ project });
         }
     } catch (error) {
         console.log(error);

@@ -20,12 +20,13 @@ import {
     addProject,
     projectsRequest,
     projectsRequestSuccess,
+    updateProject,
     updateProjectFromProjectsList,
     updateSectionInProjects,
 } from "./features/projects/projects-slice";
 import { colors } from "../assets/theme";
 import { getRandomInt } from "../utils";
-import { productivityIcons } from "../assets/icons";
+import { productivityIcons, technologyIcons } from "../assets/icons";
 import {
     setCurrentProject,
     updateSectionInCurrentProject,
@@ -33,6 +34,7 @@ import {
 import {
     closeProjectSettings,
     openProjectSettings,
+    updateProjectData,
 } from "./features/projects/projectSettingsSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -67,13 +69,38 @@ export const useCreateProject = () => {
     const token = useAppSelector((state) => state.auth.userData?.token);
     return (payload: {
         token: string | undefined;
-        project: { title: string; description: string };
+        project: { title: string; description: string; icon?: string };
     }) => {
         payload.token = token;
+        payload.project.icon =
+            technologyIcons[getRandomInt(technologyIcons.length)];
         socket.emit("projects:create", payload, (response) => {
             if (response.project) {
                 dispatch(addProject(response.project));
                 dispatch(setCurrentProject(response.project));
+            }
+        });
+    };
+};
+
+export const useUpdateProject = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    const projectData = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    return (payload: {
+        token?: string;
+        projectId?: string;
+        updates: { title?: string; description?: string; icon?: string };
+    }) => {
+        payload.token = token;
+        payload.projectId = projectData?._id;
+        socket.emit("projects:update", payload, (response) => {
+            if (response.project) {
+                dispatch(updateProject(response.project));
+                dispatch(setCurrentProject(response.project));
+                dispatch(updateProjectData(response.project));
             }
         });
     };

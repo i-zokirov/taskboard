@@ -10,8 +10,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DrawerHeader } from "../Main";
@@ -32,6 +30,8 @@ import {
 import { setCurrentProject } from "../../reduxApp/features/projects/currentProjectSlice";
 import { IProject } from "../../types";
 import ProjectDetailsModal from "../project/ProjectSettingsModal";
+import { colors } from "../../assets/theme";
+import { getRandomInt } from "../../utils";
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
@@ -174,11 +174,17 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                                 onClick={() => handleProjectChange(project)}
                             >
                                 <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
+                                    {project.icon
+                                        ? icons[project.icon]({
+                                              color: colors[
+                                                  getRandomInt(colors.length)
+                                              ].colorCode,
+                                          })
+                                        : icons["folder"]({
+                                              color: colors[
+                                                  getRandomInt(colors.length)
+                                              ].colorCode,
+                                          })}
                                 </ListItemIcon>
                                 <ListItemText primary={project.title} />
                             </ListItemButton>

@@ -169,7 +169,6 @@ export const technologyIcons = [
     "saveicon",
     "gameconsole",
     "camera",
-    "watch",
     "devices",
     "mail",
     "apple",

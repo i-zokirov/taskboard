@@ -100,6 +100,14 @@ export interface ClientToServerEvents {
         },
         callback: (response: { project?: IProject; error?: string }) => void
     ) => void;
+    ["projects:update"]: (
+        payload: {
+            token?: string;
+            projectId?: string;
+            updates: { title?: string; description?: string; icon?: string };
+        },
+        callback: (response: { project?: IProject; error?: string }) => void
+    ) => void;
 
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },

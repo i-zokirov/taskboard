@@ -19,6 +19,9 @@ export const projectSettingsSlice = createSlice({
             state.projectData = action.payload;
             state.open = true;
         },
+        updateProjectData: (state, action: PayloadAction<IProject>) => {
+            state.projectData = action.payload;
+        },
         closeProjectSettings: (state, action: PayloadAction) => {
             state.projectData = null;
             state.open = false;
@@ -26,5 +29,5 @@ export const projectSettingsSlice = createSlice({
     },
 });
 
-export const { openProjectSettings, closeProjectSettings } =
+export const { openProjectSettings, closeProjectSettings, updateProjectData } =
     projectSettingsSlice.actions;

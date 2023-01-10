@@ -64,6 +64,7 @@ export enum Status {
 
 export type IProject = {
     _id: string;
+    icon?: string;
     title: string;
     description?: string;
     owner: User;

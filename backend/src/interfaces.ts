@@ -11,6 +11,11 @@ export interface ClientToServerEvents {
         token: string;
         project: IProject;
     }) => void;
+    ["projects:update"]: (payload: {
+        token: string;
+        projectId: string;
+        updates: { title: string; description: string; icon: string };
+    }) => void;
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },
         callback: (response: {

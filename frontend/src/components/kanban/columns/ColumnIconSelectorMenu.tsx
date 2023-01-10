@@ -33,7 +33,6 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
                     aria-label="column icon and color selector menu"
                 >
                     <Tab label="Section Icon" />
-
                     <Tab label="Section Color" />
                 </Tabs>
 

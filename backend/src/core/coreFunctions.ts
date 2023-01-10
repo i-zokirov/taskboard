@@ -1,15 +1,13 @@
-import { IUser } from "../models/User.model";
 import Project from "../models/Project.model";
-import Section from "../models/Section.model";
-import Task from "../models/Task.model";
-import User from "../models/User.model";
 import { Types } from "mongoose";
 
 // PROJECTS
 export const getProjects = async (user: Types.ObjectId) => {
     const projects = await Project.find()
-        .populate("owner", "name")
-        .populate("members", "name")
+        .populate({
+            path: "owner members",
+            select: "name name",
+        })
         .populate("sections");
     let userProjects;
     if (projects.length && user?._id) {
