@@ -24,7 +24,7 @@ const ProjectDetailsModalInfoSection = () => {
             <Box sx={{ padding: "10px 20px 20px 20px" }}>
                 <Box
                     sx={{
-                        background: lightdark,
+                        background: "#eff2f5",
                         borderRadius: "10px",
                         paddingBottom: "20px",
                     }}

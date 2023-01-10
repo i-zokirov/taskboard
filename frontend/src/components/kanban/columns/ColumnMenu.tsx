@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
-import { MenuProps } from "../interfaces";
-import MenuComponent from "./MenuComponent";
+import { MenuProps } from "../../../interfaces";
+import MenuComponent from "../../custom/MenuComponent";
 import {
     ListItemIcon,
     ListItemButton,
@@ -12,13 +12,13 @@ import {
     Button,
     TextField,
 } from "@mui/material";
-import { icons } from "../assets/icons";
-import DeleteSectionConfirmation from "./DeleteSectionConfirmation";
+import { icons } from "../../../assets/icons";
+import DeleteSectionConfirmation from "../DeleteSectionConfirmation";
 import {
     useCompleteSectionTasks,
     useDeleteSection,
     useUpdateSection,
-} from "../reduxApp/hooks";
+} from "../../../reduxApp/hooks";
 
 const ColumnMenu: FunctionComponent<MenuProps> = (props) => {
     const { open, handleClose, anchorEl, column, columnId } = props;

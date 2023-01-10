@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Copyright from "../components/Copyright";
+import Copyright from "../components/custom/Copyright";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
 import { registerUser } from "../reduxApp/features/register/register-slice";

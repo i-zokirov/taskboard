@@ -1,10 +1,10 @@
 import { Typography, Box } from "@mui/material";
 import React, { FormEvent, useRef } from "react";
-import { AddTaskModalProps } from "../interfaces";
-import ProjectSelector from "./project/ProjectSelector";
-import TransitionModal from "./TransitionModal";
-import { useAppSelector, useCreateTask } from "../reduxApp/hooks";
-import { ITaskOptions } from "../types";
+import { AddTaskModalProps } from "../../interfaces";
+import ProjectSelector from "../project/ProjectSelector";
+import TransitionModal from "../custom/TransitionModal";
+import { useAppSelector, useCreateTask } from "../../reduxApp/hooks";
+import { ITaskOptions } from "../../types";
 
 const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
     const inputRef = useRef<HTMLInputElement>(null);

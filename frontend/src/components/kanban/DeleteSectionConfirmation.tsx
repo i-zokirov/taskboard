@@ -1,8 +1,8 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
-import { ModalProps } from "../interfaces";
-import { useDeleteSection } from "../reduxApp/hooks";
-import TransitionModal from "./TransitionModal";
+import { ModalProps } from "../../interfaces";
+import { useDeleteSection } from "../../reduxApp/hooks";
+import TransitionModal from "../custom/TransitionModal";
 
 const DeleteSectionConfirmation: React.FC<ModalProps> = (props) => {
     const { open, onClose, column, closeMenu } = props;

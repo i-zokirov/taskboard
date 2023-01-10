@@ -1,5 +1,5 @@
 import React from "react";
-import { ModalProps } from "../interfaces";
+import { ModalProps } from "../../interfaces";
 import { Modal, Backdrop, Fade, Box } from "@mui/material";
 
 const style = {

@@ -1,5 +1,5 @@
 import React from "react";
-import TransitionModal from "../TransitionModal";
+import TransitionModal from "../custom/TransitionModal";
 import {
     Typography,
     Box,

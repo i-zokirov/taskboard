@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Box, Typography } from "@mui/material";
-import { icons } from "../assets/icons";
+import { icons } from "../../../assets/icons";
 const ColumnNoTasksPlaceHolder: FunctionComponent = () => {
     return (
         <Box

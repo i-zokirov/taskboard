@@ -15,16 +15,16 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { TaskCardDetails } from "../interfaces";
-import TransitionModal from "./TransitionModal";
+import { TaskCardDetails } from "../../interfaces";
+import TransitionModal from "../custom/TransitionModal";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Divider from "@mui/material/Divider";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useAppSelector, useUpdateTaskDetails } from "../reduxApp/hooks";
-import { ITaskOptions } from "../types";
+import { useAppSelector, useUpdateTaskDetails } from "../../reduxApp/hooks";
+import { ITaskOptions } from "../../types";
 
 const dark = "#e7ebf0";
 

@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { ListItemIcon, ListItemButton, ListItemText } from "@mui/material";
-import MenuComponent from "./MenuComponent";
+import MenuComponent from "../custom/MenuComponent";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
-import { MenuProps } from "../interfaces";
+import { MenuProps } from "../../interfaces";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 const HelpMenu: FunctionComponent<MenuProps> = (props) => {
     const { open, anchorEl, handleClose } = props;

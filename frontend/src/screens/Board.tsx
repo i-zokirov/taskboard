@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
-import BoardToolbar from "../components/BoardToolbar";
+import BoardToolbar from "../components/appContainer/BoardToolbar";
 import MainBoardContainer from "../components/Main";
-import Drawer from "../components/Drawer";
-import Kanban from "../components/Kanban";
+import Drawer from "../components/appContainer/Drawer";
+import Kanban from "../components/kanban/Kanban";
 import { useAppSelector, useFetchProjects } from "../reduxApp/hooks";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Status } from "../types";

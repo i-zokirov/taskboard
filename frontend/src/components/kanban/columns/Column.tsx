@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { ColumnProps } from "../interfaces";
+import { ColumnProps } from "../../../interfaces";
 
 const light = "#eef1f5";
 const dark = "#e7ebf0";

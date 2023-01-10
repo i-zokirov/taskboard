@@ -5,14 +5,14 @@ import {
     ListItemText,
     Divider,
 } from "@mui/material";
-import MenuComponent from "./MenuComponent";
+import MenuComponent from "../custom/MenuComponent";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { MenuProps } from "../interfaces";
-import { useAppDispatch } from "../reduxApp/hooks";
-import { logout } from "../reduxApp/features/auth/authSlice";
+import { MenuProps } from "../../interfaces";
+import { useAppDispatch } from "../../reduxApp/hooks";
+import { logout } from "../../reduxApp/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
     const { open, anchorEl, handleClose } = props;

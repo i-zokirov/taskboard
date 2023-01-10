@@ -2,11 +2,11 @@ import React, { FormEvent, FunctionComponent, useState } from "react";
 import { Box, IconButton, Typography, Tooltip } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
-import { ColumnHeaderProps } from "../interfaces";
+import { ColumnHeaderProps } from "../../../interfaces";
 import ColumnIconSelectorMenu from "./ColumnIconSelectorMenu";
 import ColumnMenu from "./ColumnMenu";
-import { icons } from "../assets/icons";
-import { useUpdateSection } from "../reduxApp/hooks";
+import { icons } from "../../../assets/icons";
+import { useUpdateSection } from "../../../reduxApp/hooks";
 
 const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
     const { columnId, column } = props;

@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Paper, Typography, Stack, Box, IconButton, Chip } from "@mui/material";
-import { TaskCardProps } from "../interfaces";
-
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { TaskCardProps } from "../../interfaces";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
 import TaskCardDetailsModal from "./TaskCardDetailsModal";
 
 const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {

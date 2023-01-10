@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { Box, IconButton, LinearProgress, Stack, Tooltip } from "@mui/material";
-import TaskCard from "./Card";
+import TaskCard from "../tasks/TaskCard";
 import { StrictModeDroppable } from "./StrictModeDroppable";
-import Column from "./Column";
-import ColumnHeader from "./ColumnHeader";
-import LastColumn from "./LastColumn";
-import { icons } from "../assets/icons";
-import ColumnNoTasksPlaceHolder from "./ColumnNoTasksPlaceHolder";
-import TaskInputCard from "./TaskInputCard";
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import socket from "../socket";
+import Column from "./columns/Column";
+import ColumnHeader from "./columns/ColumnHeader";
+import LastColumn from "./columns/LastColumn";
+import { icons } from "../../assets/icons";
+import ColumnNoTasksPlaceHolder from "./columns/ColumnNoTasksPlaceHolder";
+import TaskInputCard from "../tasks/TaskInputCard";
+import { useAppDispatch, useAppSelector } from "../../reduxApp/hooks";
+import socket from "../../socket";
 import {
     tasksRequest,
     tasksRequestSuccess,
     updateSingleTaskInStore,
-} from "../reduxApp/features/tasks/tasks-slice";
+} from "../../reduxApp/features/tasks/tasks-slice";
 
 import {
     moveTask,
     setUpKanban,
-} from "../reduxApp/features/kanban/kanban-slice";
+} from "../../reduxApp/features/kanban/kanban-slice";
 
 const Kanban: React.FC = () => {
     const [showInputForCol, setShowInputForCol] = useState<{

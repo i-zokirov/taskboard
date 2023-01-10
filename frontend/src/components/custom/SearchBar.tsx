@@ -7,8 +7,8 @@ import {
     IconButton,
 } from "@mui/material";
 
-import { SearchBarProps } from "../interfaces";
-import { icons } from "../assets/icons";
+import { SearchBarProps } from "../../interfaces";
+import { icons } from "../../assets/icons";
 
 const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
     const { label, value, setValue, handleSearch } = props;

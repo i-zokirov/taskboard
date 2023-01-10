@@ -13,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FaceIcon from "@mui/icons-material/Face";
 import Face2Icon from "@mui/icons-material/Face2";
 import Face4Icon from "@mui/icons-material/Face4";
-import { useAppSelector, useCreateSection } from "../reduxApp/hooks";
+import { useAppSelector, useCreateSection } from "../../../reduxApp/hooks";
 const LastColumn = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [showInput, setShowInput] = useState(false);

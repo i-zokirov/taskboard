@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "@mui/material";
-import { MenuProps } from "../interfaces";
+import { MenuProps } from "../../interfaces";
 
 const MenuComponent: React.FC<MenuProps> = (props) => {
     const { anchorEl, open, handleClose, children } = props;

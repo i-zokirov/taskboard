@@ -19,24 +19,24 @@ import MailIcon from "@mui/icons-material/Mail";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import { DrawerHeader } from "../components/Main";
-import { appBarMenuOptions } from "../config";
+import { DrawerHeader } from "../Main";
+import { appBarMenuOptions } from "../../config";
 import { Link } from "react-router-dom";
-import { drawerWidth } from "../config";
-import { DrawerProps } from "../interfaces";
-import SearchBar from "./SearchBar";
-import { icons } from "../assets/icons";
+import { drawerWidth } from "../../config";
+import { DrawerProps } from "../../interfaces";
+import SearchBar from "../custom/SearchBar";
+import { icons } from "../../assets/icons";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ProjectTypeSelectionMenu from "./project/ProjectTypeSelectionMenu";
-import ProjectAddMenu from "./project/ProjectAddMenu";
+import ProjectTypeSelectionMenu from "../project/ProjectTypeSelectionMenu";
+import ProjectAddMenu from "../project/ProjectAddMenu";
 import {
     useAppDispatch,
     useAppSelector,
     useOpenProjectSettings,
-} from "../reduxApp/hooks";
-import { setCurrentProject } from "../reduxApp/features/projects/currentProjectSlice";
-import { IProject } from "../types";
-import ProjectDetailsModal from "./project/ProjectDetailsModal";
+} from "../../reduxApp/hooks";
+import { setCurrentProject } from "../../reduxApp/features/projects/currentProjectSlice";
+import { IProject } from "../../types";
+import ProjectDetailsModal from "../project/ProjectDetailsModal";
 const darkTheme = createTheme({
     palette: {
         mode: "dark",

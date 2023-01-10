@@ -1,13 +1,17 @@
 import React from "react";
-import MenuComponent from "./MenuComponent";
-import { icons, productivityIcons, technologyIcons } from "../assets/icons";
+import MenuComponent from "../../custom/MenuComponent";
+import {
+    icons,
+    productivityIcons,
+    technologyIcons,
+} from "../../../assets/icons";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { MenuProps } from "../interfaces";
+import { MenuProps } from "../../../interfaces";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 
-import { colors } from "../assets/theme";
+import { colors } from "../../../assets/theme";
 const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
     const [value, setValue] = React.useState(0);
 

@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useRef } from "react";
 import { Paper, Box } from "@mui/material";
-import { TaskInputCardProps } from "../interfaces";
+import { TaskInputCardProps } from "../../interfaces";
 
-import { useAppSelector, useCreateTask } from "../reduxApp/hooks";
+import { useAppSelector, useCreateTask } from "../../reduxApp/hooks";
 
 const TaskInputCard: FunctionComponent<TaskInputCardProps> = ({
     hideInput,

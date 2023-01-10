@@ -3,7 +3,7 @@ import React from "react";
 import { ModalProps } from "../../interfaces";
 import { useCreateProject } from "../../reduxApp/hooks";
 
-import TransitionModal from "../TransitionModal";
+import TransitionModal from "../custom/TransitionModal";
 
 const AddProjectModal: React.FunctionComponent<ModalProps> = (props) => {
     const { open, onClose } = props;

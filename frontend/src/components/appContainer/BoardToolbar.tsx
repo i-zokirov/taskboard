@@ -2,14 +2,14 @@ import React from "react";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import { Toolbar, Box, IconButton, Tooltip, Divider } from "@mui/material";
-import { BoardToolbarProps } from "../interfaces";
-import ProjectSelector from "./project/ProjectSelector";
+import { BoardToolbarProps } from "../../interfaces";
+import ProjectSelector from "../project/ProjectSelector";
 import MuiAppBar from "@mui/material/AppBar";
-import { AppBarProps } from "../interfaces";
+import { AppBarProps } from "../../interfaces";
 import { styled } from "@mui/material/styles";
-import { toolbarIconButtons } from "../config";
+import { toolbarIconButtons } from "../../config";
 import ProfileMenu from "./ProfileMenu";
-import AddTaskModal from "./AddTaskModal";
+import AddTaskModal from "../tasks/AddTaskModal";
 import HelpMenu from "./HelpMenu";
 
 const drawerWidth = 240;
