@@ -19,6 +19,8 @@ import Automations from "./projectSettingSections/Automations";
 import Checklists from "./projectSettingSections/Checklists";
 import Tags from "./projectSettingSections/Tags";
 import { icons } from "../../assets/icons";
+import ProjectSettingsMenu from "./ProjectSettingsMenu";
+
 const theme = createTheme(themeOptions);
 
 const getSection = (tab: number) => {
@@ -33,9 +35,11 @@ const getSection = (tab: number) => {
     return sections[tab];
 };
 
-const ProjectDetailsModal: React.FunctionComponent = () => {
+const ProjectSettingsModal: React.FunctionComponent = () => {
     const [tabValue, setTabValue] = React.useState(0);
-
+    const [settingsAnchorEl, setSettingsAnchorEl] =
+        React.useState<null | HTMLElement>(null);
+    const openSettingsMenu = Boolean(settingsAnchorEl);
     const handleTabValueChange = (
         event: React.SyntheticEvent,
         newValue: number
@@ -46,6 +50,12 @@ const ProjectDetailsModal: React.FunctionComponent = () => {
     const projectSettings = useAppSelector((state) => state.projectSettings);
     const closeProjectSettings = useCloseProjectSettings();
 
+    const handleCloseSettingsMenu = () => {
+        setSettingsAnchorEl(null);
+    };
+    const handleOpenSettingsMenu = (e: React.MouseEvent<HTMLElement>) => {
+        setSettingsAnchorEl(e.currentTarget);
+    };
     return (
         <ThemeProvider theme={theme}>
             <TransitionModal
@@ -54,9 +64,14 @@ const ProjectDetailsModal: React.FunctionComponent = () => {
                 width={600}
                 height={450}
             >
+                <ProjectSettingsMenu
+                    open={openSettingsMenu}
+                    anchorEl={settingsAnchorEl}
+                    handleClose={handleCloseSettingsMenu}
+                />
                 <Box>
                     <Box
-                        padding={"30px 30px"}
+                        padding={"20px 30px"}
                         display="flex"
                         justifyContent={"space-between"}
                     >
@@ -74,7 +89,10 @@ const ProjectDetailsModal: React.FunctionComponent = () => {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="More...">
-                                <IconButton sx={{ marginLeft: "6px" }}>
+                                <IconButton
+                                    sx={{ marginLeft: "6px" }}
+                                    onClick={handleOpenSettingsMenu}
+                                >
                                     {icons.morehorizon()}
                                 </IconButton>
                             </Tooltip>
@@ -110,4 +128,4 @@ const ProjectDetailsModal: React.FunctionComponent = () => {
     );
 };
 
-export default ProjectDetailsModal;
+export default ProjectSettingsModal;

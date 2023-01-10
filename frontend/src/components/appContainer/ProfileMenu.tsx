@@ -15,8 +15,6 @@ import { useAppDispatch } from "../../reduxApp/hooks";
 import { logout } from "../../reduxApp/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
-    const { open, anchorEl, handleClose } = props;
-
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -25,11 +23,7 @@ const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
         navigate("/login");
     };
     return (
-        <MenuComponent
-            open={open}
-            anchorEl={anchorEl}
-            handleClose={handleClose}
-        >
+        <MenuComponent {...props}>
             <ListItemButton>
                 <ListItemIcon>
                     <AccountCircleIcon />

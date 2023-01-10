@@ -48,11 +48,19 @@ import { SxProps } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LoginIcon from "@mui/icons-material/Login";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import AvTimerIcon from "@mui/icons-material/AvTimer";
+
 export const icons: IconDictionary = {
     // productivity workflow
 
     celebration: (sx: SxProps | undefined) => (
         <CelebrationIcon sx={{ ...sx }} />
+    ),
+    timer: (sx: SxProps | undefined) => <AvTimerIcon sx={{ ...sx }} />,
+    duplicate: (sx: SxProps | undefined) => <ContentCopyIcon sx={{ ...sx }} />,
+    deleteoutline: (sx: SxProps | undefined) => (
+        <DeleteOutlineIcon sx={{ ...sx }} />
     ),
     morehorizon: (sx: SxProps | undefined) => <MoreHorizIcon sx={{ ...sx }} />,
     notificationsactive: (sx: SxProps | undefined) => (
@@ -150,6 +158,7 @@ export const productivityIcons = [
     "uploadfile",
     "notificationsactive",
     "morehorizon",
+    "duplicate",
 ];
 
 export const technologyIcons = [

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Drawer as MUIDrawer, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import List from "@mui/material/List";
-
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -15,10 +12,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
 import { DrawerHeader } from "../Main";
 import { appBarMenuOptions } from "../../config";
 import { Link } from "react-router-dom";
@@ -36,7 +31,7 @@ import {
 } from "../../reduxApp/hooks";
 import { setCurrentProject } from "../../reduxApp/features/projects/currentProjectSlice";
 import { IProject } from "../../types";
-import ProjectDetailsModal from "../project/ProjectDetailsModal";
+import ProjectDetailsModal from "../project/ProjectSettingsModal";
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
