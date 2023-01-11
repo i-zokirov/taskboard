@@ -4,7 +4,7 @@
     "description": "",
     "main": "backend/dist/index.js",
     "scripts": {
-        "start": "nodemon backend/dist/index.js"
+        "start": "node backend/dist/index.js"
     },
     "author": "Ikboljon Zokirov",
     "license": "ISC",

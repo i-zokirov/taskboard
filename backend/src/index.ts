@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import path from "path";
 import "express-async-errors";
 import { Server, Socket } from "socket.io";
 import userRouteHandler from "./routes/userRoutes";
@@ -29,7 +30,7 @@ import {
 
 connectDB();
 const app = express();
-
+const __dirname = path.resolve();
 // MIDDLEWARE
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -45,6 +46,19 @@ app.use(function (req, res, next) {
 app.use("/api/users", userRouteHandler);
 app.use("/api/projects", projectRouteHandler);
 app.use("/api/projects", taskRouteHandler);
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "/frontend/build")));
+    app.get("*", (req, res) => {
+        res.sendFile(
+            path.resolve(__dirname, "frontend", "build", "index.html")
+        );
+    });
+} else {
+    app.get("/", (req, res) => {
+        res.send("API server is running!");
+    });
+}
 
 // ERROR HANDLERS
 app.use(notFoundErrorHandler);
