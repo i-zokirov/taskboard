@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
-import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,40 +11,35 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "../components/custom/Copyright";
 import { Link as RouterLink } from "react-router-dom";
-
 import LoadingButton from "@mui/lab/LoadingButton";
 import { icons } from "../assets/icons";
-import { useAppDispatch, useAppSelector } from "../reduxApp/hooks";
-import { authenticateUser } from "../reduxApp/features/auth/authSlice";
-import { Status } from "../types";
+import { useAppSelector, useAuthenticate } from "../reduxApp/hooks";
+import * as yup from "yup";
+import { Formik } from "formik";
+import { UserLoginValues } from "../interfaces";
+import { Alert } from "@mui/material";
+
+const initialValues: UserLoginValues = {
+    email: "",
+    password: "",
+    rememberUser: false,
+};
+const validationSchema = yup.object({
+    email: yup
+        .string()
+        .email("Enter a valid email")
+        .required("Email is required"),
+    password: yup.string().required("Password is required"),
+    rememberUser: yup.boolean(),
+});
+
 const LoginScreen: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const body = {
-            email: formData.get("email")!.toString(),
-            password: formData.get("password")!.toString(),
-        };
-        if (body.email && body.password) {
-            dispatch(authenticateUser(body));
-        }
+    const authenticate = useAuthenticate();
+
+    const handleFormSubmit = (values: UserLoginValues) => {
+        authenticate(values);
     };
-
-    const { loading, userData, status, error } = useAppSelector(
-        (state) => state.auth
-    );
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (status === Status.FulFilled && userData) {
-            navigate("/app");
-        }
-
-        if (error) {
-            // handle error
-        }
-    }, [status, error, userData]);
+    const { loading, error } = useAppSelector((state) => state.auth);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -63,64 +57,97 @@ const LoginScreen: React.FC = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{ mt: 1 }}
+                {error && <Alert severity="error">{error}</Alert>}
+                <Formik
+                    onSubmit={handleFormSubmit}
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
                 >
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleSubmit,
+                    }) => (
+                        <Box
+                            component="form"
+                            onSubmit={handleSubmit}
+                            noValidate
+                            sx={{ mt: 1 }}
+                        >
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                autoFocus
+                                error={touched.email && Boolean(errors.email)}
+                                helperText={touched.email && errors.email}
+                                value={values.email}
+                                onChange={handleChange}
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                error={
+                                    touched.password && Boolean(errors.password)
+                                }
+                                helperText={touched.password && errors.password}
+                                value={values.password}
+                                onChange={handleChange}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        id="rememberUser"
+                                        name="rememberUser"
+                                        color="primary"
+                                        value={values.rememberUser}
+                                        onChange={handleChange}
+                                    />
+                                }
+                                label="Remember me"
+                            />
 
-                    <LoadingButton
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        startIcon={icons.login()}
-                        loading={loading}
-                    >
-                        Sign In
-                    </LoadingButton>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link
-                                component={RouterLink}
-                                to="/sign-up"
-                                variant="body2"
+                            <LoadingButton
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                                startIcon={icons.login()}
+                                loading={loading}
                             >
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Box>
+                                Sign In
+                            </LoadingButton>
+                            <Grid container>
+                                <Grid item xs>
+                                    <Link href="#" variant="body2">
+                                        Forgot password?
+                                    </Link>
+                                </Grid>
+                                <Grid item>
+                                    <Link
+                                        component={RouterLink}
+                                        to="/sign-up"
+                                        variant="body2"
+                                    >
+                                        {"Don't have an account? Sign Up"}
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    )}
+                </Formik>
             </Box>
             <Copyright />
         </Container>

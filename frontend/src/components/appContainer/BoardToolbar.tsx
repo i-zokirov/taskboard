@@ -112,7 +112,9 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                             alignItems: "center",
                         }}
                     >
-                        <button className="btn btn-circular">Share</button>
+                        <Tooltip title="Not Implemented" placement="right">
+                            <button className="btn btn-circular">Share</button>
+                        </Tooltip>
                         {toolbarIconButtons.map((btn, indx) => (
                             <React.Fragment key={btn.title}>
                                 <Tooltip title={btn.title}>

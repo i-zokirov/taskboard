@@ -3,10 +3,7 @@ import baseUrl from "../../baseUrl";
 import { User } from "../../../types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Status } from "../../../types";
-
-interface ReqBody extends User {
-    marketingConsent: boolean;
-}
+import { UserRegisterValues } from "../../../interfaces";
 
 interface RegisterState {
     userData: User | null;
@@ -17,7 +14,7 @@ interface RegisterState {
 
 export const registerUser = createAsyncThunk(
     "registerUser",
-    async (reqBody: ReqBody) => {
+    async (reqBody: UserRegisterValues) => {
         return (await axios.post(`${baseUrl}/api/users/sign-up`, reqBody)).data;
     }
 );

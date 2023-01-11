@@ -120,13 +120,12 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                 <List>
                     {appBarMenuOptions.map((item) => (
                         <ListItem disablePadding key={item.name}>
-                            <ListItemButton
-                                LinkComponent={Link}
-                                href={item.url}
-                            >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.name} />
-                            </ListItemButton>
+                            <Tooltip title="Not Implemented" placement="right">
+                                <ListItemButton>
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                    <ListItemText primary={item.name} />
+                                </ListItemButton>
+                            </Tooltip>
                         </ListItem>
                     ))}
                 </List>

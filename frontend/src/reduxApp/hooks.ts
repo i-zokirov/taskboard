@@ -15,7 +15,13 @@ import {
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
-import { IProject, ISectionOptions, ITask, ITaskOptions } from "../types";
+import {
+    IProject,
+    ISectionOptions,
+    ITask,
+    ITaskOptions,
+    Status,
+} from "../types";
 import {
     addNewSectionToProject,
     addProject,
@@ -38,9 +44,57 @@ import {
     openProjectSettings,
     updateProjectData,
 } from "./features/projects/projectSettingsSlice";
+import { authenticateUser } from "./features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { UserLoginValues, UserRegisterValues } from "../interfaces";
+import { registerUser } from "./features/register/register-slice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export const useAuthenticate = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const { status, error, authenticated } = useAppSelector(
+        (state) => state.auth
+    );
+    useEffect(() => {
+        if (authenticated) {
+            navigate("/app");
+        }
+        if (error) {
+            console.log(error);
+        }
+    }, [status, navigate, error, authenticated]);
+    return (data: UserLoginValues) => {
+        dispatch(authenticateUser(data));
+    };
+};
+
+export const useRequireAuth = () => {
+    const navigate = useNavigate();
+    const { authenticated, userData } = useAppSelector((state) => state.auth);
+    useEffect(() => {
+        if (!authenticated || !userData) {
+            navigate("/login");
+        }
+    }, [navigate, userData, authenticated]);
+};
+
+export const useRegisterUser = () => {
+    const dispatch = useAppDispatch();
+    const { status, error } = useAppSelector((state) => state.register);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (status === Status.FulFilled) {
+            navigate("/login");
+        }
+    }, [status, error, navigate]);
+    return (requestBody: UserRegisterValues) => {
+        dispatch(registerUser(requestBody));
+    };
+};
 
 export const useUpdateTaskDetails = () => {
     const dispatch = useAppDispatch();
@@ -98,7 +152,6 @@ export const useDeleteProject = () => {
     return (payload: { token?: string; projectId: string }) => {
         payload.token = token;
         socket.emit("projects:delete", payload, (response) => {
-            console.log(response);
             if (response.project) {
                 // remove project from projects
                 dispatch(dropProject(response.project));

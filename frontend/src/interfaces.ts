@@ -8,6 +8,20 @@ import {
     ITaskOptions,
 } from "./types";
 
+export interface UserLoginValues {
+    email: string;
+    password: string;
+    rememberUser: boolean;
+}
+
+export interface UserRegisterValues {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    marketingConsent?: boolean;
+}
+
 export interface BoardToolbarProps {
     open: boolean;
     handleDrawerOpen: () => void;

@@ -4,6 +4,7 @@ import {
     ListItemButton,
     ListItemText,
     Divider,
+    Tooltip,
 } from "@mui/material";
 import MenuComponent from "../custom/MenuComponent";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -13,38 +14,42 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { MenuProps } from "../../interfaces";
 import { useAppDispatch } from "../../reduxApp/hooks";
 import { logout } from "../../reduxApp/features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+
 const ProfileMenu: FunctionComponent<MenuProps> = (props) => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem("userData");
-        navigate("/login");
     };
     return (
         <MenuComponent {...props}>
-            <ListItemButton>
-                <ListItemIcon>
-                    <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText>Account</ListItemText>
-            </ListItemButton>
-
-            <ListItemButton>
-                <ListItemIcon>
-                    <GroupsIcon />
-                </ListItemIcon>
-                <ListItemText>My Team</ListItemText>
-            </ListItemButton>
+            <Tooltip title="Not Implemented" placement="left">
+                <ListItemButton>
+                    <ListItemIcon>
+                        <AccountCircleIcon />
+                    </ListItemIcon>
+                    <ListItemText>Account</ListItemText>
+                </ListItemButton>
+            </Tooltip>
+            <Tooltip title="Not Implemented" placement="left">
+                <ListItemButton>
+                    <ListItemIcon>
+                        <GroupsIcon />
+                    </ListItemIcon>
+                    <ListItemText>My Team</ListItemText>
+                </ListItemButton>
+            </Tooltip>
             <Divider />
-            <ListItemButton>
-                <ListItemIcon>
-                    <SettingsSuggestIcon />
-                </ListItemIcon>
-                <ListItemText>Preferences</ListItemText>
-            </ListItemButton>
-            <ListItemButton LinkComponent={"a"} href="/login">
+            <Tooltip title="Not Implemented" placement="left">
+                <ListItemButton>
+                    <ListItemIcon>
+                        <SettingsSuggestIcon />
+                    </ListItemIcon>
+                    <ListItemText>Preferences</ListItemText>
+                </ListItemButton>
+            </Tooltip>
+            <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>
                     <LogoutIcon />
                 </ListItemIcon>
