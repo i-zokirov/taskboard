@@ -30,8 +30,7 @@ import {
 import { setCurrentProject } from "../../reduxApp/features/projects/currentProjectSlice";
 import { IProject } from "../../types";
 import ProjectDetailsModal from "../project/ProjectSettingsModal";
-import { colors } from "../../assets/theme";
-import { getRandomInt } from "../../utils";
+
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
@@ -176,14 +175,14 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                                 <ListItemIcon>
                                     {project.icon
                                         ? icons[project.icon]({
-                                              color: colors[
-                                                  getRandomInt(colors.length)
-                                              ].colorCode,
+                                              color:
+                                                  project.color &&
+                                                  project.color,
                                           })
                                         : icons["folder"]({
-                                              color: colors[
-                                                  getRandomInt(colors.length)
-                                              ].colorCode,
+                                              color:
+                                                  project.color &&
+                                                  project.color,
                                           })}
                                 </ListItemIcon>
                                 <ListItemText primary={project.title} />

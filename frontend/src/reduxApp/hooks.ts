@@ -5,6 +5,7 @@ import socket from "../socket";
 import {
     addTaskToStore,
     markSectionTasksCompleted,
+    removeTasksFromStore,
     updateSingleTaskInStore,
 } from "./features/tasks/tasks-slice";
 import {
@@ -18,6 +19,7 @@ import { IProject, ISectionOptions, ITask, ITaskOptions } from "../types";
 import {
     addNewSectionToProject,
     addProject,
+    dropProject,
     projectsRequest,
     projectsRequestSuccess,
     updateProject,
@@ -69,11 +71,17 @@ export const useCreateProject = () => {
     const token = useAppSelector((state) => state.auth.userData?.token);
     return (payload: {
         token: string | undefined;
-        project: { title: string; description: string; icon?: string };
+        project: {
+            title: string;
+            description: string;
+            icon?: string;
+            color?: string;
+        };
     }) => {
         payload.token = token;
         payload.project.icon =
             technologyIcons[getRandomInt(technologyIcons.length)];
+        payload.project.color = colors[getRandomInt(colors.length)].colorCode;
         socket.emit("projects:create", payload, (response) => {
             if (response.project) {
                 dispatch(addProject(response.project));
@@ -83,19 +91,55 @@ export const useCreateProject = () => {
     };
 };
 
+export const useDeleteProject = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    const projects = useAppSelector((state) => state.projects.data);
+    return (payload: { token?: string; projectId: string }) => {
+        payload.token = token;
+        socket.emit("projects:delete", payload, (response) => {
+            console.log(response);
+            if (response.project) {
+                // remove project from projects
+                dispatch(dropProject(response.project));
+                // close project settings
+                dispatch(closeProjectSettings());
+                // remove tasks with this project
+                dispatch(removeTasksFromStore(response.project._id));
+                // set current project to the next in list
+                if (projects.length) {
+                    const next =
+                        projects[0]._id !== response.project._id
+                            ? projects[0]
+                            : projects[1]
+                            ? projects[1]
+                            : undefined;
+                    dispatch(setCurrentProject(next));
+                }
+            }
+        });
+    };
+};
+
 export const useUpdateProject = () => {
     const dispatch = useAppDispatch();
     const token = useAppSelector((state) => state.auth.userData?.token);
-    const projectData = useAppSelector(
-        (state) => state.currentProject.projectData
+
+    const projectId = useAppSelector(
+        (state) => state.projectSettings.projectData?._id
     );
     return (payload: {
         token?: string;
         projectId?: string;
-        updates: { title?: string; description?: string; icon?: string };
+        updates: {
+            title?: string;
+            description?: string;
+            icon?: string;
+            color?: string;
+        };
     }) => {
         payload.token = token;
-        payload.projectId = projectData?._id;
+        payload.projectId = projectId;
         socket.emit("projects:update", payload, (response) => {
             if (response.project) {
                 dispatch(updateProject(response.project));

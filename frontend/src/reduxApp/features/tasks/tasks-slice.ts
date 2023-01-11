@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ISection, ITask } from "../../../types";
+import { ITask } from "../../../types";
 
 interface TasksState {
     data: {
@@ -34,6 +34,9 @@ export const tasksSlice = createSlice({
         ) => {
             state.loading = false;
             state.data[action.payload.project] = [];
+        },
+        removeTasksFromStore: (state, action: PayloadAction<string>) => {
+            delete state.data[action.payload];
         },
         updateSingleTaskInStore: (
             state,
@@ -73,4 +76,5 @@ export const {
     updateSingleTaskInStore,
     addTaskToStore,
     markSectionTasksCompleted,
+    removeTasksFromStore,
 } = tasksSlice.actions;

@@ -83,7 +83,11 @@ const InfoSection = () => {
                                 >
                                     <Avatar
                                         sx={{
-                                            bgcolor: color,
+                                            bgcolor:
+                                                projectSettings.projectData
+                                                    ?.color &&
+                                                projectSettings.projectData
+                                                    ?.color,
                                             width: 56,
                                             height: 56,
                                         }}
@@ -172,7 +176,10 @@ const InfoSection = () => {
                                 Created by
                             </Typography>
                             <Typography variant="subtitle2">
-                                {projectSettings.projectData?.createdBy?.name}
+                                {projectSettings.projectData?.createdBy?.name
+                                    ? projectSettings.projectData?.createdBy
+                                          ?.name
+                                    : projectSettings.projectData?.owner?.name}
                             </Typography>
                         </Box>
                     </Box>

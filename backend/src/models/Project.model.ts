@@ -8,6 +8,7 @@ export interface IProject {
     sections?: Types.ObjectId[];
     createdBy?: Types.ObjectId;
     icon?: string;
+    color?: string;
 }
 
 interface IProjectMethods {
@@ -27,6 +28,9 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
             type: String,
         },
         icon: {
+            type: String,
+        },
+        color: {
             type: String,
         },
         owner: {

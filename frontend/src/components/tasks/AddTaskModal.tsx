@@ -30,7 +30,7 @@ const AddTaskModal: React.FunctionComponent<AddTaskModalProps> = (props) => {
         onClose();
     };
     return (
-        <TransitionModal open={open} onClose={onClose} width={400} height={250}>
+        <TransitionModal open={open} onClose={onClose} width={400} height={200}>
             <Box padding={"30px 20px"}>
                 <Typography variant="h5" fontWeight={"550"} color={"#3268c5"}>
                     Add task

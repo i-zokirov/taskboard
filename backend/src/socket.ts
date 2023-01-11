@@ -58,15 +58,17 @@ export const createProjectHandler = async function (
 ) {
     try {
         const user = await authenticate(payload.token);
+        console.log(payload.project);
         if (user) {
             const project = await Project.create({
                 ...payload.project,
                 owner: user._id,
                 members: [user._id],
+                createdBy: user._id,
             });
 
             await project.populate({
-                path: "owner members ",
+                path: "owner members",
                 select: "name name ",
             });
 
@@ -75,6 +77,41 @@ export const createProjectHandler = async function (
     } catch (error) {
         console.log(error);
         // callback({ error });
+    }
+};
+export const deleteProjectHandler = async function (
+    this: Socket,
+    payload: { token: string; projectId: string },
+    callback: (payload: {
+        project?: IProject;
+        error?: string | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const project = await Project.findById(payload.projectId)
+                .populate({
+                    path: "owner members",
+                    select: "name name ",
+                })
+                .populate("sections");
+
+            if (
+                project &&
+                project.owner._id.toString() === user._id.toString()
+            ) {
+                await Project.deleteOne({ _id: project._id });
+                await Section.deleteMany({ project: project._id });
+                await Task.deleteMany({ project: project._id });
+                callback({ project });
+            } else {
+                callback({ error: "Unauthorized!" });
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        //  callback({ error });
     }
 };
 
@@ -131,7 +168,7 @@ export const readTasksHandler = async function (
                     project: project._id,
                 }).populate({
                     path: "createdBy assignedTo project section completedBy",
-                    select: "firstName firstName title title firstName",
+                    select: "name name title title name",
                 });
                 callback({ tasks });
                 console.log("Rendering tasks");
@@ -166,7 +203,7 @@ export const updateTaskHandler = async function (
             console.info(`Task updated: ${payload.taskId}`);
             const task = await Task.findById(payload.taskId).populate({
                 path: "createdBy assignedTo project section completedBy",
-                select: "firstName firstName title title firstName",
+                select: "name name title title name",
             });
             if (task) callback({ task });
         } else {
@@ -192,7 +229,7 @@ export const createTaskHandler = async function (
                 await Task.create({ ...payload.task, createdBy: user._id })
             ).populate({
                 path: "createdBy assignedTo project section completedBy",
-                select: "firstName firstName title title firstName",
+                select: "name name title title name",
             });
             if (task) callback({ task });
         } else {

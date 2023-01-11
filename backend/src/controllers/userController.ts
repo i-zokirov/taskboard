@@ -78,7 +78,7 @@ export const loginUser: RequestHandler = async (req, res) => {
     if (user && (await user.matchPassword(password))) {
         const token = generateToken(user._id);
         res.json({
-            id: user._id,
+            _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

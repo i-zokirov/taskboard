@@ -37,7 +37,7 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
                 </Tabs>
 
                 {value === 0 ? (
-                    <React.Fragment>
+                    <Box>
                         <Box
                             display={"flex"}
                             alignItems="center"
@@ -90,9 +90,9 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
                                 </IconButton>
                             ))}
                         </Box>
-                    </React.Fragment>
+                    </Box>
                 ) : (
-                    <React.Fragment>
+                    <Box>
                         <Box
                             display={"flex"}
                             alignItems="center"
@@ -122,7 +122,7 @@ const ColumnIconSelectorMenu: React.FC<MenuProps> = (props) => {
                                 </Tooltip>
                             ))}
                         </Box>
-                    </React.Fragment>
+                    </Box>
                 )}
             </Box>
         </MenuComponent>

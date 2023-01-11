@@ -96,7 +96,12 @@ export interface ClientToServerEvents {
     ["projects:create"]: (
         payload: {
             token: string | undefined;
-            project: { title: string; description: string };
+            project: {
+                title: string;
+                description: string;
+                color?: string;
+                icon?: string;
+            };
         },
         callback: (response: { project?: IProject; error?: string }) => void
     ) => void;
@@ -104,11 +109,22 @@ export interface ClientToServerEvents {
         payload: {
             token?: string;
             projectId?: string;
-            updates: { title?: string; description?: string; icon?: string };
+            updates: {
+                title?: string;
+                description?: string;
+                icon?: string;
+                color?: string;
+            };
         },
         callback: (response: { project?: IProject; error?: string }) => void
     ) => void;
-
+    ["projects:delete"]: (
+        payload: {
+            token?: string;
+            projectId: string;
+        },
+        callback: (response: { project?: IProject; error?: string }) => void
+    ) => void;
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },
         callback: (response: {

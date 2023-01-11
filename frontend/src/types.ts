@@ -47,6 +47,7 @@ export type IconDictionary = {
 };
 
 export type User = {
+    _id?: string;
     id?: string;
     firstName: string;
     lastName: string;
@@ -65,6 +66,7 @@ export enum Status {
 export type IProject = {
     _id: string;
     icon?: string;
+    color?: string;
     title: string;
     description?: string;
     owner: User;

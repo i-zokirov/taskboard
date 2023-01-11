@@ -41,7 +41,14 @@ export const projectsSlice = createSlice({
             const projectIndx = state.data.findIndex(
                 (project) => project._id === action.payload._id
             );
-            state.data[projectIndx] = action.payload;
+
+            if (projectIndx > -1) state.data[projectIndx] = action.payload;
+        },
+        dropProject: (state, action: PayloadAction<IProject>) => {
+            const projectIndx = state.data.findIndex(
+                (project) => project._id === action.payload._id
+            );
+            if (projectIndx > -1) state.data.splice(projectIndx, 1);
         },
         addNewSectionToProject: (
             state,
@@ -90,4 +97,5 @@ export const {
     addNewSectionToProject,
     updateSectionInProjects,
     updateProjectFromProjectsList,
+    dropProject,
 } = projectsSlice.actions;

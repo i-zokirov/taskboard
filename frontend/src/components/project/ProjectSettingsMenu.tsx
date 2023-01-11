@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MenuProps } from "../../interfaces";
 import MenuComponent from "../custom/MenuComponent";
 import {
@@ -11,6 +11,8 @@ import {
     Button,
 } from "@mui/material";
 import { icons } from "../../assets/icons";
+import { useAppSelector } from "../../reduxApp/hooks";
+import DeleteProjectConfirmationModal from "./DeleteProjectConfirmationModal";
 const settingsMenuOptions = [
     {
         title: "Deleted tasks",
@@ -45,8 +47,21 @@ const settingsMenuOptions = [
 ];
 
 const ProjectSettingsMenu: React.FC<MenuProps> = (props) => {
+    const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+        useState(false);
+    const projectSettings = useAppSelector((state) => state.projectSettings);
+    const userData = useAppSelector((state) => state.auth.userData);
+
+    const deleteConfirmationModal = () => {
+        setOpenDeleteConfirmationModal((prev) => !prev);
+    };
     return (
         <MenuComponent {...props}>
+            <DeleteProjectConfirmationModal
+                open={openDeleteConfirmationModal}
+                onClose={deleteConfirmationModal}
+                closeSettingsMenu={props.handleClose}
+            />
             {settingsMenuOptions.map((option, index) => (
                 <Box key={index}>
                     <Tooltip title={"Not implemented"} placement="left">
@@ -64,7 +79,15 @@ const ProjectSettingsMenu: React.FC<MenuProps> = (props) => {
                 </Box>
 
                 <Box>
-                    <Button fullWidth color="error">
+                    <Button
+                        fullWidth
+                        color="error"
+                        disabled={
+                            projectSettings.projectData?.owner._id !==
+                            userData?._id
+                        }
+                        onClick={deleteConfirmationModal}
+                    >
                         Delete Project
                     </Button>
                 </Box>

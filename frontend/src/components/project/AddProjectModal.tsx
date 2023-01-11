@@ -15,13 +15,13 @@ const AddProjectModal: React.FunctionComponent<ModalProps> = (props) => {
             title: formData.get("title")!.toString(),
             description: formData.get("description")!.toString(),
         };
-        if (body.title && body.description) {
+        if (body.title) {
             createProject({ token: "", project: body });
+            onClose();
         }
-        onClose();
     };
     return (
-        <TransitionModal open={open} onClose={onClose} width={400} height={350}>
+        <TransitionModal open={open} onClose={onClose} width={400} height={300}>
             <Box padding={"30px 20px"}>
                 <Typography variant="h5" fontWeight={"550"} color={"#3268c5"}>
                     Create New Project
@@ -54,7 +54,11 @@ const AddProjectModal: React.FunctionComponent<ModalProps> = (props) => {
                         maxRows={5}
                     />
 
-                    <button type="submit" className="btn">
+                    <button
+                        type="submit"
+                        className="btn"
+                        style={{ marginTop: "10px" }}
+                    >
                         Create Project
                     </button>
                 </Box>

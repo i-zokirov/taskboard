@@ -51,6 +51,7 @@ const ProjectSettingsModal: React.FunctionComponent = () => {
     const closeProjectSettings = useCloseProjectSettings();
 
     const handleCloseSettingsMenu = () => {
+        console.log(`Closing settings menu`);
         setSettingsAnchorEl(null);
     };
     const handleOpenSettingsMenu = (e: React.MouseEvent<HTMLElement>) => {
