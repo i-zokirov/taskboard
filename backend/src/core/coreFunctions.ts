@@ -5,9 +5,10 @@ import { Types } from "mongoose";
 export const getProjects = async (user: Types.ObjectId) => {
     const projects = await Project.find()
         .populate({
-            path: "owner members",
-            select: "name name",
+            path: "owner",
+            select: "name",
         })
+        .populate("members", "-password -marketingConsent")
         .populate("sections");
     let userProjects;
     if (projects.length && user?._id) {

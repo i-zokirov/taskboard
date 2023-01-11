@@ -2,12 +2,9 @@ import React, { ChangeEvent, useState } from "react";
 import { Typography, Box, TextField, Avatar, Tooltip } from "@mui/material";
 import moment from "moment";
 import { useAppSelector, useUpdateProject } from "../../../reduxApp/hooks";
-import { colors } from "../../../assets/theme";
 import { icons } from "../../../assets/icons";
-import { getRandomInt } from "../../../utils";
 import InfoSectionIconMenu from "./InfoSectionIconMenu";
 
-const color = colors[getRandomInt(colors.length)].colorCode;
 const InfoSection = () => {
     const projectSettings = useAppSelector((state) => state.projectSettings);
     const [titleValue, setTitleValue] = useState(

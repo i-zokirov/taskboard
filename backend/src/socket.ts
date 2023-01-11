@@ -67,10 +67,12 @@ export const createProjectHandler = async function (
                 createdBy: user._id,
             });
 
-            await project.populate({
-                path: "owner members",
-                select: "name name ",
-            });
+            await (
+                await project.populate({
+                    path: "owner",
+                    select: "name",
+                })
+            ).populate("members", "-password -marketingConsent");
 
             callback({ project });
         }
@@ -92,9 +94,10 @@ export const deleteProjectHandler = async function (
         if (user) {
             const project = await Project.findById(payload.projectId)
                 .populate({
-                    path: "owner members",
-                    select: "name name ",
+                    path: "owner",
+                    select: "name",
                 })
+                .populate("members", "-password -marketingConsent")
                 .populate("sections");
 
             if (
@@ -138,9 +141,10 @@ export const updateProjectHandler = async function (
                 { returnDocument: "after" }
             )
                 .populate({
-                    path: "owner members",
-                    select: "name name",
+                    path: "owner",
+                    select: "name",
                 })
+                .populate("members", "-password -marketingConsent")
                 .populate("sections");
 
             if (project) callback({ project });

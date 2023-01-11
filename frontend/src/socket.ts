@@ -1,9 +1,9 @@
 import { io, Socket } from "socket.io-client";
+import { socketSever } from "./config";
 import { ServerToClientEvents, ClientToServerEvents } from "./interfaces";
 
-const localhost = "http://localhost:5000";
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    localhost,
+    socketSever,
     {
         rememberUpgrade: true,
         transports: ["websocket"],

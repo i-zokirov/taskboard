@@ -4,11 +4,7 @@ import BoardToolbar from "../components/appContainer/BoardToolbar";
 import MainBoardContainer from "../components/Main";
 import Drawer from "../components/appContainer/Drawer";
 import Kanban from "../components/kanban/Kanban";
-import {
-    useAppSelector,
-    useFetchProjects,
-    useRequireAuth,
-} from "../reduxApp/hooks";
+import { useAppSelector, useFetchProjects } from "../reduxApp/hooks";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Status } from "../types";
 
@@ -17,7 +13,7 @@ const Board: React.FC = () => {
     const { status, loading } = useAppSelector((state) => state.projects);
     const authenticated = useAppSelector((state) => state.auth.authenticated);
     const fetchProjects = useFetchProjects();
-    useRequireAuth();
+
     useEffect(() => {
         if (authenticated) {
             fetchProjects();

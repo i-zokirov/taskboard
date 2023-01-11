@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ViewAgendaIcon from "@mui/icons-material/ViewAgenda";
 import AssessmentIcon from "@mui/icons-material/Assessment";
@@ -7,11 +6,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
-import OfflinePinIcon from "@mui/icons-material/OfflinePin";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
-import LockResetIcon from "@mui/icons-material/LockReset";
-import { taskItemsFromBackend } from "./datasets";
+
 export const drawerWidth = 240;
 
 export const appBarMenuOptions = [
@@ -43,29 +38,5 @@ export const toolbarIconButtons = [
     },
 ];
 
-export const kanbancolumns = {
-    [nanoid()]: {
-        name: "Open",
-        color: "#d93651",
-        taskItems: taskItemsFromBackend,
-        icon: <TipsAndUpdatesIcon sx={{ color: "#fff" }} />,
-    },
-    [nanoid()]: {
-        name: "In Progress",
-        color: "#00aaff",
-        taskItems: [],
-        icon: <AutorenewIcon sx={{ color: "#fff" }} />,
-    },
-    [nanoid()]: {
-        name: "Pending",
-        color: "#ff9f1a",
-        taskItems: [],
-        icon: <LockResetIcon sx={{ color: "#fff" }} />,
-    },
-    [nanoid()]: {
-        name: "Completed",
-        color: "#47cc8a",
-        taskItems: [],
-        icon: <OfflinePinIcon sx={{ color: "#fff" }} />,
-    },
-};
+export const socketSever = "http://localhost:5000";
+export const baseUrl = "http://localhost:5000";

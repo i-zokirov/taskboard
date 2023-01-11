@@ -149,6 +149,7 @@ const LoginScreen: React.FC = () => {
                     )}
                 </Formik>
             </Box>
+            <br />
             <Copyright />
         </Container>
     );

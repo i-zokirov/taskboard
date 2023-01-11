@@ -1,9 +1,9 @@
 import axios from "axios";
-import baseUrl from "../../baseUrl";
-import { User } from "../../../types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "../../../types";
 import { Status } from "../../../types";
 import { UserLoginValues } from "../../../interfaces";
+import { baseUrl } from "../../../config";
 
 interface AuthState {
     authenticated: boolean;
