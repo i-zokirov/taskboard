@@ -2,8 +2,10 @@
     "name": "dashboard",
     "version": "1.0.0",
     "description": "",
+    "type": "module",
     "main": "backend/dist/index.js",
     "scripts": {
+        "build": "tsc",
         "start": "node backend/dist/index.js"
     },
     "author": "Ikboljon Zokirov",
