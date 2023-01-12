@@ -5,7 +5,8 @@
     "main": "backend/dist/index.js",
     "scripts": {
         "build": "tsc",
-        "start": "node backend/dist/index.js"
+        "start": "node backend/dist/index.js",
+        "dev": "nodemon backend/dist/index.js"
     },
     "author": "Ikboljon Zokirov",
     "license": "ISC",
