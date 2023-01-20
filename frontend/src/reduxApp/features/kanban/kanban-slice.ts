@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { ISection, ITask, KanbanColumn } from "../../../types";
-import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 
 interface KanbanState {
     columns: {

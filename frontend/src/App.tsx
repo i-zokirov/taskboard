@@ -10,12 +10,15 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import Home from "./screens/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Page404 from "./screens/404Page";
+import Notification from "./components/notificationsytem/Notification";
 const theme = createTheme(themeOptions);
+
 const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <CssBaseline />
+                <Notification />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route element={<ProtectedRoute />}>

@@ -98,7 +98,7 @@ export interface ServerToClientEvents {}
 
 interface ProjectsReadProps {
     projects: IProject[];
-    error?: string;
+    error?: { [x: string]: string };
 }
 
 export interface ClientToServerEvents {

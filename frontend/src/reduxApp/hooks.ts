@@ -44,11 +44,15 @@ import {
     openProjectSettings,
     updateProjectData,
 } from "./features/projects/projectSettingsSlice";
-import { authenticateUser } from "./features/auth/authSlice";
+import { authenticateUser, logout } from "./features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { UserLoginValues, UserRegisterValues } from "../interfaces";
 import { registerUser } from "./features/register/register-slice";
+import {
+    addNotification,
+    resetNotifications,
+} from "./features/notifications/notification-slice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -270,8 +274,21 @@ export const useFetchProjects = () => {
         const payload = { token };
         socket.emit("projects:read", payload, (response) => {
             dispatch(projectsRequestSuccess(response.projects));
-            if (response.projects.length) {
+            if (response.projects && response.projects.length) {
                 dispatch(setCurrentProject(response.projects[0]));
+            }
+            if (response.error && response.error.name === "TokenExpiredError") {
+                console.log(response.error.name);
+                dispatch(
+                    addNotification({
+                        type: "error",
+                        message: "Session expired",
+                    })
+                );
+                dispatch(logout());
+                setTimeout(() => {
+                    dispatch(resetNotifications());
+                }, 3000);
             }
         });
     };

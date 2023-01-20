@@ -39,4 +39,5 @@ export const toolbarIconButtons = [
 ];
 
 export const socketSever = "https://taskboard-mchv.onrender.com";
-export const baseUrl = "";
+export const localhost = "http://localhost:5000";
+export const baseUrl = localhost;

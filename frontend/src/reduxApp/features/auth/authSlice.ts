@@ -47,6 +47,8 @@ export const authSlice = createSlice({
         logout: (state, action: PayloadAction) => {
             state.userData = null;
             state.authenticated = false;
+            state.userData = null;
+            localStorage.removeItem("userData");
         },
     },
     extraReducers: (builder) => {

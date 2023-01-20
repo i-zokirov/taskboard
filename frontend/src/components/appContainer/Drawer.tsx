@@ -166,38 +166,40 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                         />
                     </ListItem>
 
-                    {projects.map((project: IProject, index: number) => (
-                        <ListItem key={project._id} disablePadding>
-                            <ListItemButton
-                                onClick={() => handleProjectChange(project)}
-                            >
-                                <ListItemIcon>
-                                    {project.icon
-                                        ? icons[project.icon]({
-                                              color:
-                                                  project.color &&
-                                                  project.color,
-                                          })
-                                        : icons["folder"]({
-                                              color:
-                                                  project.color &&
-                                                  project.color,
-                                          })}
-                                </ListItemIcon>
-                                <ListItemText primary={project.title} />
-                            </ListItemButton>
-                            <Tooltip title="More...">
-                                <IconButton
-                                    sx={{ marginRight: "5px" }}
-                                    onClick={() => {
-                                        openProjectSettings(project);
-                                    }}
+                    {projects &&
+                        projects.length &&
+                        projects.map((project: IProject, index: number) => (
+                            <ListItem key={project._id} disablePadding>
+                                <ListItemButton
+                                    onClick={() => handleProjectChange(project)}
                                 >
-                                    <MoreHorizIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </ListItem>
-                    ))}
+                                    <ListItemIcon>
+                                        {project.icon
+                                            ? icons[project.icon]({
+                                                  color:
+                                                      project.color &&
+                                                      project.color,
+                                              })
+                                            : icons["folder"]({
+                                                  color:
+                                                      project.color &&
+                                                      project.color,
+                                              })}
+                                    </ListItemIcon>
+                                    <ListItemText primary={project.title} />
+                                </ListItemButton>
+                                <Tooltip title="More...">
+                                    <IconButton
+                                        sx={{ marginRight: "5px" }}
+                                        onClick={() => {
+                                            openProjectSettings(project);
+                                        }}
+                                    >
+                                        <MoreHorizIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ListItem>
+                        ))}
                 </List>
                 <Divider />
             </MUIDrawer>

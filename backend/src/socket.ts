@@ -7,6 +7,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import Task, { ITask, ITaskOptions } from "./models/Task.model";
 import Section, { ISection, ISectionOptions } from "./models/Section.model";
 
+type Error = { name?: string; message?: string; [x: string]: any };
+
 const authenticate = async (token: string) => {
     if (!token) {
         throw new Error("Invalid token");
@@ -29,7 +31,7 @@ export const readProjectsHandler = async function (
     payload: { token: string },
     callback: (payload: {
         projects?: IProject[] | undefined;
-        error?: string | undefined;
+        error?: any | undefined;
     }) => void
 ) {
     try {
@@ -43,8 +45,8 @@ export const readProjectsHandler = async function (
             callback({ projects });
         }
     } catch (error) {
-        console.log(error);
-        // callback({ error });
+        console.error(error);
+        callback({ error });
     }
 };
 

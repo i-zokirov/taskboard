@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./features/auth/authSlice";
 import { kanbanSlice } from "./features/kanban/kanban-slice";
+import { notificationSlice } from "./features/notifications/notification-slice";
 import { currentProject } from "./features/projects/currentProjectSlice";
 import { projectsSlice } from "./features/projects/projects-slice";
 import { projectSettingsSlice } from "./features/projects/projectSettingsSlice";
@@ -16,6 +17,7 @@ export const store = configureStore({
         currentProject: currentProject.reducer,
         tasks: tasksSlice.reducer,
         kanban: kanbanSlice.reducer,
+        notificationsystem: notificationSlice.reducer,
     },
 });
 
