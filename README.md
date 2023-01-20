@@ -12,7 +12,7 @@ Live demo can be viewed with the following link: [https://taskboard-mchv.onrende
 
 Feel free to register with a dummy account to test the application features.
 
-[Sample](taskboard.png)
+[Sample](https://github.com/i-zokirov/taskboard/blob/master/taskboard.png)
 
 ## Tech Stack
 
