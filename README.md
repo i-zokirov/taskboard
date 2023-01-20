@@ -12,6 +12,8 @@ Live demo can be viewed with the following link: [https://taskboard-mchv.onrende
 
 Feel free to register with a dummy account to test the application features.
 
+[Sample](taskboard.png)
+
 ## Tech Stack
 
 **Client:** React with Typescript, Redux toolkit, Material UI, Axios, Socket.io client and more...
