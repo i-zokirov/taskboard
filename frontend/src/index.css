@@ -101,7 +101,7 @@ input:focus {
 }
 
 .scrollbar {
-    overflow-y: "hidden";
+    overflow-y: hidden;
 }
 .scrollbar:hover {
     overflow-y: auto;

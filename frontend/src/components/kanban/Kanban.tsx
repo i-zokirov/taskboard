@@ -132,7 +132,7 @@ const Kanban: React.FC = () => {
                                 <Box
                                     sx={{
                                         padding: "10px 5px",
-                                        marginTop: "60px",
+                                        marginTop: "10px",
                                         height: "90%",
                                     }}
                                     className="scrollbar"
