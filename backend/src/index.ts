@@ -15,6 +15,7 @@ import {
     SocketData,
 } from "./interfaces";
 import {
+    addProjectMemberHandler,
     completeSectionTasksHandler,
     createProjectHandler,
     createSectionHandler,
@@ -85,6 +86,7 @@ io.on("connection", function (socket: Socket) {
     socket.on("projects:create", createProjectHandler);
     socket.on("projects:update", updateProjectHandler);
     socket.on("projects:delete", deleteProjectHandler);
+    socket.on("projects:addMember", addProjectMemberHandler);
     socket.on("tasks:read", readTasksHandler);
     socket.on("tasks:update", updateTaskHandler);
     socket.on("tasks:create", createTaskHandler);

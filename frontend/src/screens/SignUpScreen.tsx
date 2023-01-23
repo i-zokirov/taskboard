@@ -16,6 +16,7 @@ import { Formik, FormikHelpers } from "formik";
 import { UserRegisterValues } from "../interfaces";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as yup from "yup";
+import { Alert } from "@mui/material";
 
 const initialValues: UserRegisterValues = {
     firstName: "",
@@ -39,9 +40,9 @@ const validationSchema = yup.object({
 });
 
 const SignUpScreen: React.FC = () => {
-    const { loading } = useAppSelector((state) => state.register);
+    const { loading, error } = useAppSelector((state) => state.register);
     const registerUser = useRegisterUser();
-    const handleSubmit = (
+    const handleFormSubmit = (
         values: UserRegisterValues,
         actions: FormikHelpers<UserRegisterValues>
     ) => {
@@ -63,9 +64,10 @@ const SignUpScreen: React.FC = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                {error && <Alert severity="error">{error}</Alert>}
                 <Formik
                     initialValues={initialValues}
-                    onSubmit={handleSubmit}
+                    onSubmit={handleFormSubmit}
                     validationSchema={validationSchema}
                 >
                     {({
@@ -176,6 +178,7 @@ const SignUpScreen: React.FC = () => {
                                     />
                                 </Grid>
                             </Grid>
+                            {/* <button type="submit">submit</button> */}
                             <LoadingButton
                                 type="submit"
                                 fullWidth
@@ -185,20 +188,20 @@ const SignUpScreen: React.FC = () => {
                             >
                                 Sign Up
                             </LoadingButton>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Link
-                                        component={RouterLink}
-                                        to="/login"
-                                        variant="body2"
-                                    >
-                                        Already have an account? Sign in
-                                    </Link>
-                                </Grid>
-                            </Grid>
                         </Box>
                     )}
                 </Formik>
+                <Grid container justifyContent="flex-end">
+                    <Grid item>
+                        <Link
+                            component={RouterLink}
+                            to="/login"
+                            variant="body2"
+                        >
+                            Already have an account? Sign in
+                        </Link>
+                    </Grid>
+                </Grid>
             </Box>
             <br />
             <Copyright />

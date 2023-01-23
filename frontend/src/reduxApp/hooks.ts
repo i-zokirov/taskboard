@@ -96,6 +96,7 @@ export const useRegisterUser = () => {
         }
     }, [status, error, navigate]);
     return (requestBody: UserRegisterValues) => {
+        console.log(requestBody);
         dispatch(registerUser(requestBody));
     };
 };
@@ -173,6 +174,25 @@ export const useDeleteProject = () => {
                             : undefined;
                     dispatch(setCurrentProject(next));
                 }
+            }
+        });
+    };
+};
+
+export const useInviteProjectMember = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    const projectId = useAppSelector(
+        (state) => state.currentProject.projectData?._id
+    );
+
+    return (email: string, message: string) => {
+        const payload = { token, projectId, email };
+        socket.emit("projects:addMember", payload, (response) => {
+            if (response.project) {
+                dispatch(updateProject(response.project));
+                dispatch(setCurrentProject(response.project));
+                dispatch(updateProjectData(response.project));
             }
         });
     };

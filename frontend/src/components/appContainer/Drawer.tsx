@@ -14,7 +14,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DrawerHeader } from "../Main";
 import { appBarMenuOptions } from "../../config";
-import { Link } from "react-router-dom";
+
 import { drawerWidth } from "../../config";
 import { DrawerProps } from "../../interfaces";
 import SearchBar from "../custom/SearchBar";
@@ -108,13 +108,15 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                 open={open}
             >
                 <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === "ltr" ? (
-                            <ChevronLeftIcon />
-                        ) : (
-                            <ChevronRightIcon />
-                        )}
-                    </IconButton>
+                    <Tooltip title="Close drawer">
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === "ltr" ? (
+                                <ChevronLeftIcon />
+                            ) : (
+                                <ChevronRightIcon />
+                            )}
+                        </IconButton>
+                    </Tooltip>
                 </DrawerHeader>
                 <Divider />
                 <List>

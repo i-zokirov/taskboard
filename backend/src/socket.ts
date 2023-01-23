@@ -7,8 +7,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import Task, { ITask, ITaskOptions } from "./models/Task.model";
 import Section, { ISection, ISectionOptions } from "./models/Section.model";
 
-type Error = { name?: string; message?: string; [x: string]: any };
-
 const authenticate = async (token: string) => {
     if (!token) {
         throw new Error("Invalid token");
@@ -50,6 +48,47 @@ export const readProjectsHandler = async function (
     }
 };
 
+export const addProjectMemberHandler = async function (
+    this: Socket,
+    payload: { token: string; projectId: string; email: string },
+    callback: (payload: {
+        project?: IProject | undefined;
+        error?: any | undefined;
+    }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const invitedUser = await User.findOne({ email: payload.email });
+            const project = await Project.findById(payload.projectId);
+            if (invitedUser && project) {
+                if (project.members) {
+                    project.members.push(invitedUser._id);
+                }
+                await (
+                    await project.save()
+                ).populate({
+                    path: "owner members sections",
+                    select: "name name *",
+                });
+            } else if (!invitedUser && project) {
+                project.invited.push(payload.email);
+                await (
+                    await project.save()
+                ).populate({
+                    path: "owner members sections",
+                    select: "name name *",
+                });
+            } else {
+                throw new Error("No project found");
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        callback({ error });
+    }
+};
+
 export const createProjectHandler = async function (
     this: Socket,
     payload: { token: string; project: IProject },
@@ -60,7 +99,6 @@ export const createProjectHandler = async function (
 ) {
     try {
         const user = await authenticate(payload.token);
-        console.log(payload.project);
         if (user) {
             const project = await Project.create({
                 ...payload.project,

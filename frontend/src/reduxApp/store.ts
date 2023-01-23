@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./features/auth/authSlice";
 import { kanbanSlice } from "./features/kanban/kanban-slice";
+import { shareProjectModalSlice } from "./features/modals/modal-slice";
 import { notificationSlice } from "./features/notifications/notification-slice";
 import { currentProject } from "./features/projects/currentProjectSlice";
 import { projectsSlice } from "./features/projects/projects-slice";
@@ -18,6 +19,7 @@ export const store = configureStore({
         tasks: tasksSlice.reducer,
         kanban: kanbanSlice.reducer,
         notificationsystem: notificationSlice.reducer,
+        modal: shareProjectModalSlice.reducer,
     },
 });
 

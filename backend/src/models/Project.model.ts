@@ -9,6 +9,7 @@ export interface IProject {
     createdBy?: Types.ObjectId;
     icon?: string;
     color?: string;
+    invited: string[];
 }
 
 interface IProjectMethods {
@@ -44,6 +45,7 @@ const projectSchema = new Schema<IProject, IProjectModel, IProjectMethods>(
                 ref: "User",
             },
         ],
+        invited: [{ type: String }],
         sections: [
             {
                 type: Schema.Types.ObjectId,

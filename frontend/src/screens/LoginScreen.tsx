@@ -129,25 +129,25 @@ const LoginScreen: React.FC = () => {
                             >
                                 Sign In
                             </LoadingButton>
-                            <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
-                                <Grid item>
-                                    <Link
-                                        component={RouterLink}
-                                        to="/sign-up"
-                                        variant="body2"
-                                    >
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
-                                </Grid>
-                            </Grid>
                         </Box>
                     )}
                 </Formik>
+                <Grid container>
+                    <Grid item xs>
+                        <Link href="#" variant="body2">
+                            Forgot password?
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <Link
+                            component={RouterLink}
+                            to="/sign-up"
+                            variant="body2"
+                        >
+                            {"Don't have an account? Sign Up"}
+                        </Link>
+                    </Grid>
+                </Grid>
             </Box>
             <br />
             <Copyright />

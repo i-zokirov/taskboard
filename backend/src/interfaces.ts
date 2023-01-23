@@ -20,6 +20,11 @@ export interface ClientToServerEvents {
         token: string;
         projectId: string;
     }) => void;
+    ["projects:addMember"]: (payload: {
+        token: string;
+        projectId: string;
+        email: string;
+    }) => void;
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },
         callback: (response: {

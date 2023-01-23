@@ -139,6 +139,14 @@ export interface ClientToServerEvents {
         },
         callback: (response: { project?: IProject; error?: string }) => void
     ) => void;
+    ["projects:addMember"]: (
+        payload: {
+            token?: string;
+            projectId?: string;
+            email: string;
+        },
+        callback: (response: { project?: IProject; error?: string }) => void
+    ) => void;
     ["tasks:read"]: (
         payload: { token: string | undefined; projectId: string },
         callback: (response: {

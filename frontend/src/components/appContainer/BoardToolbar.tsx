@@ -1,5 +1,4 @@
 import React from "react";
-
 import MenuIcon from "@mui/icons-material/Menu";
 import { Toolbar, Box, IconButton, Tooltip, Divider } from "@mui/material";
 import { BoardToolbarProps } from "../../interfaces";
@@ -11,6 +10,9 @@ import { toolbarIconButtons } from "../../config";
 import ProfileMenu from "./ProfileMenu";
 import AddTaskModal from "../tasks/AddTaskModal";
 import HelpMenu from "./HelpMenu";
+import ShareProjectModal from "../project/ShareProjectModal";
+import { useAppDispatch } from "../../reduxApp/hooks";
+import { openShareProjectModal } from "../../reduxApp/features/modals/modal-slice";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -76,8 +78,13 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                 break;
         }
     };
+    const dispatch = useAppDispatch();
+    const handleShareLink = () => {
+        dispatch(openShareProjectModal());
+    };
     return (
         <React.Fragment>
+            <ShareProjectModal />
             <ProfileMenu
                 open={openProfileMenu}
                 anchorEl={profileMenuAnchorEl}
@@ -95,14 +102,19 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                 sx={{ background: "#fff", boxShadow: "none" }}
             >
                 <Toolbar>
-                    <IconButton
-                        aria-label="open drawer"
-                        onClick={props.handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(props.open && { display: "none" }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    <Tooltip title="Open drawer menu">
+                        <IconButton
+                            aria-label="open drawer"
+                            onClick={props.handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                mr: 2,
+                                ...(props.open && { display: "none" }),
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Tooltip>
                     <ProjectSelector />
                     <Box sx={{ flexGrow: 1 }} />
                     <Box
@@ -113,7 +125,12 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                         }}
                     >
                         <Tooltip title="Not Implemented" placement="right">
-                            <button className="btn btn-circular">Share</button>
+                            <button
+                                className="btn btn-circular"
+                                onClick={handleShareLink}
+                            >
+                                Share
+                            </button>
                         </Tooltip>
                         {toolbarIconButtons.map((btn, indx) => (
                             <React.Fragment key={btn.title}>

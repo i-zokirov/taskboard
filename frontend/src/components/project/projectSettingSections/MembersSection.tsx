@@ -8,14 +8,35 @@ import {
     Typography,
 } from "@mui/material";
 import React from "react";
-import { useAppSelector } from "../../../reduxApp/hooks";
+import { openShareProjectModal } from "../../../reduxApp/features/modals/modal-slice";
+import { useAppDispatch, useAppSelector } from "../../../reduxApp/hooks";
 
 const MembersSection = () => {
     const projectData = useAppSelector(
         (state) => state.projectSettings.projectData
     );
+    const dispatch = useAppDispatch();
+    const handleAdd = () => {
+        dispatch(openShareProjectModal());
+    };
     return (
         <Box sx={{ padding: "10px 20px 20px 20px" }}>
+            <Box
+                margin="10px"
+                display={"flex"}
+                alignItems="center"
+                justifyContent={"space-between"}
+            >
+                <button className="btn" onClick={handleAdd}>
+                    Add
+                </button>
+                <Typography>
+                    {projectData &&
+                        projectData.members &&
+                        projectData.members.length}{" "}
+                    Member(s)
+                </Typography>
+            </Box>
             <Box
                 sx={{
                     background: "#eff2f5",
