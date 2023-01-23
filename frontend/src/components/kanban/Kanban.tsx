@@ -9,7 +9,11 @@ import LastColumn from "./columns/LastColumn";
 import { icons } from "../../assets/icons";
 import ColumnNoTasksPlaceHolder from "./columns/ColumnNoTasksPlaceHolder";
 import TaskInputCard from "../tasks/TaskInputCard";
-import { useAppDispatch, useAppSelector } from "../../reduxApp/hooks";
+import {
+    useAppDispatch,
+    useAppSelector,
+    useUpdateTaskDetails,
+} from "../../reduxApp/hooks";
 import socket from "../../socket";
 import {
     tasksRequest,
@@ -37,26 +41,18 @@ const Kanban: React.FC = () => {
     const token = useAppSelector((state) => state.auth.userData?.token);
 
     const dispatch = useAppDispatch();
+    const updateTask = useUpdateTaskDetails();
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) return;
         const { source, destination } = result;
-        dispatch(moveTask({ source, destination }));
+        // dispatch(moveTask({ source, destination }));
         const payload = {
             token,
             taskId: result.draggableId,
             updates: { section: result.destination.droppableId },
+            coordinates: { source, destination },
         };
-        socket.emit("tasks:update", payload, (response) => {
-            if (response.task) {
-                // update task in redux
-                dispatch(
-                    updateSingleTaskInStore({
-                        projectId: projectData!._id,
-                        task: response.task,
-                    })
-                );
-            }
-        });
+        updateTask(payload);
     };
     useEffect(() => {
         if (projectData) {
@@ -133,7 +129,14 @@ const Kanban: React.FC = () => {
                                     columnId={columnId}
                                     column={column}
                                 />
-                                <Box sx={{ padding: "10px 5px" }}>
+                                <Box
+                                    sx={{
+                                        padding: "10px 5px",
+                                        marginTop: "60px",
+                                        height: "90%",
+                                    }}
+                                    className="scrollbar"
+                                >
                                     <StrictModeDroppable
                                         droppableId={columnId}
                                         key={columnId}

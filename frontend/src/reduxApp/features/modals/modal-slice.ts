@@ -5,7 +5,7 @@ interface ShareProjectModalState {
     open: boolean;
 }
 
-const initialShareProjectModalState: ShareProjectModalState = { open: true };
+const initialShareProjectModalState: ShareProjectModalState = { open: false };
 
 export const shareProjectModalSlice = createSlice({
     name: "shareproject",

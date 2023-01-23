@@ -94,7 +94,11 @@ export interface TaskInputCardProps {
 
 // SOCKET
 
-export interface ServerToClientEvents {}
+export interface ServerToClientEvents {
+    ["projects:update"]: (project: IProject) => void;
+    ["tasks:update"]: (payload: { task: ITask; coordinates?: any }) => void;
+    ["tasks:create"]: (task: ITask) => void;
+}
 
 interface ProjectsReadProps {
     projects: IProject[];
@@ -103,6 +107,10 @@ interface ProjectsReadProps {
 
 export interface ClientToServerEvents {
     hello: () => void;
+    ["projectRooms:join"]: (
+        payload: { token?: string },
+        callback: () => void
+    ) => void;
     ["projects:read"]: (
         payload: { token: string | undefined },
         callback: (response: ProjectsReadProps) => void
@@ -159,6 +167,7 @@ export interface ClientToServerEvents {
             token: string | undefined;
             taskId: string;
             updates: { [x: string]: any };
+            coordinates?: any;
         },
         callback: (response: {
             task?: ITask;

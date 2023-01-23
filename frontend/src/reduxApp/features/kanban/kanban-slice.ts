@@ -77,9 +77,14 @@ export const kanbanSlice = createSlice({
             state,
             action: PayloadAction<{ task: ITask; sectionId: string }>
         ) => {
-            state.columns[action.payload.sectionId].taskItems.push(
-                action.payload.task
-            );
+            if (
+                !state.columns[action.payload.sectionId].taskItems.some(
+                    (task) => task._id === action.payload.task._id
+                )
+            )
+                state.columns[action.payload.sectionId].taskItems.push(
+                    action.payload.task
+                );
         },
         moveTask: (
             state,
@@ -104,22 +109,25 @@ export const kanbanSlice = createSlice({
                     action.payload.source.index,
                     1
                 );
-                removed.section._id = action.payload.destination.droppableId;
-                destinationTaskItems.splice(
-                    action.payload.destination.index,
-                    0,
-                    removed
-                );
+                if (removed) {
+                    removed.section._id =
+                        action.payload.destination.droppableId;
+                    destinationTaskItems.splice(
+                        action.payload.destination.index,
+                        0,
+                        removed
+                    );
 
-                state.columns[action.payload.source.droppableId] = {
-                    ...sourceColumn,
-                    taskItems: sourceTaskItems,
-                };
+                    state.columns[action.payload.source.droppableId] = {
+                        ...sourceColumn,
+                        taskItems: sourceTaskItems,
+                    };
 
-                state.columns[action.payload.destination.droppableId] = {
-                    ...destinationColumn,
-                    taskItems: destinationTaskItems,
-                };
+                    state.columns[action.payload.destination.droppableId] = {
+                        ...destinationColumn,
+                        taskItems: destinationTaskItems,
+                    };
+                }
             } else {
                 const column = state.columns[action.payload.source.droppableId];
                 const copiedItems = [...column.taskItems];
@@ -127,15 +135,17 @@ export const kanbanSlice = createSlice({
                     action.payload.source.index,
                     1
                 );
-                copiedItems.splice(
-                    action.payload.destination.index,
-                    0,
-                    removed
-                );
-                state.columns[action.payload.source.droppableId] = {
-                    ...column,
-                    taskItems: copiedItems,
-                };
+                if (removed) {
+                    copiedItems.splice(
+                        action.payload.destination.index,
+                        0,
+                        removed
+                    );
+                    state.columns[action.payload.source.droppableId] = {
+                        ...column,
+                        taskItems: copiedItems,
+                    };
+                }
             }
         },
     },

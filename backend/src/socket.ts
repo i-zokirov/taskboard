@@ -6,6 +6,7 @@ import { JWT_SECRET } from "./config/variables";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Task, { ITask, ITaskOptions } from "./models/Task.model";
 import Section, { ISection, ISectionOptions } from "./models/Section.model";
+import { io } from ".";
 
 const authenticate = async (token: string) => {
     if (!token) {
@@ -39,6 +40,13 @@ export const readProjectsHandler = async function (
             console.log(
                 `Reading projects: ${this.id} \nProjects length: ${projects?.length}`
             );
+
+            if (projects?.length) {
+                const projectRooms = projects.map((project) =>
+                    project._id.toString()
+                );
+                this.join(projectRooms);
+            }
 
             callback({ projects });
         }
@@ -187,7 +195,13 @@ export const updateProjectHandler = async function (
                 .populate("members", "-password -marketingConsent")
                 .populate("sections");
 
-            if (project) callback({ project });
+            if (project) {
+                this.to(project._id.toString()).emit(
+                    "projects:update",
+                    project
+                );
+                callback({ project });
+            }
         }
     } catch (error) {
         console.log(error);
@@ -231,6 +245,7 @@ export const updateTaskHandler = async function (
         token: string;
         taskId: string;
         updates: ITaskOptions;
+        coordinates?: any;
     },
     callback: (response: { task?: ITask; error?: string | undefined }) => void
 ) {
@@ -249,7 +264,13 @@ export const updateTaskHandler = async function (
                 path: "createdBy assignedTo project section completedBy",
                 select: "name name title title name",
             });
-            if (task) callback({ task });
+            if (task) {
+                callback({ task });
+                this.to(task.project._id.toString()).emit("tasks:update", {
+                    task,
+                    coordinates: payload.coordinates,
+                });
+            }
         } else {
             callback({ error: "NO user" });
         }
@@ -275,7 +296,10 @@ export const createTaskHandler = async function (
                 path: "createdBy assignedTo project section completedBy",
                 select: "name name title title name",
             });
-            if (task) callback({ task });
+            if (task) {
+                callback({ task });
+                this.to(task.project._id.toString()).emit("tasks:create", task);
+            }
         } else {
             callback({ error: "NO user" });
         }

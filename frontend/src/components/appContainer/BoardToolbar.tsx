@@ -11,8 +11,13 @@ import ProfileMenu from "./ProfileMenu";
 import AddTaskModal from "../tasks/AddTaskModal";
 import HelpMenu from "./HelpMenu";
 import ShareProjectModal from "../project/ShareProjectModal";
-import { useAppDispatch } from "../../reduxApp/hooks";
+import {
+    useAppDispatch,
+    useAppSelector,
+    useOpenProjectSettings,
+} from "../../reduxApp/hooks";
 import { openShareProjectModal } from "../../reduxApp/features/modals/modal-slice";
+import { icons } from "../../assets/icons";
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -79,8 +84,18 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
         }
     };
     const dispatch = useAppDispatch();
+    const openProjectSettings = useOpenProjectSettings();
+    const projectData = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    const projectIcon =
+        projectData && projectData.icon ? projectData.icon : "folder";
+    const projectColor = projectData && projectData.color && projectData.color;
     const handleShareLink = () => {
         dispatch(openShareProjectModal());
+    };
+    const handleOpenProjectSettings = () => {
+        if (projectData) openProjectSettings(projectData);
     };
     return (
         <React.Fragment>
@@ -113,6 +128,17 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                             }}
                         >
                             <MenuIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Open project settings">
+                        <IconButton
+                            aria-label="open project settings"
+                            onClick={handleOpenProjectSettings}
+                            edge="start"
+                        >
+                            {icons[projectIcon]({
+                                color: projectColor && projectColor,
+                            })}
                         </IconButton>
                     </Tooltip>
                     <ProjectSelector />

@@ -4,7 +4,11 @@ import BoardToolbar from "../components/appContainer/BoardToolbar";
 import MainBoardContainer from "../components/Main";
 import Drawer from "../components/appContainer/Drawer";
 import Kanban from "../components/kanban/Kanban";
-import { useAppSelector, useFetchProjects } from "../reduxApp/hooks";
+import {
+    useAppSelector,
+    useFetchProjects,
+    useListenToServerEvents,
+} from "../reduxApp/hooks";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Status } from "../types";
 
@@ -13,12 +17,17 @@ const Board: React.FC = () => {
     const { status, loading } = useAppSelector((state) => state.projects);
     const authenticated = useAppSelector((state) => state.auth.authenticated);
     const fetchProjects = useFetchProjects();
+    const listenToEvents = useListenToServerEvents();
 
     useEffect(() => {
         if (authenticated) {
             fetchProjects();
         }
     }, [authenticated]);
+
+    useEffect(() => {
+        listenToEvents();
+    }, []);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -27,6 +36,7 @@ const Board: React.FC = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
     return (
         <Box sx={{ display: "flex" }}>
             <BoardToolbar open={open} handleDrawerOpen={handleDrawerOpen} />

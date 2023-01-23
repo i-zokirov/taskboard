@@ -9,8 +9,8 @@ const Column: React.FC<ColumnProps> = (props) => {
         <Box
             sx={{
                 width: props.width,
-                height: "100vh",
-                overflow: "hidden",
+                height: "91vh",
+                overflowY: "hidden",
                 background:
                     props.index && (props.index + 1) % 2 === 0 ? light : dark,
             }}

@@ -12,6 +12,7 @@ import {
     addColumnToKanban,
     addTaskToKanbanBoard,
     markColumnTasksCompleted,
+    moveTask,
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
@@ -103,19 +104,21 @@ export const useRegisterUser = () => {
 
 export const useUpdateTaskDetails = () => {
     const dispatch = useAppDispatch();
-    return (
-        payload: {
-            token: string | undefined;
-            taskId: string;
-            updates: ITaskOptions;
-        },
-        task: ITask
-    ) => {
+    return (payload: {
+        token: string | undefined;
+        taskId: string;
+        updates: ITaskOptions;
+        coordinates?: any;
+    }) => {
+        console.log(payload.coordinates);
+        if (payload.coordinates) {
+            dispatch(moveTask(payload.coordinates));
+        }
         socket.emit("tasks:update", payload, (result) => {
             if (result.task) {
                 dispatch(
                     updateSingleTaskInStore({
-                        projectId: task.project!._id,
+                        projectId: result.task.project!._id,
                         task: result.task,
                     })
                 );
@@ -380,5 +383,58 @@ export const useCloseProjectSettings = () => {
     const dispatch = useAppDispatch();
     return () => {
         dispatch(closeProjectSettings());
+    };
+};
+
+// Server to client listeners
+export const useListenToServerEvents = () => {
+    const dispatch = useAppDispatch();
+    const currentProject = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    const tasks = useAppSelector((state) => state.tasks.data);
+    socket.on("connect", () => {
+        console.log("Connected!");
+    });
+    return () => {
+        socket.on("projects:update", (project) => {
+            console.log(`Received serverside update on project`);
+            if (project._id === currentProject?._id) {
+                console.log(project._id === currentProject?._id);
+                dispatch(setCurrentProject(project));
+            }
+            dispatch(updateProject(project));
+            dispatch(updateProjectData(project));
+        });
+
+        socket.on("tasks:update", ({ task, coordinates }) => {
+            console.log(`Received serverside update on task`);
+            if (coordinates) {
+                dispatch(moveTask(coordinates));
+            }
+            dispatch(
+                updateSingleTaskInStore({
+                    projectId: task.project!._id,
+                    task: task,
+                })
+            );
+            dispatch(updateTaskInKanbanBoard({ task: task }));
+        });
+
+        socket.on("tasks:create", (task) => {
+            console.log(`Received serverside task`);
+            dispatch(
+                addTaskToKanbanBoard({
+                    sectionId: task.section._id,
+                    task: task,
+                })
+            );
+            dispatch(
+                addTaskToStore({
+                    projectId: task.project._id,
+                    task: task,
+                })
+            );
+        });
     };
 };

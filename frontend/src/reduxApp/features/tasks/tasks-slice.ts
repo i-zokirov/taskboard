@@ -51,7 +51,12 @@ export const tasksSlice = createSlice({
             state,
             action: PayloadAction<{ projectId: string; task: ITask }>
         ) => {
-            state.data[action.payload.projectId].push(action.payload.task);
+            if (
+                !state.data[action.payload.projectId].some(
+                    (task) => task._id === action.payload.task._id
+                )
+            )
+                state.data[action.payload.projectId].push(action.payload.task);
         },
         markSectionTasksCompleted: (
             state,

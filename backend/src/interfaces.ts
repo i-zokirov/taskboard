@@ -2,7 +2,11 @@ import { IProject } from "./models/Project.model";
 import { ISection, ISectionOptions } from "./models/Section.model";
 import { ITask, ITaskOptions } from "./models/Task.model";
 
-export interface ServerToClientEvents {}
+export interface ServerToClientEvents {
+    ["projects:update"]: (project: IProject) => void;
+    ["tasks:update"]: (payload: { task: ITask; coordinates: any }) => void;
+    ["tasks:create"]: (payload: { task: ITask }) => void;
+}
 
 export interface ClientToServerEvents {
     hello: () => void;

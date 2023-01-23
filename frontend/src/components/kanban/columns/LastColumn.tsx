@@ -5,33 +5,25 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
-    Fade,
-    Paper,
-    Popper,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FaceIcon from "@mui/icons-material/Face";
 import Face2Icon from "@mui/icons-material/Face2";
 import Face4Icon from "@mui/icons-material/Face4";
-import { useAppSelector, useCreateSection } from "../../../reduxApp/hooks";
+import { useAppDispatch, useCreateSection } from "../../../reduxApp/hooks";
+import { openShareProjectModal } from "../../../reduxApp/features/modals/modal-slice";
+
 const LastColumn = () => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [showInput, setShowInput] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const addSectionRef = useRef<any>(null);
     const createSection = useCreateSection();
 
-    const openPopper = Boolean(anchorEl);
-
     const handleAddSectionBtnClick = () => {
         setShowInput((prev) => !prev);
     };
 
-    const closePopper = () => {
-        setAnchorEl(null);
-    };
     const handleInputBlur = () => {
-        closePopper();
         if (inputRef.current && inputRef.current.value) {
             createSection({
                 section: { title: inputRef.current.value },
@@ -40,25 +32,13 @@ const LastColumn = () => {
         }
         setShowInput((prev) => !prev);
     };
+    const dispatch = useAppDispatch();
+    const handleInviteClick = () => {
+        dispatch(openShareProjectModal());
+    };
+
     return (
         <React.Fragment>
-            {/* <Popper
-                open={openPopper}
-                anchorEl={anchorEl}
-                placement={"top-end"}
-                transition
-            >
-                {({ TransitionProps }) => (
-                    <Fade {...TransitionProps} timeout={350}>
-                        <Paper>
-                            <Typography sx={{ p: 2 }}>
-                                Click here to add sections to your project board
-                                to get started.
-                            </Typography>
-                        </Paper>
-                    </Fade>
-                )}
-            </Popper> */}
             <Box
                 sx={{
                     padding: "10px",
@@ -146,7 +126,12 @@ const LastColumn = () => {
                     with colleagues and friends
                 </Typography>
                 <br />
-                <button className="btn btn-circular">Invite</button>
+                <button
+                    className="btn btn-circular"
+                    onClick={handleInviteClick}
+                >
+                    Invite
+                </button>
             </Box>
         </React.Fragment>
     );

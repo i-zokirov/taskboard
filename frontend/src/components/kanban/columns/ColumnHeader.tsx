@@ -143,6 +143,8 @@ const ColumnHeader: FunctionComponent<ColumnHeaderProps> = (props) => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     backgroundColor: column.color,
+                    position: "fixed",
+                    zIndex: 1000,
                 }}
                 width={"100%"}
             >

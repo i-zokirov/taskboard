@@ -65,7 +65,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
             taskObject.title = titleInput;
         }
         const payload = { token, taskId: task._id, updates: taskObject };
-        updateTaskDetails(payload, task);
+        updateTaskDetails(payload);
     };
 
     const handlePriorityChange = (e: SelectChangeEvent) => {
@@ -74,7 +74,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
             taskId: task._id,
             updates: { priority: e.target.value },
         };
-        updateTaskDetails(payload, task);
+        updateTaskDetails(payload);
     };
 
     const markTaskCompleted = () => {
@@ -83,7 +83,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
             taskId: task._id,
             updates: { completed: true },
         };
-        updateTaskDetails(payload, task);
+        updateTaskDetails(payload);
     };
     const hideDescriptionInput = () => {
         setShowDescriptionInput(false);
@@ -96,7 +96,7 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                 taskId: task._id,
                 updates: { dueDate: newValue },
             };
-            updateTaskDetails(payload, task);
+            updateTaskDetails(payload);
         }
     };
 

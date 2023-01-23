@@ -69,7 +69,7 @@ const server = http.createServer(app);
 // WebSocket
 
 // SOCKET SERVER
-const io = new Server<
+export const io = new Server<
     ClientToServerEvents,
     ServerToClientEvents,
     InterServerEvents,
@@ -82,6 +82,7 @@ io.on("connection", function (socket: Socket) {
         console.log("New client joined");
         console.log(socket.id);
     });
+
     socket.on("projects:read", readProjectsHandler);
     socket.on("projects:create", createProjectHandler);
     socket.on("projects:update", updateProjectHandler);
