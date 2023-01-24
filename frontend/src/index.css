@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
@@ -118,4 +122,85 @@ input:focus {
 
 .scrollbar::-webkit-scrollbar-thumb {
     background-color: #555555;
+}
+
+.feature-card {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+}
+.feature-card:hover {
+    background-color: #c0c0c0;
+}
+.feature-icon {
+    font-size: 48px;
+    color: #333;
+    margin-bottom: 20px;
+}
+.feature-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+.feature-body {
+    font-size: 18px;
+    color: #666;
+}
+
+@media all and (min-width: 40em) {
+    .feature-card {
+        width: 50%;
+    }
+}
+@media all and (min-width: 60em) {
+    .feature-card {
+        width: 33.33%;
+    }
+}
+
+/* NAVBAR */
+#nav-items-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.nav-item {
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+}
+.nav-item a {
+    color: black;
+    font-weight: bold;
+}
+
+.nav-item:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-btn {
+    margin-left: 10px;
+}
+
+.btn-login {
+    border: none;
+    background: white;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00aaff;
+    cursor: pointer;
+}
+.btn-login:hover {
+    text-decoration: underline;
 }

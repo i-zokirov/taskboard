@@ -53,12 +53,16 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LinkIcon from "@mui/icons-material/Link";
 import RocketIcon from "@mui/icons-material/Rocket";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PushPinIcon from "@mui/icons-material/PushPin";
 export const icons: IconDictionary = {
     // productivity workflow
 
     celebration: (sx: SxProps | undefined) => (
         <CelebrationIcon sx={{ ...sx }} />
     ),
+    pin: (sx: SxProps | undefined) => <PushPinIcon sx={{ ...sx }} />,
+    dashboard: (sx: SxProps | undefined) => <DashboardIcon sx={{ ...sx }} />,
     rocketicon: (sx: SxProps | undefined) => <RocketIcon sx={{ ...sx }} />,
     link: (sx: SxProps | undefined) => <LinkIcon sx={{ ...sx }} />,
     account: (sx: SxProps | undefined) => <AccountCircleIcon sx={{ ...sx }} />,
