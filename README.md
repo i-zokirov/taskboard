@@ -43,12 +43,12 @@ To run this project, you will need to add the following environment variables to
 -   Dynamic taskboard sections
 -   Full taskboard customization
 -   Ultra-fast frontend to backend communication with Socket.io
-
-## v2 Roadmap
-
 -   Set up Team management
 -   Invite project members
 -   Real-time team collaboration
+
+## v2 Roadmap
+
 -   Email
 -   Project Reports
 -   Application settings
