@@ -50,13 +50,14 @@ import LoginIcon from "@mui/icons-material/Login";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 export const icons: IconDictionary = {
     // productivity workflow
 
     celebration: (sx: SxProps | undefined) => (
         <CelebrationIcon sx={{ ...sx }} />
     ),
+    account: (sx: SxProps | undefined) => <AccountCircleIcon sx={{ ...sx }} />,
     timer: (sx: SxProps | undefined) => <AvTimerIcon sx={{ ...sx }} />,
     duplicate: (sx: SxProps | undefined) => <ContentCopyIcon sx={{ ...sx }} />,
     deleteoutline: (sx: SxProps | undefined) => (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     IconButton,
@@ -13,6 +13,7 @@ import {
     Select,
     MenuItem,
     SelectChangeEvent,
+    InputLabel,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TaskCardDetails } from "../../interfaces";
@@ -39,7 +40,9 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate : null);
     const [showDescriptionInput, setShowDescriptionInput] = useState(false);
     const [showTitleInput, setShowTitleInput] = useState(false);
-
+    const [assignedTo, setAssignedTo] = useState<string | undefined>(
+        task.assignedTo ? task.assignedTo._id : ""
+    );
     const toggleDescriptionInput = () => {
         setShowDescriptionInput((prev) => !prev);
     };
@@ -100,12 +103,33 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
         }
     };
 
+    const projectData = useAppSelector(
+        (state) => state.currentProject.projectData
+    );
+    const updateTask = useUpdateTaskDetails();
+    const handleAssigneeChange = (e: SelectChangeEvent) => {
+        if (assignedTo !== e.target.value) {
+            setAssignedTo(e.target.value);
+            updateTask({
+                taskId: task._id,
+                token: "",
+                updates: { assignedTo: e.target.value },
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (task.assignedTo && task.assignedTo._id !== assignedTo) {
+            setAssignedTo(task.assignedTo?._id);
+        }
+    }, [task]);
+
     return (
         <TransitionModal
             open={open}
             onClose={onClose}
             height={{ md: 400, lg: 400 }}
-            width={{ md: 600, lg: 600 }}
+            width={{ md: 600, lg: 700 }}
         >
             <Box>
                 <Box
@@ -116,9 +140,9 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                 >
                     <Box
                         display={"flex"}
-                        justifyContent="space-between"
+                        justifyContent="flex-start"
                         alignItems={"center"}
-                        width="60%"
+                        width="80%"
                     >
                         {task.completed ? (
                             <Button variant="outlined" disabled={true}>
@@ -134,30 +158,66 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                             </button>
                         )}
 
-                        <Box
-                            display={"flex"}
-                            width="50%"
-                            justifyContent={"space-around"}
-                            alignItems={"center"}
-                        >
-                            <Box>
-                                <CheckCircleIcon
-                                    sx={{ color: "#47cc8a", fontSize: "26px" }}
-                                />
+                        {task.completed ? (
+                            <Box
+                                display={"flex"}
+                                width="50%"
+                                justifyContent={"space-around"}
+                                alignItems={"center"}
+                            >
+                                <Box>
+                                    <CheckCircleIcon
+                                        sx={{
+                                            color: "#47cc8a",
+                                            fontSize: "26px",
+                                        }}
+                                    />
+                                </Box>
+                                <Box>
+                                    <Typography variant="body1">
+                                        Completed by {task.completedBy?.name}
+                                    </Typography>
+                                    <Typography variant={"caption"}>
+                                        {task.completedOn &&
+                                            new Date(
+                                                task.completedOn
+                                            )?.toLocaleDateString()}
+                                    </Typography>
+                                </Box>
                             </Box>
+                        ) : (
                             <Box>
-                                <Typography variant="body1">
-                                    Completed by {task.completedBy?.firstName}{" "}
-                                    {task.completedBy?.lastName}
-                                </Typography>
-                                <Typography variant={"caption"}>
-                                    {task.completedOn &&
-                                        new Date(
-                                            task.completedOn
-                                        )?.toLocaleDateString()}
-                                </Typography>
+                                <FormControl
+                                    sx={{ m: 1, minWidth: 140 }}
+                                    size="small"
+                                >
+                                    <InputLabel id="task-assignee-select-small">
+                                        Assigned to
+                                    </InputLabel>
+                                    <Select
+                                        labelId="task-assignee-select-small"
+                                        id="task-assignee-select-small"
+                                        value={assignedTo}
+                                        label="Assigned To"
+                                        onChange={handleAssigneeChange}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        {projectData?.members?.map(
+                                            (member, indx) => (
+                                                <MenuItem
+                                                    value={member._id}
+                                                    key={indx}
+                                                >
+                                                    {member.name}
+                                                </MenuItem>
+                                            )
+                                        )}
+                                    </Select>
+                                </FormControl>
                             </Box>
-                        </Box>
+                        )}
                     </Box>
                     <Box>
                         <Tooltip title="More..." placement="top">

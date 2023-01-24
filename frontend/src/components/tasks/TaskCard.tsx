@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Paper, Typography, Stack, Box, IconButton, Chip } from "@mui/material";
+import {
+    Paper,
+    Typography,
+    Stack,
+    Box,
+    IconButton,
+    Chip,
+    Avatar,
+    Tooltip,
+    colors,
+} from "@mui/material";
 import { TaskCardProps } from "../../interfaces";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import TaskCardDetailsModal from "./TaskCardDetailsModal";
+import { icons } from "../../assets/icons";
 
 const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
     const { task, completed, innerRef, ...rest } = props;
@@ -94,15 +105,34 @@ const TaskCard: React.FunctionComponent<TaskCardProps> = (props) => {
                                 alignItems={"center"}
                                 width="100%"
                             >
-                                <Typography
-                                    sx={{
-                                        textDecoration: completed
-                                            ? "line-through"
-                                            : "none",
-                                    }}
+                                <Box
+                                    display={"flex"}
+                                    justifyContent="space-between"
+                                    alignItems={"center"}
                                 >
-                                    {task.title}
-                                </Typography>
+                                    <Typography
+                                        sx={{
+                                            textDecoration: completed
+                                                ? "line-through"
+                                                : "none",
+                                        }}
+                                    >
+                                        {task.title}
+                                    </Typography>
+
+                                    {task.assignedTo &&
+                                        task.assignedTo.name && (
+                                            <Tooltip
+                                                title={task.assignedTo.name}
+                                            >
+                                                {icons["account"]({
+                                                    color: "#8A9499",
+                                                    width: "30px",
+                                                    height: "30px",
+                                                })}
+                                            </Tooltip>
+                                        )}
+                                </Box>
                                 {task.description && (
                                     <Typography
                                         sx={{

@@ -117,7 +117,12 @@ const BoardToolbar: React.FC<BoardToolbarProps> = (props) => {
                 sx={{ background: "#fff", boxShadow: "none" }}
             >
                 <Toolbar>
-                    <Tooltip title="Open drawer menu">
+                    <Tooltip
+                        title="Open drawer menu"
+                        sx={{
+                            ...(props.open && { display: "none" }),
+                        }}
+                    >
                         <IconButton
                             aria-label="open drawer"
                             onClick={props.handleDrawerOpen}

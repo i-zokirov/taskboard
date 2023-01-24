@@ -134,6 +134,7 @@ const Kanban: React.FC = () => {
                                         padding: "10px 5px",
                                         marginTop: "10px",
                                         height: "90%",
+                                        transition: "ease",
                                     }}
                                     className="scrollbar"
                                 >
@@ -145,7 +146,9 @@ const Kanban: React.FC = () => {
                                             <div
                                                 {...provided.droppableProps}
                                                 ref={provided.innerRef}
-                                                style={{ minHeight: "90vh" }}
+                                                style={{
+                                                    minHeight: "90vh",
+                                                }}
                                             >
                                                 {column.taskItems.map(
                                                     (item, indx) => (

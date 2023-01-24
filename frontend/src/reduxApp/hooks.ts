@@ -104,16 +104,17 @@ export const useRegisterUser = () => {
 
 export const useUpdateTaskDetails = () => {
     const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
     return (payload: {
         token: string | undefined;
         taskId: string;
         updates: ITaskOptions;
         coordinates?: any;
     }) => {
-        console.log(payload.coordinates);
         if (payload.coordinates) {
             dispatch(moveTask(payload.coordinates));
         }
+        payload.token = token;
         socket.emit("tasks:update", payload, (result) => {
             if (result.task) {
                 dispatch(

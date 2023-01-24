@@ -20,7 +20,7 @@ export type ITaskOptions = {
     completed?: boolean;
     dueDate?: Date;
     createdBy?: User;
-    assignedTo?: User;
+    assignedTo?: User | string;
     section?: string;
     priority?: string;
     project?: string;

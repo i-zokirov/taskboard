@@ -108,15 +108,13 @@ const Drawer: React.FC<DrawerProps> = ({ open, handleDrawerClose }) => {
                 open={open}
             >
                 <DrawerHeader>
-                    <Tooltip title="Close drawer">
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === "ltr" ? (
-                                <ChevronLeftIcon />
-                            ) : (
-                                <ChevronRightIcon />
-                            )}
-                        </IconButton>
-                    </Tooltip>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === "ltr" ? (
+                            <ChevronLeftIcon />
+                        ) : (
+                            <ChevronRightIcon />
+                        )}
+                    </IconButton>
                 </DrawerHeader>
                 <Divider />
                 <List>
