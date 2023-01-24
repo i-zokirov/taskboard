@@ -6,6 +6,9 @@ export interface ServerToClientEvents {
     ["projects:update"]: (project: IProject) => void;
     ["tasks:update"]: (payload: { task: ITask; coordinates: any }) => void;
     ["tasks:create"]: (payload: { task: ITask }) => void;
+    ["sections:update"]: (section: ISection) => void;
+    ["sections:create"]: (section: ISection) => void;
+    ["sections:delete"]: (project: IProject) => void;
 }
 
 export interface ClientToServerEvents {

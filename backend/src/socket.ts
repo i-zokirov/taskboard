@@ -331,6 +331,10 @@ export const createSectionHandler = async function (
             });
 
             callback({ section });
+            this.to(section.project._id.toString()).emit(
+                "sections:create",
+                section
+            );
         } else {
             callback({ error: "NO user" });
         }
@@ -362,7 +366,13 @@ export const updateSectionHandler = async function (
                 { returnDocument: "after" }
             ).populate("project");
 
-            if (section) callback({ section });
+            if (section) {
+                callback({ section });
+                this.to(section.project._id.toString()).emit(
+                    "sections:update",
+                    section
+                );
+            }
         } else {
             callback({ error: "NO user" });
         }
@@ -400,7 +410,13 @@ export const deleteSectionHandler = async function (
             console.log(project);
             const result = await Task.deleteMany({ section: section?._id });
             console.log(result);
-            if (project) callback({ project });
+            if (project) {
+                callback({ project });
+                this.to(project._id.toString()).emit(
+                    "sections:delete",
+                    project
+                );
+            }
         } else {
             callback({ error: "NO user" });
         }

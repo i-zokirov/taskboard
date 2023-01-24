@@ -6,9 +6,7 @@ import {
     Box,
     IconButton,
     Chip,
-    Avatar,
     Tooltip,
-    colors,
 } from "@mui/material";
 import { TaskCardProps } from "../../interfaces";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";

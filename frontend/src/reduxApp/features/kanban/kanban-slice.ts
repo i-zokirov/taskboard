@@ -49,7 +49,6 @@ export const kanbanSlice = createSlice({
             state,
             action: PayloadAction<{ section: ISection }>
         ) => {
-            console.log("Kanban", action.payload.section);
             state.columns[action.payload.section._id] = {
                 ...action.payload.section,
                 taskItems: state.columns[action.payload.section._id].taskItems,

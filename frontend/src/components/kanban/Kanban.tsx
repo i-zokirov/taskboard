@@ -18,13 +18,9 @@ import socket from "../../socket";
 import {
     tasksRequest,
     tasksRequestSuccess,
-    updateSingleTaskInStore,
 } from "../../reduxApp/features/tasks/tasks-slice";
 
-import {
-    moveTask,
-    setUpKanban,
-} from "../../reduxApp/features/kanban/kanban-slice";
+import { setUpKanban } from "../../reduxApp/features/kanban/kanban-slice";
 
 const Kanban: React.FC = () => {
     const [showInputForCol, setShowInputForCol] = useState<{

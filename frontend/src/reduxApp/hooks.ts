@@ -16,13 +16,7 @@ import {
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
-import {
-    IProject,
-    ISectionOptions,
-    ITask,
-    ITaskOptions,
-    Status,
-} from "../types";
+import { IProject, ISectionOptions, ITaskOptions, Status } from "../types";
 import {
     addNewSectionToProject,
     addProject,
@@ -281,7 +275,6 @@ export const useCreateSection = () => {
         payload.section.icon =
             productivityIcons[getRandomInt(productivityIcons.length)];
         socket.emit("sections:create", payload, (result) => {
-            console.log(result.section);
             if (result.section) {
                 dispatch(addNewSectionToProject({ section: result.section }));
                 dispatch(addColumnToKanban({ section: result.section }));
@@ -393,7 +386,7 @@ export const useListenToServerEvents = () => {
     const currentProject = useAppSelector(
         (state) => state.currentProject.projectData
     );
-    const tasks = useAppSelector((state) => state.tasks.data);
+
     socket.on("connect", () => {
         console.log("Connected!");
     });
@@ -436,6 +429,25 @@ export const useListenToServerEvents = () => {
                     task: task,
                 })
             );
+        });
+
+        socket.on("sections:update", (section) => {
+            console.log(`Received serverside update on section`);
+            dispatch(updateSectionInCurrentProject(section));
+            dispatch(updateSectionInProjects(section));
+            dispatch(updateColumnSectionInKanban({ section }));
+        });
+
+        socket.on("sections:create", (section) => {
+            console.log(`Received serverside section`);
+            dispatch(addNewSectionToProject({ section }));
+            dispatch(addColumnToKanban({ section }));
+        });
+
+        socket.on("sections:delete", (project) => {
+            console.log(`Received serverside delete section event`);
+            dispatch(setCurrentProject(project));
+            dispatch(updateProjectFromProjectsList(project));
         });
     };
 };
