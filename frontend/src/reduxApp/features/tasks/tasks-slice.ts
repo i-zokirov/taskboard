@@ -38,6 +38,13 @@ export const tasksSlice = createSlice({
         removeTasksFromStore: (state, action: PayloadAction<string>) => {
             delete state.data[action.payload];
         },
+        removeSingleTaskFromStore: (state, action: PayloadAction<ITask>) => {
+            const task = action.payload;
+            const indx = state.data[task.project._id].findIndex(
+                (t) => t._id === task._id
+            );
+            if (indx >= 0) delete state.data[task.project._id][indx];
+        },
         updateSingleTaskInStore: (
             state,
             action: PayloadAction<{ projectId: string; task: ITask }>
@@ -82,4 +89,5 @@ export const {
     addTaskToStore,
     markSectionTasksCompleted,
     removeTasksFromStore,
+    removeSingleTaskFromStore,
 } = tasksSlice.actions;

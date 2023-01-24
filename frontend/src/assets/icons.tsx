@@ -51,12 +51,16 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LinkIcon from "@mui/icons-material/Link";
+import RocketIcon from "@mui/icons-material/Rocket";
 export const icons: IconDictionary = {
     // productivity workflow
 
     celebration: (sx: SxProps | undefined) => (
         <CelebrationIcon sx={{ ...sx }} />
     ),
+    rocketicon: (sx: SxProps | undefined) => <RocketIcon sx={{ ...sx }} />,
+    link: (sx: SxProps | undefined) => <LinkIcon sx={{ ...sx }} />,
     account: (sx: SxProps | undefined) => <AccountCircleIcon sx={{ ...sx }} />,
     timer: (sx: SxProps | undefined) => <AvTimerIcon sx={{ ...sx }} />,
     duplicate: (sx: SxProps | undefined) => <ContentCopyIcon sx={{ ...sx }} />,
@@ -148,6 +152,7 @@ export const productivityIcons = [
     "schedule",
     "searchicon",
     "bugreport",
+    "rocketicon",
     "thumbup",
     "starticon",
     "listicon",

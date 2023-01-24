@@ -5,6 +5,7 @@ import socket from "../socket";
 import {
     addTaskToStore,
     markSectionTasksCompleted,
+    removeSingleTaskFromStore,
     removeTasksFromStore,
     updateSingleTaskInStore,
 } from "./features/tasks/tasks-slice";
@@ -13,6 +14,7 @@ import {
     addTaskToKanbanBoard,
     markColumnTasksCompleted,
     moveTask,
+    removeTaskInKanbanBoard,
     updateColumnSectionInKanban,
     updateTaskInKanbanBoard,
 } from "./features/kanban/kanban-slice";
@@ -118,6 +120,20 @@ export const useUpdateTaskDetails = () => {
                     })
                 );
                 dispatch(updateTaskInKanbanBoard({ task: result.task }));
+            }
+        });
+    };
+};
+
+export const useDeleteTask = () => {
+    const dispatch = useAppDispatch();
+    const token = useAppSelector((state) => state.auth.userData?.token);
+    return (payload: { token: string | undefined; taskId: string }) => {
+        payload.token = token;
+        socket.emit("tasks:delete", payload, ({ task }) => {
+            if (task) {
+                dispatch(removeSingleTaskFromStore(task));
+                dispatch(removeTaskInKanbanBoard(task));
             }
         });
     };
@@ -448,6 +464,11 @@ export const useListenToServerEvents = () => {
             console.log(`Received serverside delete section event`);
             dispatch(setCurrentProject(project));
             dispatch(updateProjectFromProjectsList(project));
+        });
+
+        socket.on("tasks:delete", (task) => {
+            dispatch(removeSingleTaskFromStore(task));
+            dispatch(removeTaskInKanbanBoard(task));
         });
     };
 };

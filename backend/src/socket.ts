@@ -279,6 +279,34 @@ export const updateTaskHandler = async function (
     }
 };
 
+export const deleteTaskHandler = async function (
+    this: Socket,
+    payload: {
+        token: string;
+        taskId: string;
+    },
+    callback: (response: { task?: ITask; error?: string | undefined }) => void
+) {
+    try {
+        const user = await authenticate(payload.token);
+        if (user) {
+            const task = await Task.findByIdAndDelete(payload.taskId).populate({
+                path: "createdBy assignedTo project section completedBy",
+                select: "name name title title name",
+            });
+            console.info(`Task deleted: ${payload.taskId}`);
+            if (task) {
+                callback({ task });
+                this.to(task.project._id.toString()).emit("tasks:delete", task);
+            }
+        } else {
+            callback({ error: "No user" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const createTaskHandler = async function (
     this: Socket,
     payload: {

@@ -61,8 +61,17 @@ export const kanbanSlice = createSlice({
             const index = state.columns[
                 action.payload.task.section._id
             ].taskItems.findIndex((el) => el._id === action.payload.task._id);
-            state.columns[action.payload.task.section._id].taskItems[index] =
-                action.payload.task;
+            if (index >= 0)
+                state.columns[action.payload.task.section._id].taskItems[
+                    index
+                ] = action.payload.task;
+        },
+        removeTaskInKanbanBoard: (state, action: PayloadAction<ITask>) => {
+            const task = action.payload;
+            const sectionData = state.columns[task.section._id].taskItems;
+            state.columns[task.section._id].taskItems = sectionData.filter(
+                (el) => el._id !== task._id
+            );
         },
         markColumnTasksCompleted: (state, action: PayloadAction<string>) => {
             state.columns[action.payload].taskItems = state.columns[
@@ -158,4 +167,5 @@ export const {
     addColumnToKanban,
     updateColumnSectionInKanban,
     markColumnTasksCompleted,
+    removeTaskInKanbanBoard,
 } = kanbanSlice.actions;

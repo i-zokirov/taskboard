@@ -26,7 +26,7 @@ import type {} from "@mui/x-date-pickers/themeAugmentation";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useAppSelector, useUpdateTaskDetails } from "../../reduxApp/hooks";
 import { ITaskOptions } from "../../types";
-
+import TaskMenu from "./TaskMenu";
 const dark = "#e7ebf0";
 
 const priorities = ["Low", "Medium", "High"];
@@ -43,6 +43,17 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
     const [assignedTo, setAssignedTo] = useState<string | undefined>(
         task.assignedTo ? task.assignedTo._id : ""
     );
+
+    const [taskMenuAnchorEl, setTaskMenuAnchorEl] =
+        useState<HTMLElement | null>(null);
+    const openTaskMenu = Boolean(taskMenuAnchorEl);
+    const handleOpenTaskMenu = (e: React.MouseEvent<HTMLElement>) => {
+        setTaskMenuAnchorEl(e.currentTarget);
+    };
+    const handleCloseTaskMenu = () => {
+        console.log(`Closing task menu`);
+        setTaskMenuAnchorEl(null);
+    };
     const toggleDescriptionInput = () => {
         setShowDescriptionInput((prev) => !prev);
     };
@@ -131,6 +142,12 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
             height={{ md: 400, lg: 400 }}
             width={{ md: 600, lg: 700 }}
         >
+            <TaskMenu
+                anchorEl={taskMenuAnchorEl}
+                open={openTaskMenu}
+                handleClose={handleCloseTaskMenu}
+                task={task}
+            />
             <Box>
                 <Box
                     display={"flex"}
@@ -221,7 +238,10 @@ const TaskCardDetailsModal: React.FC<TaskCardDetails> = (props) => {
                     </Box>
                     <Box>
                         <Tooltip title="More..." placement="top">
-                            <IconButton sx={{ marginLeft: "10px" }}>
+                            <IconButton
+                                sx={{ marginLeft: "10px" }}
+                                onClick={handleOpenTaskMenu}
+                            >
                                 <MoreHorizIcon />
                             </IconButton>
                         </Tooltip>

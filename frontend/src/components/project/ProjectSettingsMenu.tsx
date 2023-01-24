@@ -11,8 +11,9 @@ import {
     Button,
 } from "@mui/material";
 import { icons } from "../../assets/icons";
-import { useAppSelector } from "../../reduxApp/hooks";
+import { useAppDispatch, useAppSelector } from "../../reduxApp/hooks";
 import DeleteProjectConfirmationModal from "./DeleteProjectConfirmationModal";
+import { openShareProjectModal } from "../../reduxApp/features/modals/modal-slice";
 const settingsMenuOptions = [
     {
         title: "Deleted tasks",
@@ -55,6 +56,11 @@ const ProjectSettingsMenu: React.FC<MenuProps> = (props) => {
     const deleteConfirmationModal = () => {
         setOpenDeleteConfirmationModal((prev) => !prev);
     };
+    const dispatch = useAppDispatch();
+    const handleShareClick = () => {
+        if (props.handleClose) props.handleClose();
+        dispatch(openShareProjectModal());
+    };
     return (
         <MenuComponent {...props}>
             <DeleteProjectConfirmationModal
@@ -75,7 +81,9 @@ const ProjectSettingsMenu: React.FC<MenuProps> = (props) => {
             ))}
             <Box textAlign={"center"} paddingBottom="10px" paddingTop="10px">
                 <Box paddingBottom="5px">
-                    <Button fullWidth>Share</Button>
+                    <Button fullWidth onClick={handleShareClick}>
+                        Share
+                    </Button>
                 </Box>
 
                 <Box>

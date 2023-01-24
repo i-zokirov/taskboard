@@ -22,6 +22,7 @@ import {
     createTaskHandler,
     deleteProjectHandler,
     deleteSectionHandler,
+    deleteTaskHandler,
     readProjectsHandler,
     readTasksHandler,
     updateProjectHandler,
@@ -91,6 +92,7 @@ io.on("connection", function (socket: Socket) {
     socket.on("tasks:read", readTasksHandler);
     socket.on("tasks:update", updateTaskHandler);
     socket.on("tasks:create", createTaskHandler);
+    socket.on("tasks:delete", deleteTaskHandler);
     socket.on("sections:create", createSectionHandler);
     socket.on("sections:update", updateSectionHandler);
     socket.on("sections:delete", deleteSectionHandler);
