@@ -20,8 +20,8 @@ import { UserLoginValues } from "../interfaces";
 import { Alert } from "@mui/material";
 
 const initialValues: UserLoginValues = {
-    email: "",
-    password: "",
+    email: "jon@email.com",
+    password: "12345678",
     rememberUser: false,
 };
 const validationSchema = yup.object({
