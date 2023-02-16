@@ -58,6 +58,9 @@ const LoginScreen: React.FC = () => {
                     Sign in
                 </Typography>
                 {error && <Alert severity="error">{error}</Alert>}
+                <Alert severity="info">
+                    You can login using jon@email.com and 12345678 for password.
+                </Alert>
                 <Formik
                     onSubmit={handleFormSubmit}
                     initialValues={initialValues}

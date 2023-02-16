@@ -64,6 +64,13 @@ const SignUpScreen: React.FC = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                <Alert severity="info">
+                    You can login to the app with test email.{" "}
+                    <Link component={RouterLink} to="/login" variant="body2">
+                        Go to Login
+                    </Link>
+                    page.
+                </Alert>
                 {error && <Alert severity="error">{error}</Alert>}
                 <Formik
                     initialValues={initialValues}
